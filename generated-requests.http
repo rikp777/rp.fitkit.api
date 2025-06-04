@@ -1,20 +1,49 @@
-@userId = user123
+@host = http://localhost:8080
+@apiBase = {{host}}/api/v1
+@contentType = application/json
 
-###
-@exerciseName = Overhead Press
-GET http://localhost:8080/api/v1/workouts/suggestion?userId={{userId}}&exerciseName={{exerciseName}}
 
-###
-POST http://localhost:8080/api/v1/workouts/users/{{userId}}/log
-Content-Type: application/json
+@testUserId = user123
+
+
+### Vraag een workout suggestie op 1e
+@exerciseForSuggestion = Squat
+GET {{apiBase}}/workouts/suggestion?userId={{testUserId}}&exerciseName={{exerciseForSuggestion}}
+
+### Vraag een workout suggestie op 2e
+@anotherExercise = Bench Press
+GET {{apiBase}}/workouts/suggestion?userId={{testUserId}}&exerciseName={{anotherExercise}}
+
+### Log een nieuwe workout sessie voor een gebruiker
+POST {{apiBase}}/workouts/users/{{testUserId}}/log
+Content-Type: {{contentType}}
 
 {
-  "exerciseName": "Overhead Press",
+  "exerciseName": "Squat",
   "date": "2025-06-04",
   "sets": [
-    { "reps": 8, "weight": 30.0 },
-    { "reps": 8, "weight": 30.0 },
-    { "reps": 7, "weight": 30.0 }
+    { "reps": 5, "weight": 100.0 },
+    { "reps": 5, "weight": 100.0 },
+    { "reps": 5, "weight": 100.0 }
   ],
-  "notes": "Ging best lekker"
+  "notes": "Zware squats vandaag"
+}
+
+### Registreer een nieuwe gebruiker
+POST {{apiBase}}/users/register
+Content-Type: {{contentType}}
+
+{
+  "username": "nieuweGebruiker2",
+  "email": "nieuw@example2.com",
+  "password": "wachtwoordVeilig123"
+}
+
+###  Login als een bestaande gebruiker
+POST {{apiBase}}/users/login
+Content-Type: {{contentType}}
+
+{
+  "usernameOrEmail": "nieuweGebruiker",
+  "password": "wachtwoordVeilig123"
 }
