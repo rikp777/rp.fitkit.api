@@ -1,0 +1,20 @@
+@userId = user123
+
+###
+@exerciseName = Overhead Press
+GET http://localhost:8080/api/v1/workouts/suggestion?userId={{userId}}&exerciseName={{exerciseName}}
+
+###
+POST http://localhost:8080/api/v1/workouts/users/{{userId}}/log
+Content-Type: application/json
+
+{
+  "exerciseName": "Overhead Press",
+  "date": "2025-06-04",
+  "sets": [
+    { "reps": 8, "weight": 30.0 },
+    { "reps": 8, "weight": 30.0 },
+    { "reps": 7, "weight": 30.0 }
+  ],
+  "notes": "Ging best lekker"
+}
