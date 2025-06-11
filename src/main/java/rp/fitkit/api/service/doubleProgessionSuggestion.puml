@@ -1,0 +1,72 @@
+@startuml
+' Stijl-instellingen voor betere leesbaarheid
+skinparam activity {
+    BackgroundColor #FEFEFE
+    BorderColor #333232
+    ArrowColor #333232
+    FontColor #333232
+}
+skinparam partition {
+    BackgroundColor #F2F2F2
+}
+
+title Volledige Flow: Workout Suggestie Algoritme
+
+start
+
+if (Request voor geplande oefening?
+(met exerciseTemplateId)) then (ja, via plan)
+    :Haal **ExerciseTemplate** op
+    uit de database;
+    :Stel algoritme parameters in
+    **vanuit het plan**
+    (bijv. rep-range: 6-10, sets: 4);
+else (nee, ad-hoc)
+    :Gebruik **default** parameters
+    (bijv. rep-range: 8-12, sets: 3);
+endif
+
+' Beide paden komen hier samen
+:Haal laatste trainingssessie op
+(inclusief sets en RPE)
+voor de betreffende oefening;
+
+if (Bestaat er een vorige sessie?) then (ja, heeft historie)
+    :Analyseer de sets van de laatste sessie
+    en bereken de gemiddelde RPE;
+
+    if (Is het **rep-doel** behaald?) then (ja, rep-doel behaald)
+        if (Was de gemiddelde **RPE hoog**?
+        (bijv. >= 9)) then (ja, was zwaar)
+            partition Consolidatie {
+                :Genereer suggestie:
+                **Houd gewicht gelijk**
+                **Reset reps naar minimum**;
+            }
+        else (nee, was goed te doen)
+            partition Progressie {
+                :Genereer suggestie:
+                **Verhoog gewicht**
+                **Reset reps naar minimum**;
+            }
+        endif
+    else (nee, rep-doel niet behaald)
+        partition Rep Progressie {
+            :Genereer suggestie:
+            **Houd gewicht gelijk**
+            **Verhoog reps met +1**;
+        }
+    endif
+else (nee, geen historie)
+    partition Beginner {
+        :Genereer standaard
+        beginnerssuggestie;
+    }
+endif
+
+:Geef de gegenereerde
+suggestie terug aan de gebruiker;
+
+stop
+
+@enduml

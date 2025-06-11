@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
+import rp.fitkit.api.dto.LoginResponseDto;
 import rp.fitkit.api.dto.UserLoginDto;
 import rp.fitkit.api.dto.UserRegistrationDto;
 import rp.fitkit.api.dto.UserResponseDto;
@@ -29,8 +30,6 @@ public class UserController {
     public Mono<ResponseEntity<UserResponseDto>> registerUser(
             @Valid @RequestBody UserRegistrationDto registrationDto
     ) {
-
-
         return userService.registerUser(registrationDto)
                 .map(savedUser -> {
 
@@ -45,18 +44,10 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Mono<ResponseEntity<UserResponseDto>> loginUser(
+    public Mono<ResponseEntity<LoginResponseDto>> loginUser(
             @Valid @RequestBody UserLoginDto loginDto
     ) {
-        return userService.loginUser(loginDto)
-                .map(authenticatedUser -> {
-                    UserResponseDto responseDto = new UserResponseDto(
-                            authenticatedUser.getId(),
-                            authenticatedUser.getUsername(),
-                            authenticatedUser.getEmail(),
-                            authenticatedUser.getDateJoined()
-                    );
-                    return ResponseEntity.ok(responseDto);
-                });
+        return userService.loginUserAndGenerateToken(loginDto)
+                .map(loginResponse -> ResponseEntity.ok(loginResponse));
     }
 }

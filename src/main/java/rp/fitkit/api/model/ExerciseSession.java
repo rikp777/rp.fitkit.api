@@ -3,6 +3,7 @@ package rp.fitkit.api.model;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -16,7 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @ToString(exclude = {"sets"})
 @Table("exercise_session")
-public class ExerciseSession {
+public class ExerciseSession implements Persistable<String> {
 
     @Id
     private String id = UUID.randomUUID().toString();
@@ -31,7 +32,13 @@ public class ExerciseSession {
     private List<SetLog> sets = new ArrayList<>();
     private String notes;
 
+    @Transient
+    private boolean isNew;
+
     public ExerciseSession(String userId, String exerciseName) {
+        this.id = UUID.randomUUID().toString();
+        this.date = LocalDate.now();
+        this.isNew = true;
         this.userId = userId;
         this.exerciseName = exerciseName;
     }
@@ -46,5 +53,11 @@ public class ExerciseSession {
 
     public void addSet(SetLog set) {
         this.sets.add(set);
+    }
+
+    @Override
+    @Transient
+    public boolean isNew() {
+        return this.isNew;
     }
 }

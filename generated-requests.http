@@ -1,49 +1,85 @@
-@host = http://localhost:8080
+### ======================================================================
+### VARIABELEN & CONFIGURATIE
+### ======================================================================
+
+# Pas de poort aan indien nodig
+@host = http://localhost:2518
 @apiBase = {{host}}/api/v1
 @contentType = application/json
 
+# --- Inloggegevens om te testen ---
+@username = fitness_fanaat
+@password = wachtwoordVeilig123
+@email = coach@example.com
 
-@testUserId = user123
+# --- Variabelen voor gebruik in requests ---
+@authToken = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmaXRuZXNzX2ZhbmFhdCIsImlhdCI6MTc0OTY1MDc4OCwiZXhwIjoxNzQ5NjU0Mzg4fQ.WRdCvrQw321hvsUlmRiXLrH9n6tInN2Rj8Gx0ycavD0
+@planId =
+@exerciseTemplateId =
 
 
-### Vraag een workout suggestie op 1e
-@exerciseForSuggestion = Squat
-GET {{apiBase}}/workouts/suggestion?userId={{testUserId}}&exerciseName={{exerciseForSuggestion}}
+### ======================================================================
+### AUTHENTICATIE
+### ======================================================================
 
-### Vraag een workout suggestie op 2e
-@anotherExercise = Bench Press
-GET {{apiBase}}/workouts/suggestion?userId={{testUserId}}&exerciseName={{anotherExercise}}
-
-### Log een nieuwe workout sessie voor een gebruiker
-POST {{apiBase}}/workouts/users/{{testUserId}}/log
-Content-Type: {{contentType}}
-
-{
-  "exerciseName": "Squat",
-  "date": "2025-06-04",
-  "sets": [
-    { "reps": 5, "weight": 100.0 },
-    { "reps": 5, "weight": 100.0 },
-    { "reps": 5, "weight": 100.0 }
-  ],
-  "notes": "Zware squats vandaag"
-}
-
-### Registreer een nieuwe gebruiker
+### Registreer een nieuwe gebruiker (voer eenmalig uit per gebruiker)
 POST {{apiBase}}/users/register
 Content-Type: {{contentType}}
 
 {
-  "username": "nieuweGebruiker2",
-  "email": "nieuw@example2.com",
-  "password": "wachtwoordVeilig123"
+  "username": "{{username}}",
+  "email": "{{email}}",
+  "password": "{{password}}"
 }
 
-###  Login als een bestaande gebruiker
+### Login om een JWT token te krijgen
+# @name loginRequest
 POST {{apiBase}}/users/login
 Content-Type: {{contentType}}
 
 {
-  "usernameOrEmail": "nieuweGebruiker",
-  "password": "wachtwoordVeilig123"
+  "usernameOrEmail": "{{username}}",
+  "password": "{{password}}"
 }
+
+
+### ======================================================================
+### WORKOUT PLANNEN (CRUD)
+### ======================================================================
+
+### Maak een nieuw workoutplan aan
+POST {{apiBase}}/plans
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "name": "Mijn Kracht & Hypertrofie Plan",
+  "description": "Een 4-daags Upper/Lower split schema.",
+  "isActive": true,
+  "workoutTemplates": [
+    {
+      "name": "Upper Body A",
+      "exercises": [
+        { "exerciseName": "Bench Press", "order": 1, "targetSets": 3, "targetRepsMin": 5, "targetRepsMax": 8 },
+        { "exerciseName": "Pull-up", "order": 2, "targetSets": 3, "targetRepsMin": 6, "targetRepsMax": 10 }
+      ]
+    },
+    {
+      "name": "Lower Body A",
+      "exercises": [
+        { "exerciseName": "Squat", "order": 1, "targetSets": 3, "targetRpsMin": 5, "targetRepsMax": 8 },
+        { "exerciseName": "Leg Press", "order": 2, "targetSets": 3, "targetRepsMin": 10, "targetRepsMax": 15 }
+      ]
+    }
+  ]
+}
+
+### Haal alle workoutplannen op voor de ingelogde gebruiker
+GET {{apiBase}}/plans
+Authorization: {{authToken}}
+
+
+###
+GET {{apiBase}}/stats/progress/squats
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
