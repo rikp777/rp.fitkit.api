@@ -1,0 +1,18 @@
+spring:
+  liquibase:
+    contexts: schema,test
+
+  springdoc:
+    api-docs:
+      enabled: true
+    swagger-ui:
+      enabled: true
+      path: /docs.html
+      doc-expansion: none
+      tags-sorter: alpha
+      operations-sorter: alpha
+
+fitkit:
+  api:
+    jwt:
+      secret: c29tZVZlcnlMb25nQW5kU2VjdXJlS2V5Rm9ySldUU2lnbmluZ1B1cnBvc2Vz

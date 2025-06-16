@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="2025-06-16-insert-languages-from-csv" author="Rik Peeters" context="test" labels="dev">
+        <loadData
+                file="db/changelog/changes/data/languages.csv"
+                separator=";"
+                tableName="language">
+            <column name="code" type="STRING"/>
+            <column name="name" type="STRING"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="2025-06-16-insert-test-users-from-csv" author="Rik Peeters" context="test" labels="dev">
+        <loadData
+                file="db/changelog/changes/data/users.csv"
+                separator=";"
+                tableName="app_user">
+            <column name="id" type="STRING"/>
+            <column name="username" type="STRING"/>
+            <column name="email" type="STRING"/>
+            <column name="password_hash" type="STRING"/>
+            <column name="date_joined" type="DATE"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="2025-06-16-insert-exercises" author="Rik Peeters" context="test" labels="dev">
+        <loadData
+                file="db/changelog/changes/data/exercises.csv"
+                separator=";"
+                tableName="exercise">
+            <column name="id" type="STRING"/>
+            <column name="met_value" type="NUMERIC"/>
+            <column name="primary_muscle_group" type="STRING"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="2025-06-16-insert-exercise-translations" author="Rik Peeters" context="test" labels="dev">
+        <loadData
+                file="db/changelog/changes/data/exercise_translations.csv"
+                separator=";"
+                tableName="exercise_translation">
+            <column name="exercise_id" type="STRING"/>
+            <column name="language_code" type="STRING"/>
+            <column name="name" type="STRING"/>
+            <column name="description" type="STRING"/>
+            <column name="instructions" type="STRING"/>
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

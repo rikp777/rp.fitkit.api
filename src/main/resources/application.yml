@@ -1,0 +1,32 @@
+# ============ SERVER ============
+server:
+  port: 6078
+
+# ============ SPRING ============
+spring:
+  application:
+    name: api
+
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/fitkit
+    username: fitkit
+    password: s3cr3t
+
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+    url: jdbc:postgresql://localhost:5432/fitkit
+    user: fitkit
+    password: s3cr3t
+    contexts: schema  # default context (for prod)
+
+  springdoc:
+    api-docs:
+      enabled: false
+    swagger-ui:
+      enabled: false
+
+fitkit:
+  api:
+    jwt:
+      expirationMs: 3600000

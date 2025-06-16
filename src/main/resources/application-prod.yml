@@ -1,0 +1,9 @@
+# In prod hoeft vaak alleen de test-data uit, en docs disabled
+spring:
+  liquibase:
+    contexts: schema
+
+fitkit:
+  api:
+    jwt:
+      secret: cHJvZC1zZWNyZXQtdXNlLWtleS1oZXJlLWZvci1zYWZldHk=

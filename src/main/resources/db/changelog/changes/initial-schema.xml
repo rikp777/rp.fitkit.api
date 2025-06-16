@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create-table-language" author="Rik Peeters">
+        <createTable tableName="language">
+            <column name="code" type="VARCHAR(5)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-app_user" author="Rik Peeters">
+        <createTable tableName="app_user">
+            <column name="id" type="VARCHAR(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password_hash" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_joined" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-exercise" author="Rik Peeters">
+        <createTable tableName="exercise">
+            <column name="id" type="VARCHAR(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="met_value" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="primary_muscle_group" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-exercise_translation" author="Rik Peeters">
+        <createTable tableName="exercise_translation">
+            <column name="exercise_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_ex_trans_exercise"
+                             references="exercise(id)" deleteCascade="true"/>
+            </column>
+            <column name="language_code" type="VARCHAR(5)">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_ex_trans_language"
+                             references="language(code)" deleteCascade="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="instructions" type="TEXT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-user_metric" author="Rik Peeters">
+        <createTable tableName="user_metric">
+            <column name="id" type="VARCHAR(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="VARCHAR(36)">
+                <constraints nullable="false" foreignKeyName="fk_user_metric_user" references="app_user(id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="date_recorded" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="body_weight_kg" type="DOUBLE"/>
+            <column name="height_cm" type="DOUBLE"/>
+        </createTable>
+        <addUniqueConstraint tableName="user_metric" columnNames="user_id, date_recorded"
+                             constraintName="uq_user_metric_user_date"/>
+    </changeSet>
+
+    <changeSet id="create-table-exercise_session" author="Rik Peeters">
+        <createTable tableName="exercise_session">
+            <column name="id" type="VARCHAR(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="VARCHAR(36)">
+                <constraints nullable="false" foreignKeyName="fk_ex_session_user" references="app_user(id)"/>
+            </column>
+            <column name="exercise_id" type="VARCHAR(36)">
+                <constraints nullable="false" foreignKeyName="fk_ex_session_exercise" references="exercise(id)"/>
+            </column>
+            <column name="session_date" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="duration_minutes" type="INT"/>
+            <column name="notes" type="TEXT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-set_log" author="Rik Peeters">
+        <createTable tableName="set_log">
+            <column name="id" type="VARCHAR(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="exercise_session_id" type="VARCHAR(36)">
+                <constraints nullable="false" foreignKeyName="fk_set_log_session" references="exercise_session(id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="reps" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="weight" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rpe" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Workout Plan & Template Tables -->
+    <changeSet id="create-table-workout_plan" author="Rik Peeters">
+        <createTable tableName="workout_plan">
+            <column name="id" type="VARCHAR(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="VARCHAR(36)">
+                <constraints nullable="false" foreignKeyName="fk_workout_plan_user" references="app_user(id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="is_active" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-workout_template" author="Rik Peeters">
+        <createTable tableName="workout_template">
+            <column name="id" type="VARCHAR(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="workout_plan_id" type="VARCHAR(36)">
+                <constraints nullable="false" foreignKeyName="fk_workout_tmpl_plan" references="workout_plan(id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="day_of_week" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-exercise_template" author="Rik Peeters">
+        <createTable tableName="exercise_template">
+            <column name="id" type="VARCHAR(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="workout_template_id" type="VARCHAR(36)">
+                <constraints nullable="false" foreignKeyName="fk_ex_tmpl_workout" references="workout_template(id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="exercise_id" type="VARCHAR(36)">
+                <constraints nullable="false" foreignKeyName="fk_ex_tmpl_exercise" references="exercise(id)"/>
+            </column>
+            <column name="target_sets" type="INT"/>
+            <column name="target_reps_min" type="INT"/>
+            <column name="target_reps_max" type="INT"/>
+            <column name="target_rpe_min" type="INT"/>
+            <column name="target_rpe_max" type="INT"/>
+            <column name="rest_period_seconds" type="INT"/>
+            <column name="display_order" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Nutrition Tables -->
+    <changeSet id="create-table-category" author="Rik Peeters">
+        <createTable tableName="category">
+            <column name="id" type="VARCHAR(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-category_translation" author="Rik Peeters">
+        <createTable tableName="category_translation">
+            <column name="category_id" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_cat_trans_cat"
+                             references="category(id)" deleteCascade="true"/>
+            </column>
+            <column name="language_code" type="VARCHAR(5)">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_cat_trans_lang"
+                             references="language(code)" deleteCascade="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-unit" author="Rik Peeters">
+        <createTable tableName="unit">
+            <column name="id" type="VARCHAR(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-unit_translation" author="Rik Peeters">
+        <createTable tableName="unit_translation">
+            <column name="unit_id" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_unit_trans_unit"
+                             references="unit(id)" deleteCascade="true"/>
+            </column>
+            <column name="language_code" type="VARCHAR(5)">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_unit_trans_lang"
+                             references="language(code)" deleteCascade="true"/>
+            </column>
+            <column name="name_singular" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name_plural" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-ingredient" author="Rik Peeters">
+        <createTable tableName="ingredient">
+            <column name="id" type="VARCHAR(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="default_unit_id" type="VARCHAR(50)">
+                <constraints nullable="false" foreignKeyName="fk_ingr_unit" references="unit(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-ingredient_category" author="Rik Peeters">
+        <createTable tableName="ingredient_category">
+            <column name="ingredient_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_ingr_cat_ingr"
+                             references="ingredient(id)" deleteCascade="true"/>
+            </column>
+            <column name="category_id" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_ingr_cat_cat"
+                             references="category(id)" deleteCascade="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-ingredient_translation" author="Rik Peeters">
+        <createTable tableName="ingredient_translation">
+            <column name="ingredient_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_ingr_trans_ingr"
+                             references="ingredient(id)" deleteCascade="true"/>
+            </column>
+            <column name="language_code" type="VARCHAR(5)">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_ingr_trans_lang"
+                             references="language(code)" deleteCascade="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Product & Recipe Tables -->
+    <changeSet id="create-table-product" author="jouw-naam">
+        <createTable tableName="product">
+            <column name="id" type="VARCHAR(36)"><constraints primaryKey="true" nullable="false"/></column>
+            <column name="user_id" type="VARCHAR(36)"/>
+            <column name="base_name" type="VARCHAR(255)"><constraints nullable="false"/></column>
+        </createTable>
+    </changeSet>
+    <changeSet id="add-fk-product-to-user" author="jouw-naam">
+        <addForeignKeyConstraint baseTableName="product"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_prod_user"
+                                 referencedTableName="app_user"
+                                 referencedColumnNames="id"
+                                 onDelete="SET NULL"/>
+    </changeSet>
+
+
+    <changeSet id="create-table-product_version" author="Rik Peeters">
+        <createTable tableName="product_version">
+            <column name="id" type="VARCHAR(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="product_id" type="VARCHAR(36)">
+                <constraints nullable="false" foreignKeyName="fk_prod_ver_prod" references="product(id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="version_number" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="brand" type="VARCHAR(255)"/>
+            <column name="category_id" type="VARCHAR(50)">
+                <constraints nullable="false" foreignKeyName="fk_prod_ver_cat" references="category(id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="effective_from" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="notes" type="TEXT"/>
+        </createTable>
+        <addUniqueConstraint tableName="product_version" columnNames="product_id, version_number"
+                             constraintName="uq_prod_ver_prod_version"/>
+    </changeSet>
+
+    <changeSet id="create-table-product_version_translation" author="Rik Peeters">
+        <createTable tableName="product_version_translation">
+            <column name="product_version_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_prod_ver_trans_prod"
+                             references="product_version(id)" deleteCascade="true"/>
+            </column>
+            <column name="language_code" type="VARCHAR(5)">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_prod_ver_trans_lang"
+                             references="language(code)" deleteCascade="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-product_ingredient" author="Rik Peeters">
+        <createTable tableName="product_ingredient">
+            <column name="product_version_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_prod_ingr_prod_ver"
+                             references="product_version(id)" deleteCascade="true"/>
+            </column>
+            <column name="ingredient_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_prod_ingr_ingr"
+                             references="ingredient(id)" deleteCascade="true"/>
+            </column>
+            <column name="amount" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unit_id" type="VARCHAR(50)">
+                <constraints nullable="false" foreignKeyName="fk_prod_ingr_unit" references="unit(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-recipe" author="jouw-naam">
+        <createTable tableName="recipe">
+            <column name="id" type="VARCHAR(36)"><constraints primaryKey="true" nullable="false"/></column>
+            <column name="user_id" type="VARCHAR(36)"/>
+            <column name="prep_time_minutes" type="INT"/>
+            <column name="cook_time_minutes" type="INT"/>
+            <column name="servings" type="INT"/>
+            <column name="created_at" type="TIMESTAMP"><constraints nullable="false"/></column>
+        </createTable>
+    </changeSet>
+    <changeSet id="add-fk-recipe-to-user" author="jouw-naam">
+        <addForeignKeyConstraint baseTableName="recipe"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_recipe_user"
+                                 referencedTableName="app_user"
+                                 referencedColumnNames="id"
+                                 onDelete="SET NULL"/>
+    </changeSet>
+
+    <changeSet id="create-table-recipe_translation" author="Rik Peeters">
+        <createTable tableName="recipe_translation">
+            <column name="recipe_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_recipe_trans_recipe"
+                             references="recipe(id)" deleteCascade="true"/>
+            </column>
+            <column name="language_code" type="VARCHAR(5)">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_recipe_trans_lang"
+                             references="language(code)" deleteCascade="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-recipe_ingredient" author="Rik Peeters">
+        <createTable tableName="recipe_ingredient">
+            <column name="id" type="VARCHAR(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="recipe_id" type="VARCHAR(36)">
+                <constraints nullable="false" foreignKeyName="fk_recipe_ingr_recipe" references="recipe(id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="ingredient_id" type="VARCHAR(36)">
+                <constraints nullable="false" foreignKeyName="fk_recipe_ingr_ingr" references="ingredient(id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="amount" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unit_id" type="VARCHAR(50)">
+                <constraints nullable="false" foreignKeyName="fk_recipe_ingr_unit" references="unit(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-recipe_ingredient_translation" author="Rik Peeters">
+        <createTable tableName="recipe_ingredient_translation">
+            <column name="recipe_ingredient_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_recipe_ingr_trans_ingr"
+                             references="recipe_ingredient(id)" deleteCascade="true"/>
+            </column>
+            <column name="language_code" type="VARCHAR(5)">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_recipe_ingr_trans_lang"
+                             references="language(code)" deleteCascade="true"/>
+            </column>
+            <column name="notes" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-recipe_step" author="Rik Peeters">
+        <createTable tableName="recipe_step">
+            <column name="id" type="VARCHAR(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="recipe_id" type="VARCHAR(36)">
+                <constraints nullable="false" foreignKeyName="fk_recipe_step_recipe" references="recipe(id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="step_number" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="recipe_step" columnNames="recipe_id, step_number"
+                             constraintName="uq_recipe_step_recipe_step"/>
+    </changeSet>
+
+    <changeSet id="create-table-recipe_step_translation" author="Rik Peeters">
+        <createTable tableName="recipe_step_translation">
+            <column name="recipe_step_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_recipe_step_trans_step"
+                             references="recipe_step(id)" deleteCascade="true"/>
+            </column>
+            <column name="language_code" type="VARCHAR(5)">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_recipe_step_trans_lang"
+                             references="language(code)" deleteCascade="true"/>
+            </column>
+            <column name="instructions" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Consumption Logging Tables -->
+    <changeSet id="create-table-consumption_log" author="Rik Peeters">
+        <createTable tableName="consumption_log">
+            <column name="id" type="VARCHAR(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="VARCHAR(36)">
+                <constraints nullable="false" foreignKeyName="fk_cons_log_user" references="app_user(id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="consumed_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="notes" type="TEXT"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
