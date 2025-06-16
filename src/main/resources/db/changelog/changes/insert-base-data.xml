@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="2025-06-16-insert-languages-from-csv" author="Rik Peeters" context="test" labels="dev">
+        <loadData
+                file="db/changelog/changes/data/languages.csv"
+                separator=";"
+                tableName="language">
+            <column name="code" type="STRING"/>
+            <column name="name" type="STRING"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="2025-06-16-insert-exercises" author="Rik Peeters" context="test" labels="dev">
+        <loadData
+                file="db/changelog/changes/data/workout/exercises.csv"
+                separator=";"
+                tableName="exercise">
+            <column name="id" type="STRING"/>
+            <column name="met_value" type="NUMERIC"/>
+            <column name="primary_muscle_group" type="STRING"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="2025-06-16-insert-exercise-translations" author="Rik Peeters" context="test" labels="dev">
+        <loadData
+                file="db/changelog/changes/data/workout/exercise_translations.csv"
+                separator=";"
+                tableName="exercise_translation">
+            <column name="exercise_id" type="STRING"/>
+            <column name="language_code" type="STRING"/>
+            <column name="name" type="STRING"/>
+            <column name="description" type="STRING"/>
+            <column name="instructions" type="STRING"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="2025-06-16-insert-category" author="Rik Peeters" context="test" labels="dev">
+        <loadData
+                file="db/changelog/changes/data/food/category.csv"
+                separator=";"
+                tableName="category">
+            <column name="id" type="STRING"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="2025-06-16-insert-category-translation" author="Rik Peeters" context="test" labels="dev">
+        <loadData
+                file="db/changelog/changes/data/food/category_translation.csv"
+                separator=";"
+                tableName="category_translation">
+            <column name="category_id" type="STRING"/>
+            <column name="language_code" type="STRING"/>
+            <column name="name" type="STRING"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="2025-06-16-load-unit" author="Rik Peeters">
+        <loadData
+                file="db/changelog/changes/data/unit.csv"
+                separator=","
+                tableName="unit">
+            <column name="id" type="STRING"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="2025-06-16-load-unit-translation" author="Rik Peeters">
+        <loadData
+                file="db/changelog/changes/data/unit_translation.csv"
+                separator=";"
+                tableName="unit_translation">
+            <column name="unit_id" type="STRING"/>
+            <column name="language_code" type="STRING"/>
+            <column name="name_singular" type="STRING"/>
+            <column name="name_plural" type="STRING"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="2025-06-16-load-ingredients" author="Rik Peeters">
+        <loadData
+                file="db/changelog/changes/data/food/ingredient.csv"
+                separator=","
+                tableName="ingredient">
+            <column name="id" type="STRING"/>
+            <column name="default_unit_id" type="STRING"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="2025-06-16-load-ingredient-category" author="Rik Peeters">
+        <loadData
+                file="db/changelog/changes/data/food/ingredient_category.csv"
+                separator=","
+                tableName="ingredient_category">
+            <column name="ingredient_id" type="STRING"/>
+            <column name="category_id" type="STRING"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="2025-06-16-load-ingredient-translation" author="Rik Peeters">
+        <loadData
+                file="db/changelog/changes/data/food/ingredient_translation.csv"
+                separator=";"
+                tableName="ingredient_translation">
+            <column name="ingredient_id" type="STRING"/>
+            <column name="language_code" type="STRING"/>
+            <column name="name" type="STRING"/>
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

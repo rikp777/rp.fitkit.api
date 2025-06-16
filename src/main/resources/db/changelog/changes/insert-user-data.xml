@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="2025-06-16-insert-test-users-from-csv" author="Rik Peeters" context="test" labels="dev">
+        <loadData
+                file="db/changelog/changes/data/user/users.csv"
+                separator=";"
+                tableName="app_user">
+            <column name="id" type="STRING"/>
+            <column name="username" type="STRING"/>
+            <column name="email" type="STRING"/>
+            <column name="password_hash" type="STRING"/>
+            <column name="date_joined" type="DATE"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="2025-06-16-insert-user-metrics-from-csv" author="Rik Peeters" context="test" labels="dev">
+        <loadData
+                file="db/changelog/changes/data/user/user_metrics.csv"
+                separator=";"
+                tableName="user_metric">
+            <column name="id" type="STRING"/>
+            <column name="user_id" type="STRING"/>
+            <column name="date_recorded" type="DATE"/>
+            <column name="body_weight_kg" type="NUMERIC"/>
+            <column name="height_cm" type="NUMERIC"/>
+        </loadData>
+    </changeSet>
+
+</databaseChangeLog>
