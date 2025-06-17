@@ -1,18 +1,19 @@
 package rp.fitkit.api.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import rp.fitkit.api.dto.LoginResponseDto;
 import rp.fitkit.api.dto.UserLoginDto;
 import rp.fitkit.api.dto.UserRegistrationDto;
 import rp.fitkit.api.dto.UserResponseDto;
+import rp.fitkit.api.model.User;
 import rp.fitkit.api.service.UserService;
 
 @RestController
@@ -49,5 +50,19 @@ public class UserController {
     ) {
         return userService.loginUserAndGenerateToken(loginDto)
                 .map(loginResponse -> ResponseEntity.ok(loginResponse));
+    }
+
+    @GetMapping("/me")
+    @SecurityRequirement(name = "bearerAuth")
+    public Mono<UserResponseDto> getMe(@AuthenticationPrincipal UserDetails userDetails) {
+        User currentUser = (User) userDetails;
+
+        UserResponseDto responseDto = new UserResponseDto(
+                currentUser.getId(),
+                currentUser.getUsername(),
+                currentUser.getEmail(),
+                currentUser.getDateJoined()
+        );
+        return Mono.just(responseDto);
     }
 }

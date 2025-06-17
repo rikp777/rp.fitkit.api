@@ -40,10 +40,6 @@ public class StatisticsController {
                 .collectList();
     }
 
-    @GetMapping("/test-security")
-    public Mono<String> testSecurityEndpoint(@AuthenticationPrincipal UserDetails userDetails) {
-        log.info("==> TEST ENDPOINT BEREIKT door gebruiker: {}", userDetails.getUsername());
-        return Mono.just("Hello, " + userDetails.getUsername() + "! Je hebt succesvol toegang tot een beveiligd GET endpoint.");
-    }
+
 }
 

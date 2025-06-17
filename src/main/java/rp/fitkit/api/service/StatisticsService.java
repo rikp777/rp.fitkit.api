@@ -16,10 +16,10 @@ import java.util.Optional;
 @Slf4j
 public class StatisticsService {
 
-    private final WorkoutSuggestionService workoutService;
+    private final WorkoutHistoryService workoutHistoryService;
 
-    public StatisticsService(WorkoutSuggestionService workoutService) {
-        this.workoutService = workoutService;
+    public StatisticsService(WorkoutHistoryService workoutHistoryService) {
+        this.workoutHistoryService = workoutHistoryService;
     }
 
     /**
@@ -33,7 +33,7 @@ public class StatisticsService {
     @PreAuthorize("isAuthenticated()")
     public Flux<ProgressDataPointDto> getEstimated1rmHistory(String userId, String exerciseName) {
         log.info("Calculating e1RM history for user '{}' and exercise '{}'", userId, exerciseName);
-        return workoutService.getHistoryForExercise(userId, exerciseName)
+        return workoutHistoryService.getHistoryForExercise(userId, exerciseName)
                 .flatMap(this::createDataPointFromSession);
     }
 

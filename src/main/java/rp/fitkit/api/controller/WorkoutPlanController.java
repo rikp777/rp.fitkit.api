@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -66,5 +67,17 @@ public class WorkoutPlanController {
         return planService.getPlanByIdAndUser(planId, userId)
                 .map(planDto -> ResponseEntity.ok(planDto))
                 .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
+
+
+    @DeleteMapping("/{planId}")
+    @SecurityRequirement(name = "bearerAuth")
+    public Mono<ResponseEntity<Void>> deletePlan(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable String planId) {
+
+        String userId = ((User) userDetails).getId();
+        return planService.deletePlan(planId, userId)
+                .thenReturn(ResponseEntity.noContent().build());
     }
 }

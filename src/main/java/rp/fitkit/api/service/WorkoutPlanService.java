@@ -2,6 +2,7 @@ package rp.fitkit.api.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
@@ -10,6 +11,7 @@ import rp.fitkit.api.dto.ExerciseSessionResponseDto;
 import rp.fitkit.api.dto.ExerciseTemplateDto;
 import rp.fitkit.api.dto.WorkoutPlanDto;
 import rp.fitkit.api.dto.WorkoutTemplateDto;
+import rp.fitkit.api.exception.ResourceNotFoundException;
 import rp.fitkit.api.model.ExerciseSession;
 import rp.fitkit.api.model.ExerciseTemplate;
 import rp.fitkit.api.model.WorkoutPlan;
@@ -178,5 +180,18 @@ public class WorkoutPlanService {
                 )
                 .collectList()
                 .map(templateDtos -> mapToPlanDto(plan, templateDtos));
+    }
+
+
+    @Transactional
+    public Mono<Void> deletePlan(String planId, String userId) {
+        return planRepository.findById(planId)
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("Plan met ID " + planId + " niet gevonden.")))
+                .flatMap(plan -> {
+                    if (!plan.getUserId().equals(userId)) {
+                        return Mono.error(new AccessDeniedException("Gebruiker heeft geen toegang tot dit plan."));
+                    }
+                    return planRepository.delete(plan);
+                });
     }
 }
