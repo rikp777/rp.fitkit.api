@@ -18,13 +18,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/fitkit
     user: fitkit
     password: s3cr3t
-    contexts: schema  # default context (for prod)
-
-  springdoc:
-    api-docs:
-      enabled: false
-    swagger-ui:
-      enabled: false
+    contexts: schema
 
 fitkit:
   api:

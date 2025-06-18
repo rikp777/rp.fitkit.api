@@ -3,6 +3,12 @@ spring:
   liquibase:
     contexts: schema
 
+  springdoc:
+    api-docs:
+      enabled: false
+    swagger-ui:
+      enabled: false
+
 fitkit:
   api:
     jwt:

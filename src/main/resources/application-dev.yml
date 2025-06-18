@@ -7,7 +7,6 @@ spring:
       enabled: true
     swagger-ui:
       enabled: true
-      path: /docs.html
       doc-expansion: none
       tags-sorter: alpha
       operations-sorter: alpha
