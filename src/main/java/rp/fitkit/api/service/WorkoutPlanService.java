@@ -40,26 +40,12 @@ public class WorkoutPlanService {
         this.exerciseRepository = exerciseRepository;
     }
 
-    /**
-     * Haalt alle workoutplannen op voor een specifieke gebruiker.
-     * Elk plan wordt volledig opgebouwd met de bijbehorende templates en oefeningen.
-     *
-     * @param userId De ID van de gebruiker.
-     * @return Een Flux van complete WorkoutPlanDto's.
-     */
     public Flux<WorkoutPlanDto> getPlansForUser(String userId) {
         log.info("Fetching all workout plans for user ID: {}", userId);
         return planRepository.findByUserId(userId)
                 .flatMap(this::hydratePlan);
     }
 
-    /**
-     * Haalt één specifiek workoutplan op, maar alleen als het van de opgegeven gebruiker is.
-     *
-     * @param planId De ID van het plan.
-     * @param userId De ID van de gebruiker die de aanvraag doet.
-     * @return Een Mono met het complete WorkoutPlanDto, of een lege Mono als het niet gevonden is of niet van de gebruiker is.
-     */
     public Mono<WorkoutPlanDto> getPlanByIdAndUser(String planId, String userId) {
         log.info("Fetching workout plan with ID: {} for user ID: {}", planId, userId);
         return planRepository.findById(planId)
@@ -67,14 +53,6 @@ public class WorkoutPlanService {
                 .flatMap(this::hydratePlan);
     }
 
-    /**
-     * Maakt een compleet nieuw workoutplan, inclusief templates en oefeningen.
-     * Dit is een transactionele operatie: als er iets misgaat, wordt alles teruggedraaid.
-     *
-     * @param planDto Het DTO met de volledige planstructuur.
-     * @param userId  De ID van de gebruiker aan wie dit plan toebehoort.
-     * @return Een Mono die het volledig opgeslagen plan als DTO teruggeeft.
-     */
     @Transactional
     public Mono<WorkoutPlanDto> createWorkoutPlan(WorkoutPlanDto planDto, String userId) {
         log.info("Creating a new workout plan named '{}' for user '{}'", planDto.getName(), userId);
@@ -164,13 +142,6 @@ public class WorkoutPlanService {
         return dto;
     }
 
-    /**
-     * Hulp-methode die een WorkoutPlan-entity "hydrateert" door de onderliggende
-     * templates en exercises op te halen en er een compleet DTO van te maken.
-     *
-     * @param plan De WorkoutPlan entity.
-     * @return Een Mono die het volledige WorkoutPlanDto bevat.
-     */
     private Mono<WorkoutPlanDto> hydratePlan(WorkoutPlan plan) {
         return templateRepository.findByWorkoutPlanId(plan.getId())
                 .flatMap(template ->

@@ -42,9 +42,6 @@ public class WorkoutSuggestionService {
     private final WorkoutTemplateRepository workoutTemplateRepository;
     private final WorkoutPlanRepository planRepository;
 
-    /**
-     * Publieke methode voor suggesties gebaseerd op een plan.
-     */
     public Mono<WorkoutSuggestion> getSuggestionForPlannedExercise(String userId, String exerciseTemplateId) {
         log.debug("Requesting suggestion for user '{}' and exerciseTemplateId '{}'", userId, exerciseTemplateId);
 
@@ -85,10 +82,6 @@ public class WorkoutSuggestionService {
                 });
     }
 
-
-    /**
-     * Publieke methode voor ad-hoc/freestyle suggesties.
-     */
     public Mono<WorkoutSuggestion> getSuggestionForAdHocExercise(String userId, String exerciseName) {
         return getLastSessionWithSets(userId, exerciseName)
                 .map(lastSession ->
@@ -97,9 +90,6 @@ public class WorkoutSuggestionService {
                 .defaultIfEmpty(createDefaultSuggestion(exerciseName));
     }
 
-    /**
-     * Hulp-methode om de laatste sessie inclusief sets op te halen.
-     */
     private Mono<ExerciseSession> getLastSessionWithSets(String userId, String exerciseName) {
         return exerciseSessionRepository.findByUserIdAndExerciseNameOrderByDateDesc(userId, exerciseName)
                 .next()
@@ -113,9 +103,6 @@ public class WorkoutSuggestionService {
                 );
     }
 
-    /**
-     * De centrale, private hulp-methode met de kernlogica van Double Progression met RPE.
-     */
     private WorkoutSuggestion applyDoubleProgressionLogic(String exerciseName, ExerciseSession lastSession, int minReps, int maxReps, int targetSets) {
         log.debug("Applying Double Progression for '{}' with rep range {}-{}", exerciseName, minReps, maxReps);
 
@@ -146,9 +133,6 @@ public class WorkoutSuggestionService {
         return new WorkoutSuggestion(exerciseName, suggestedSets, message);
     }
 
-    /**
-     * Hulp-methode om een default beginnerssuggestie te maken.
-     */
     private WorkoutSuggestion createDefaultSuggestion(String exerciseName) {
         List<SetLog> suggestedSets = new ArrayList<>();
         suggestedSets.add(new SetLog(null, 10, 20.0, 0));

@@ -53,6 +53,12 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.giffing.bucket4j.spring.boot.starter</groupId>
+            <artifactId>bucket4j-spring-boot-starter</artifactId>
+            <version>0.8.0</version>
+        </dependency>
+
         <!-- Database & Migratie -->
         <dependency>
             <groupId>org.postgresql</groupId>

@@ -1,16 +1,12 @@
 package rp.fitkit.api.controller;
 
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.ReactiveSecurityContextHolder;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import rp.fitkit.api.dto.ProgressDataPointDto;
 import rp.fitkit.api.model.User;
@@ -39,7 +35,5 @@ public class StatisticsController {
         return statisticsService.getEstimated1rmHistory(userId, exerciseName)
                 .collectList();
     }
-
-
 }
 

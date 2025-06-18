@@ -27,12 +27,6 @@ public class WorkoutPlanController {
         this.planService = planService;
     }
 
-    /**
-     * Endpoint om een nieuw, compleet workoutplan aan te maken voor de ingelogde gebruiker.
-     * @param userDetails De details van de ingelogde gebruiker (automatisch geleverd door Spring Security).
-     * @param planDto Het DTO met de volledige planstructuur uit de request body.
-     * @return Een Mono die de aangemaakte WorkoutPlanDto bevat, met HTTP status 201 (Created).
-     */
     @PostMapping
     public Mono<ResponseEntity<WorkoutPlanDto>> createWorkoutPlan(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -43,9 +37,6 @@ public class WorkoutPlanController {
                 .map(savedPlan -> ResponseEntity.status(HttpStatus.CREATED).body(savedPlan));
     }
 
-    /**
-     * Endpoint om alle workoutplannen van de ingelogde gebruiker op te halen.
-     */
     @GetMapping
     public Flux<WorkoutPlanDto> getPlansForCurrentUser(
             @AuthenticationPrincipal UserDetails userDetails
@@ -54,9 +45,6 @@ public class WorkoutPlanController {
         return planService.getPlansForUser(userId);
     }
 
-    /**
-     * Endpoint om één specifiek workoutplan van de ingelogde gebruiker op te halen.
-     */
     @GetMapping("/{planId}")
     public Mono<ResponseEntity<WorkoutPlanDto>> getPlanById(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -68,7 +56,6 @@ public class WorkoutPlanController {
                 .map(planDto -> ResponseEntity.ok(planDto))
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
-
 
     @DeleteMapping("/{planId}")
     @SecurityRequirement(name = "bearerAuth")
