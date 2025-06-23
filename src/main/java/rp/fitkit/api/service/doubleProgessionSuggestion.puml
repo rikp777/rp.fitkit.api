@@ -1,72 +1,70 @@
 @startuml
-' Stijl-instellingen voor betere leesbaarheid
+' ──────────────────────────────
+'   Stijl – identiek aan je oude
+' ──────────────────────────────
 skinparam activity {
     BackgroundColor #FEFEFE
-    BorderColor #333232
-    ArrowColor #333232
-    FontColor #333232
+    BorderColor     #333232
+    ArrowColor      #333232
+    FontColor       #333232
 }
 skinparam partition {
     BackgroundColor #F2F2F2
 }
 
-title Volledige Flow: Workout Suggestie Algoritme
+title Volledige Flow: Workout Suggestie Algoritme (v2)
 
 start
 
-if (Request voor geplande oefening?
-(met exerciseTemplateId)) then (ja, via plan)
-    :Haal **ExerciseTemplate** op
-    uit de database;
-    :Stel algoritme parameters in
-    **vanuit het plan**
-    (bijv. rep-range: 6-10, sets: 4);
-else (nee, ad-hoc)
-    :Gebruik **default** parameters
-    (bijv. rep-range: 8-12, sets: 3);
+' ────────── 1. Plan of ad-hoc? ──────────
+if ("Request voor geplande\n oefening?") then (Ja)
+    :Haal **ExerciseTemplate** op;
+    :Lees parameters uit plan\n(minReps, maxReps, sets);
+else (Nee)
+    :Gebruik **default** parameters\n(8–12 reps, 3 sets);
 endif
 
-' Beide paden komen hier samen
-:Haal laatste trainingssessie op
-(inclusief sets en RPE)
-voor de betreffende oefening;
+' ────────── 2. Historie ophalen ──────────
+:Haal laatste sessie op\n(incl. sets + RPE);
 
-if (Bestaat er een vorige sessie?) then (ja, heeft historie)
-    :Analyseer de sets van de laatste sessie
-    en bereken de gemiddelde RPE;
+if ("Heeft vorige sessie?") then (Ja)
+    :Bereken *gem. RPE* en\ncount sets ≥ maxReps;
 
-    if (Is het **rep-doel** behaald?) then (ja, rep-doel behaald)
-        if (Was de gemiddelde **RPE hoog**?
-        (bijv. >= 9)) then (ja, was zwaar)
+    ' ── 2a. Rep-doel gehaald? ──
+    if ("Rep-doel gehaald\n(alle sets ≥ maxReps)?") then (Ja)
+        ' ─── 2a-i. Zwaar of te doen? ───
+        if ("gem. RPE ≥ 9") then (Zwaar)
             partition Consolidatie {
-                :Genereer suggestie:
-                **Houd gewicht gelijk**
-                **Reset reps naar minimum**;
+                :Houd gewicht *gelijk*;
+                :Reset reps → **minReps**;
             }
-        else (nee, was goed te doen)
+        else (gem. RPE < 9)
             partition Progressie {
-                :Genereer suggestie:
-                **Verhoog gewicht**
-                **Reset reps naar minimum**;
+                :Verhoog gewicht (+2 – 3 kg);
+                :Reset reps → **minReps**;
             }
         endif
-    else (nee, rep-doel niet behaald)
-        partition Rep Progressie {
-            :Genereer suggestie:
-            **Houd gewicht gelijk**
-            **Verhoog reps met +1**;
-        }
+
+    else (Nee – rep-doel **niet** gehaald)
+        ' ─── 2b-i. Licht of normaal/zwaar? ───
+        if ("gem. RPE ≤ 6") then (Licht)
+            partition Volume {
+                :Houd gewicht gelijk;
+                :Verhoog reps met +1;
+            }
+        else (gem. RPE > 6)
+            partition Stabilisatie {
+                :Houd huidige reps & gewicht;
+            }
+        endif
     endif
-else (nee, geen historie)
+
+else (Nee – geen historie)
     partition Beginner {
-        :Genereer standaard
-        beginnerssuggestie;
+        :Genereer standaard\nbeginners-suggestie;
     }
 endif
 
-:Geef de gegenereerde
-suggestie terug aan de gebruiker;
-
+:Stuur suggestie terug;
 stop
-
 @enduml

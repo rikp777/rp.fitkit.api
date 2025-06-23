@@ -1,6 +1,5 @@
 package rp.fitkit.api.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -9,12 +8,13 @@ import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
 @NoArgsConstructor
-@Table("workout_plan")
-public class WorkoutPlan implements Persistable<String> {
+@Table("user_metric")
+public class UserMetric implements Persistable<String> {
 
     @Id
     private String id;
@@ -22,21 +22,24 @@ public class WorkoutPlan implements Persistable<String> {
     @Column("user_id")
     private String userId;
 
-    private String name;
-    private String description;
+    @Column("date_recorded")
+    private LocalDate dateRecorded;
 
-    @Column("is_active")
-    private boolean isActive;
+    @Column("body_weight_kg")
+    private Double bodyWeightKg;
+
+    @Column("height_cm")
+    private Double heightCm;
 
     @Transient
     private boolean isNew;
 
-    public WorkoutPlan(String userId, String name, String description, boolean isActive) {
+    public UserMetric(String userId, LocalDate dateRecorded, Double bodyWeightKg, Double heightCm) {
         this.id = UUID.randomUUID().toString();
         this.userId = userId;
-        this.name = name;
-        this.description = description;
-        this.isActive = isActive;
+        this.dateRecorded = dateRecorded;
+        this.bodyWeightKg = bodyWeightKg;
+        this.heightCm = heightCm;
         this.isNew = true;
     }
 
@@ -46,7 +49,7 @@ public class WorkoutPlan implements Persistable<String> {
         return this.isNew || id == null;
     }
 
-    public WorkoutPlan markAsNew() {
+    public UserMetric markAsNew() {
         this.isNew = true;
         return this;
     }

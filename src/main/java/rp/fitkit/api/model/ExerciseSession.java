@@ -23,10 +23,12 @@ public class ExerciseSession implements Persistable<String> {
     private String id = UUID.randomUUID().toString();
     @Column("user_id")
     private String userId;
-    @Column("exercise_name")
-    private String exerciseName;
+    @Column("exercise_id")
+    private String exerciseId;
     @Column("session_date")
     private LocalDate date = LocalDate.now();
+    @Column("duration_minutes")
+    private Integer durationMinutes;
 
     @Transient
     private List<SetLog> sets = new ArrayList<>();
@@ -35,17 +37,15 @@ public class ExerciseSession implements Persistable<String> {
     @Transient
     private boolean isNew;
 
-    public ExerciseSession(String userId, String exerciseName) {
+    public ExerciseSession(String userId) {
         this.id = UUID.randomUUID().toString();
         this.date = LocalDate.now();
         this.isNew = true;
         this.userId = userId;
-        this.exerciseName = exerciseName;
     }
 
-    public ExerciseSession(String userId, String exerciseName, LocalDate date, List<SetLog> sets, String notes) {
+    public ExerciseSession(String userId, LocalDate date, List<SetLog> sets, String notes) {
         this.userId = userId;
-        this.exerciseName = exerciseName;
         this.date = date;
         this.sets = (sets != null) ? new ArrayList<>(sets) : new ArrayList<>();
         this.notes = notes;

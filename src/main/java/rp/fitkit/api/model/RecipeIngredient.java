@@ -1,6 +1,5 @@
 package rp.fitkit.api.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -13,30 +12,32 @@ import java.util.UUID;
 
 @Data
 @NoArgsConstructor
-@Table("workout_plan")
-public class WorkoutPlan implements Persistable<String> {
+@Table("recipe_ingredient")
+public class RecipeIngredient implements Persistable<String> {
 
     @Id
     private String id;
 
-    @Column("user_id")
-    private String userId;
+    @Column("recipe_id")
+    private String recipeId;
 
-    private String name;
-    private String description;
+    @Column("ingredient_id")
+    private String ingredientId;
 
-    @Column("is_active")
-    private boolean isActive;
+    private double amount;
+
+    @Column("unit_id")
+    private String unitId;
 
     @Transient
     private boolean isNew;
 
-    public WorkoutPlan(String userId, String name, String description, boolean isActive) {
+    public RecipeIngredient(String recipeId, String ingredientId, double amount, String unitId) {
         this.id = UUID.randomUUID().toString();
-        this.userId = userId;
-        this.name = name;
-        this.description = description;
-        this.isActive = isActive;
+        this.recipeId = recipeId;
+        this.ingredientId = ingredientId;
+        this.amount = amount;
+        this.unitId = unitId;
         this.isNew = true;
     }
 
@@ -46,8 +47,9 @@ public class WorkoutPlan implements Persistable<String> {
         return this.isNew || id == null;
     }
 
-    public WorkoutPlan markAsNew() {
+    public RecipeIngredient markAsNew() {
         this.isNew = true;
         return this;
     }
 }
+

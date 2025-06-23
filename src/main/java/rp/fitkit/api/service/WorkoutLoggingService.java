@@ -31,7 +31,7 @@ public class WorkoutLoggingService {
         return userRepository.findById(userId)
                 .switchIfEmpty(Mono.error(new ResourceNotFoundException("Gebruiker met ID '" + userId + "' niet gevonden.")))
                 .flatMap(user -> {
-                    ExerciseSession newSession = new ExerciseSession(userId, logDto.getExerciseName());
+                    ExerciseSession newSession = new ExerciseSession(userId);
                     if (logDto.getDate() != null) newSession.setDate(logDto.getDate());
                     newSession.setNotes(logDto.getNotes());
                     return exerciseSessionRepository.save(newSession);
@@ -48,7 +48,7 @@ public class WorkoutLoggingService {
                             .map(savedSets -> {
                                 savedSession.setSets(savedSets);
                                 workoutSessionSink.tryEmitNext(new ExerciseSessionResponseDto(
-                                        savedSession.getId(), savedSession.getExerciseName(), savedSession.getDate(),
+                                        savedSession.getId(), "bleb", savedSession.getDate(),
                                         savedSession.getNotes(), savedSets
                                 ));
                                 return savedSession;

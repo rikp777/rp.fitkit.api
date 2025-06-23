@@ -1,6 +1,5 @@
 package rp.fitkit.api.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -13,30 +12,25 @@ import java.util.UUID;
 
 @Data
 @NoArgsConstructor
-@Table("workout_plan")
-public class WorkoutPlan implements Persistable<String> {
+@Table("product")
+public class Product implements Persistable<String> {
 
     @Id
     private String id;
 
     @Column("user_id")
-    private String userId;
+    private String userId; // Can be null for system-defined products
 
-    private String name;
-    private String description;
-
-    @Column("is_active")
-    private boolean isActive;
+    @Column("base_name")
+    private String baseName;
 
     @Transient
     private boolean isNew;
 
-    public WorkoutPlan(String userId, String name, String description, boolean isActive) {
+    public Product(String userId, String baseName) {
         this.id = UUID.randomUUID().toString();
         this.userId = userId;
-        this.name = name;
-        this.description = description;
-        this.isActive = isActive;
+        this.baseName = baseName;
         this.isNew = true;
     }
 
@@ -46,7 +40,7 @@ public class WorkoutPlan implements Persistable<String> {
         return this.isNew || id == null;
     }
 
-    public WorkoutPlan markAsNew() {
+    public Product markAsNew() {
         this.isNew = true;
         return this;
     }
