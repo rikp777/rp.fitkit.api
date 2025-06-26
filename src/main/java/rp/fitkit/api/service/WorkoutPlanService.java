@@ -93,8 +93,8 @@ public class WorkoutPlanService {
                             .map(exDto -> {
                                 ExerciseTemplate ex = new ExerciseTemplate();
                                 ex.setWorkoutTemplateId(savedTemplate.getId());
-                                ex.setExerciseName(exDto.getExerciseName());
-                                ex.setOrder(exDto.getOrder());
+//                                ex.setExerciseName(exDto.getExerciseName());
+//                                ex.setOrder(exDto.getOrder());
                                 ex.setTargetSets(exDto.getTargetSets());
                                 ex.setTargetRepsMin(exDto.getTargetRepsMin());
                                 ex.setTargetRepsMax(exDto.getTargetRepsMax());
@@ -133,8 +133,8 @@ public class WorkoutPlanService {
     private ExerciseTemplateDto mapToExerciseDto(ExerciseTemplate exercise) {
         ExerciseTemplateDto dto = new ExerciseTemplateDto();
         dto.setId(exercise.getId());
-        dto.setExerciseName(exercise.getExerciseName());
-        dto.setOrder(exercise.getOrder());
+//        dto.setExerciseName(exercise.getExerciseName());
+//        dto.setOrder(exercise.getOrder());
         dto.setTargetSets(exercise.getTargetSets());
         dto.setTargetRepsMin(exercise.getTargetRepsMin());
         dto.setTargetRepsMax(exercise.getTargetRepsMax());
@@ -145,7 +145,7 @@ public class WorkoutPlanService {
     private Mono<WorkoutPlanDto> hydratePlan(WorkoutPlan plan) {
         return templateRepository.findByWorkoutPlanId(plan.getId())
                 .flatMap(template ->
-                        exerciseRepository.findByWorkoutTemplateIdOrderByOrderAsc(template.getId())
+                        exerciseRepository.findByWorkoutTemplateIdOrderByDisplayOrderAsc(template.getId())
                                 .collectList()
                                 .map(exercises -> mapToTemplateDto(template, exercises))
                 )

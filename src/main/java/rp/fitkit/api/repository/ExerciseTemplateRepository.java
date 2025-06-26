@@ -5,6 +5,6 @@ import reactor.core.publisher.Flux;
 import rp.fitkit.api.model.ExerciseTemplate;
 
 public interface ExerciseTemplateRepository extends R2dbcRepository<ExerciseTemplate, String> {
-    Flux<ExerciseTemplate> findByWorkoutTemplateIdOrderByOrderAsc(String workoutTemplateId);
+    Flux<ExerciseTemplate> findByWorkoutTemplateIdOrderByDisplayOrderAsc(String workoutTemplateId);
 }
 

@@ -1,5 +1,7 @@
 package rp.fitkit.api.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -7,11 +9,13 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import rp.fitkit.api.dto.CreateExerciseRequest;
 import rp.fitkit.api.dto.ExerciseDto;
+import rp.fitkit.api.dto.UpdateExerciseRequest;
 import rp.fitkit.api.service.ExerciseService;
 
 @RestController
 @RequestMapping("/api/v1/exercises")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class ExerciseController {
 
     private final ExerciseService exerciseService;
@@ -30,7 +34,14 @@ public class ExerciseController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<ExerciseDto> createExercise(@RequestBody CreateExerciseRequest request) {
+    public Mono<ExerciseDto> createExercise(@Valid @RequestBody CreateExerciseRequest request) {
         return exerciseService.createExercise(request);
+    }
+
+    @PutMapping("/{id}")
+    public Mono<ExerciseDto> updateExercise(
+            @PathVariable String id,
+            @Valid @RequestBody UpdateExerciseRequest request) {
+        return exerciseService.updateExercise(id, request);
     }
 }

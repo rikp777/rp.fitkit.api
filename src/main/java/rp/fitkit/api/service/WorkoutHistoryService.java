@@ -39,7 +39,7 @@ public class WorkoutHistoryService {
         return setLogRepository.findByExerciseSessionId(session.getId())
                 .collectList()
                 .map(sets -> new ExerciseSessionResponseDto(
-                        session.getId(), session.getExerciseName(), session.getDate(),
+                        session.getId(), "todo get exercise name", session.getDate(),
                         session.getNotes(), sets
                 ));
     }

@@ -49,7 +49,7 @@ public class WorkoutSuggestionService {
         log.info("{} START - Ophalen van geplande suggestie gestart.", logPrefix);
 
         return exerciseTemplateRepository.findById(exerciseTemplateId)
-                .doOnNext(et -> log.debug("{} Stap 1/4 - Oefening-template gevonden: {}", logPrefix, et.getExerciseName()))
+                .doOnNext(et -> log.debug("{} Stap 1/4 - Oefening-template gevonden: {}", logPrefix, "todo get exercise name from et"))
                 .switchIfEmpty(Mono.defer(() -> {
                     log.warn("{} Fout: Oefening-template met ID '{}' niet gevonden.", logPrefix, exerciseTemplateId);
                     return Mono.error(new ResourceNotFoundException("Geplande oefening niet gevonden (ID: " + exerciseTemplateId + ')'));
@@ -69,7 +69,7 @@ public class WorkoutSuggestionService {
                 })
                 .flatMap(et -> {
                     log.debug("{} Stap 3/4 - Ophalen van parameters en laatste sessie.", logPrefix);
-                    String exerciseName = et.getExerciseName();
+                    String exerciseName = "todo get exercise name from et";
                     int minR = et.getTargetRepsMin() != null ? et.getTargetRepsMin() : DEFAULT_MIN_REPS;
                     int maxR = et.getTargetRepsMax() != null ? et.getTargetRepsMax() : DEFAULT_MAX_REPS;
                     int tgtS = et.getTargetSets() != null ? et.getTargetSets() : DEFAULT_TARGET_SETS;
