@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="2025-08-30-insert-mental-health-steps" author="Rik Peeters" context="test" labels="dev">
+        <loadData
+                file="db/changelog/changes/data/mental_health/mental_health_steps.csv"
+                separator=";"
+                tableName="mental_health_step">
+            <column name="id" type="NUMERIC"/>
+            <column name="step_number" type="NUMERIC"/>
+            <column name="required_completions" type="NUMERIC"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="2025-08-30-insert-mental-health-step-translations" author="Rik Peeters" context="test" labels="dev">
+        <loadData
+                file="db/changelog/changes/data/mental_health/mental_health_step_translations.csv"
+                separator=";"
+                tableName="mental_health_step_translation">
+            <column name="mental_health_step_id" type="NUMERIC"/>
+            <column name="language_code" type="STRING"/>
+            <column name="title" type="STRING"/>
+            <column name="description" type="STRING"/>
+            <column name="purpose" type="STRING"/>
+        </loadData>
+    </changeSet>
+
+
+</databaseChangeLog>

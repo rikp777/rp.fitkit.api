@@ -62,6 +62,7 @@ public class SecurityConfig {
                                 "/v3/api-docs.yaml",
                                 "/v3/api-docs/swagger-config"
                         ).permitAll()
+                        .pathMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .pathMatchers("/actuator/**").hasRole("ADMIN")
                         .pathMatchers("/actuator/health", "/actuator/info", "/actuator/prometheus").permitAll()
                         .anyExchange().authenticated()

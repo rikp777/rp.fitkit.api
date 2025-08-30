@@ -12,7 +12,7 @@ import rp.fitkit.api.model.ExerciseSession;
 import rp.fitkit.api.model.SetLog;
 import rp.fitkit.api.repository.ExerciseSessionRepository;
 import rp.fitkit.api.repository.SetLogRepository;
-import rp.fitkit.api.repository.UserRepository;
+import rp.fitkit.api.repository.user.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;

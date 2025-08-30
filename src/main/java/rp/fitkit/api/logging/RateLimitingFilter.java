@@ -62,7 +62,8 @@ public class RateLimitingFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         String path = exchange.getRequest().getURI().getPath();
-        boolean shouldApplyRateLimit = rateLimitedPaths.contains(path);
+        boolean shouldApplyRateLimit = rateLimitedPaths.stream()
+                .anyMatch(path::matches);
 
         if (shouldApplyRateLimit) {
             String ipAddress = getIpAddress(exchange);

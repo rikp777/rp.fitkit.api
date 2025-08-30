@@ -15,8 +15,8 @@
 //import org.springframework.stereotype.Component;
 //import org.springframework.util.StringUtils;
 //import org.springframework.web.filter.OncePerRequestFilter;
-//import rp.fitkit.api.model.User;
-//import rp.fitkit.api.repository.UserRepository;
+//import rp.fitkit.api.model.user.User;
+//import rp.fitkit.api.repository.user.UserRepository;
 //import rp.fitkit.api.util.JwtUtil;
 //
 //import java.io.IOException;

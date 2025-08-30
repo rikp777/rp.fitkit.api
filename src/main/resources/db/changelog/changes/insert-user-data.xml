@@ -18,6 +18,17 @@
         </loadData>
     </changeSet>
 
+    <changeSet id="2025-08-30-insert-user-roles" author="Rik Peeters" context="test" labels="dev">
+        <loadData
+                file="db/changelog/changes/data/user/user_roles.csv"
+                separator=";"
+                tableName="user_role">
+            <column name="user_id" type="STRING"/>
+            <column name="role_name" type="STRING"/>
+        </loadData>
+    </changeSet>
+
+
     <changeSet id="2025-06-16-insert-user-metrics-from-csv" author="Rik Peeters" context="test" labels="dev">
         <loadData
                 file="db/changelog/changes/data/user/user_metrics.csv"

@@ -1,7 +1,8 @@
-package rp.fitkit.api.service;
+package rp.fitkit.api.service.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -10,8 +11,10 @@ import rp.fitkit.api.dto.UserLoginDto;
 import rp.fitkit.api.dto.UserRegistrationDto;
 import rp.fitkit.api.dto.UserResponseDto;
 import rp.fitkit.api.exception.UserAlreadyExistsException;
-import rp.fitkit.api.model.User;
-import rp.fitkit.api.repository.UserRepository;
+import rp.fitkit.api.model.user.User;
+import rp.fitkit.api.model.user.UserRole;
+import rp.fitkit.api.repository.user.UserRepository;
+import rp.fitkit.api.repository.user.UserRoleRepository;
 import rp.fitkit.api.util.JwtUtil;
 
 import java.util.Optional;
@@ -20,16 +23,19 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
     @Autowired
     public UserService(
             UserRepository userRepository,
+            UserRoleRepository userRoleRepository,
             PasswordEncoder passwordEncoder,
             JwtUtil jwtUtil
     ) {
         this.userRepository = userRepository;
+        this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
     }
@@ -60,7 +66,10 @@ public class UserService {
                             hashedPassword
                     );
 
-                    return userRepository.save(newUser);
+                    return userRepository.save(newUser) .flatMap(savedUser -> userRoleRepository
+                            .save(new UserRole(savedUser.getId(), "ROLE_USER"))
+                            .thenReturn(savedUser)
+                    );
                 });
     }
 
@@ -72,20 +81,26 @@ public class UserService {
     public Mono<LoginResponseDto> loginUserAndGenerateToken(UserLoginDto loginDto) {
         return userRepository.findByUsername(loginDto.getUsernameOrEmail())
                 .switchIfEmpty(userRepository.findByEmail(loginDto.getUsernameOrEmail()))
-                .flatMap(user -> {
-                    if (passwordEncoder.matches(loginDto.getPassword(), user.getPasswordHash())) {
-                        String token = jwtUtil.generateToken(user);
-                        UserResponseDto userDetails = new UserResponseDto(
-                                user.getId(),
-                                user.getUsername(),
-                                user.getEmail(),
-                                user.getDateJoined()
-                        );
-                        return Mono.just(new LoginResponseDto(token, "Bearer", userDetails));
-                    } else {
-                        return Mono.error(new BadCredentialsException("Ongeldige inloggegevens."));
-                    }
-                })
+                .flatMap(user -> userRoleRepository.findByUserId(user.getId())
+                        .map(UserRole::getRoleName)
+                        .map(SimpleGrantedAuthority::new)
+                        .collectList()
+                        .flatMap(authorities -> {
+                            user.setAuthorities(authorities);
+
+                            if (passwordEncoder.matches(loginDto.getPassword(), user.getPasswordHash())) {
+                                String token = jwtUtil.generateToken(user);
+                                UserResponseDto userDetails = new UserResponseDto(
+                                        user.getId(),
+                                        user.getUsername(),
+                                        user.getEmail(),
+                                        user.getDateJoined()
+                                );
+                                return Mono.just(new LoginResponseDto(token, "Bearer", userDetails));
+                            } else {
+                                return Mono.error(new BadCredentialsException("Ongeldige inloggegevens."));
+                            }
+                        }))
                 .switchIfEmpty(Mono.error(new BadCredentialsException("Gebruiker niet gevonden of ongeldige inloggegevens.")));
     }
 }

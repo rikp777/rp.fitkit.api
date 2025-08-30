@@ -2,24 +2,17 @@ package rp.fitkit.api.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Sinks;
-import rp.fitkit.api.dto.ExerciseLogDto;
 import rp.fitkit.api.exception.ResourceNotFoundException;
 import rp.fitkit.api.model.*;
-import rp.fitkit.api.dto.ExerciseSessionResponseDto;
 import reactor.core.publisher.Mono;
+import rp.fitkit.api.model.user.UserSettings;
 import rp.fitkit.api.repository.*;
+import rp.fitkit.api.repository.user.UserSettingsRepository;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service

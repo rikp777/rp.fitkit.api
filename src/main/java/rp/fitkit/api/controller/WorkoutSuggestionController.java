@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import rp.fitkit.api.model.User;
+import rp.fitkit.api.model.user.User;
 import rp.fitkit.api.model.WorkoutSuggestion;
 import rp.fitkit.api.service.WorkoutSuggestionService;
 

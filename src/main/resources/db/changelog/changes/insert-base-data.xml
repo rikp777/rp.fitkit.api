@@ -15,6 +15,16 @@
         </loadData>
     </changeSet>
 
+    <changeSet id="insert-initial-roles" author="AI Assistant">
+        <insert tableName="role">
+            <column name="name" value="ROLE_USER"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="ROLE_ADMIN"/>
+        </insert>
+    </changeSet>
+
+
     <changeSet id="2025-06-16-insert-exercises" author="Rik Peeters" context="test" labels="dev">
         <loadData
                 file="db/changelog/changes/data/workout/exercises.csv"
@@ -87,27 +97,6 @@
                 tableName="ingredient">
             <column name="id" type="STRING"/>
             <column name="default_unit_id" type="STRING"/>
-        </loadData>
-    </changeSet>
-
-    <changeSet id="2025-06-16-load-ingredient-category" author="Rik Peeters">
-        <loadData
-                file="db/changelog/changes/data/food/ingredient_category.csv"
-                separator=","
-                tableName="ingredient_category">
-            <column name="ingredient_id" type="STRING"/>
-            <column name="category_id" type="STRING"/>
-        </loadData>
-    </changeSet>
-
-    <changeSet id="2025-06-16-load-ingredient-translation" author="Rik Peeters">
-        <loadData
-                file="db/changelog/changes/data/food/ingredient_translation.csv"
-                separator=";"
-                tableName="ingredient_translation">
-            <column name="ingredient_id" type="STRING"/>
-            <column name="language_code" type="STRING"/>
-            <column name="name" type="STRING"/>
         </loadData>
     </changeSet>
 </databaseChangeLog>

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import rp.fitkit.api.dto.ExerciseSessionResponseDto;
-import rp.fitkit.api.model.User;
+import rp.fitkit.api.model.user.User;
 import rp.fitkit.api.service.WorkoutHistoryService;
 
 import java.time.LocalDate;

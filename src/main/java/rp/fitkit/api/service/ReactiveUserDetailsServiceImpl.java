@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import rp.fitkit.api.repository.UserRepository;
+import rp.fitkit.api.repository.user.UserRepository;
 
 @Service
 @AllArgsConstructor

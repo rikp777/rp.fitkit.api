@@ -1,4 +1,4 @@
-package rp.fitkit.api.model;
+package rp.fitkit.api.model.user;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -37,6 +37,9 @@ public class User implements Persistable<String>, UserDetails {
     @Transient
     private boolean isNew;
 
+    @Transient
+    private Collection<? extends GrantedAuthority> authorities = Collections.emptyList();
+
     public User(String username, String email, String passwordHash) {
         this.id = UUID.randomUUID().toString();
         this.dateJoined = LocalDate.now();
@@ -56,8 +59,9 @@ public class User implements Persistable<String>, UserDetails {
     @Override
     @Transient
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return this.authorities;
     }
+
 
     @Override
     public String getPassword() {

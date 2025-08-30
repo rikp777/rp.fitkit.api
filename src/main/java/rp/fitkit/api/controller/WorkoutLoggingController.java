@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 import rp.fitkit.api.dto.ExerciseLogDto;
 import rp.fitkit.api.dto.ExerciseSessionResponseDto;
 import rp.fitkit.api.model.ExerciseSession;
-import rp.fitkit.api.model.User;
+import rp.fitkit.api.model.user.User;
 import rp.fitkit.api.service.WorkoutLoggingService;
 
 @RestController

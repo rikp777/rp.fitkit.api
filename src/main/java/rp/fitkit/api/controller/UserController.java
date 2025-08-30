@@ -13,8 +13,8 @@ import rp.fitkit.api.dto.LoginResponseDto;
 import rp.fitkit.api.dto.UserLoginDto;
 import rp.fitkit.api.dto.UserRegistrationDto;
 import rp.fitkit.api.dto.UserResponseDto;
-import rp.fitkit.api.model.User;
-import rp.fitkit.api.service.UserService;
+import rp.fitkit.api.model.user.User;
+import rp.fitkit.api.service.user.UserService;
 
 @RestController
 @RequestMapping("/api/v1/users")
