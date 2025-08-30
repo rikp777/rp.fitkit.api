@@ -1,6 +1,7 @@
 package rp.fitkit.api.controller.mental;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,6 +17,7 @@ import rp.fitkit.api.service.mental.MentalHealthService;
 @RequestMapping("/api/v1/mental-health")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
+@Tag(name = "Mental Health (User)", description = "Endpoints for regular users of the Mental Health feature.")
 public class MentalHealthController {
 
     private final MentalHealthService mentalHealthService;

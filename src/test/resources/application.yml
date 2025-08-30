@@ -1,0 +1,15 @@
+fitkit:
+  api:
+    jwt:
+      secret: dGVzdC1zZWNyZXQta2V5LWZvci1qd3Qtc2lnbmluZy1wdXJwb3Nlcy10aGF0LWlzLWxvbmctZW5vdWdo
+      expirationMs: 3600000
+
+spring:
+  r2dbc:
+    url: r2dbc:h2:mem:///testdb;DB_CLOSE_DELAY=-1;
+    username: sa
+    password:
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    contexts: test
+

@@ -1,6 +1,8 @@
 package rp.fitkit.api.controller.mental;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import rp.fitkit.api.service.mental.AdminMentalHealthService;
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
 @PreAuthorize("hasRole('ADMIN')")
+@Tag(name = "Mental Health (Admin)", description = "Admin-only endpoints for managing the Mental Health feature.")
 public class AdminMentalHealthController {
 
     private final AdminMentalHealthService adminMentalHealthService;
