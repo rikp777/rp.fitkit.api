@@ -1,4 +1,4 @@
-package rp.fitkit.api.controller;
+package rp.fitkit.api.controller.fitness;
 
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

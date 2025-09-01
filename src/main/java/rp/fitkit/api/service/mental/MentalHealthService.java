@@ -16,8 +16,8 @@ import rp.fitkit.api.repository.mental.MentalHealthStepRepository;
 import rp.fitkit.api.repository.mental.MentalHealthStepTranslationRepository;
 import rp.fitkit.api.repository.mental.PerformedActionRepository;
 import rp.fitkit.api.repository.mental.UserStepProgressRepository;
+import org.springframework.security.access.AccessDeniedException;
 
-import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -124,7 +124,7 @@ public class MentalHealthService {
         }
         return stepRepository.findByStepNumber(step.getStepNumber() - 1)
                 .flatMap(previousStep -> userStepProgressRepository.findByUserIdAndMentalHealthStepId(userId, previousStep.getId())
-                        .map(progress -> progress.getCompletionCount() >= step.getRequiredCompletions())
+                        .map(progress -> progress.getCompletionCount() >= previousStep.getRequiredCompletions())
                         .defaultIfEmpty(false)
                 )
                 .defaultIfEmpty(false);
@@ -138,8 +138,9 @@ public class MentalHealthService {
             return false; // Should not happen in a consistent dataset
         }
         UserStepProgress previousStepProgress = progressMap.get(previousStep.getId());
-        return previousStepProgress != null && previousStepProgress.getCompletionCount() >= currentStep.getRequiredCompletions();
+        return previousStepProgress != null && previousStepProgress.getCompletionCount() >= previousStep.getRequiredCompletions();
     }
+
 
     private MentalHealthStepDto toDto(MentalHealthStep step, MentalHealthStepTranslation translation, boolean isUnlocked, int userCompletions) {
         return new MentalHealthStepDto(

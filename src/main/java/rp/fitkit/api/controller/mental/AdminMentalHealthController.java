@@ -1,9 +1,5 @@
 package rp.fitkit.api.controller.mental;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,28 +14,27 @@ import rp.fitkit.api.service.mental.AdminMentalHealthService;
 @RestController
 @RequestMapping("/api/v1/admin/mental-health")
 @RequiredArgsConstructor
-@SecurityRequirement(name = "bearerAuth")
 @PreAuthorize("hasRole('ADMIN')")
-@Tag(name = "Mental Health (Admin)", description = "Admin-only endpoints for managing the Mental Health feature.")
-public class AdminMentalHealthController {
+public class AdminMentalHealthController implements AdminMentalHealthApi {
 
     private final AdminMentalHealthService adminMentalHealthService;
 
-    @PostMapping("/steps")
-    public Mono<ResponseEntity<MentalHealthStep>> createMentalHealthStep(@Valid @RequestBody CreateMentalHealthStepRequest request) {
+    @Override
+    public Mono<ResponseEntity<MentalHealthStep>> createMentalHealthStep(CreateMentalHealthStepRequest request) {
         return adminMentalHealthService.createMentalHealthStep(request)
                 .map(step -> ResponseEntity.status(HttpStatus.CREATED).body(step));
     }
 
-    @GetMapping("/steps")
+    @Override
     public Flux<MentalHealthStep> getAllMentalHealthSteps() {
         return adminMentalHealthService.getAllMentalHealthSteps();
     }
 
-    @DeleteMapping("/steps/{stepId}")
-    public Mono<ResponseEntity<Void>> deleteMentalHealthStep(@PathVariable Long stepId) {
+    @Override
+    public Mono<ResponseEntity<Void>> deleteMentalHealthStep(Long stepId) {
         return adminMentalHealthService.deleteMentalHealthStep(stepId)
                 .thenReturn(ResponseEntity.noContent().build());
     }
 }
+
 
