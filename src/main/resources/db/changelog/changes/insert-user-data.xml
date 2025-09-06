@@ -29,17 +29,17 @@
     </changeSet>
 
 
-    <changeSet id="2025-06-16-insert-user-metrics-from-csv" author="Rik Peeters" context="test" labels="dev">
-        <loadData
-                file="db/changelog/changes/data/user/user_metrics.csv"
-                separator=";"
-                tableName="user_metric">
-            <column name="id" type="STRING"/>
-            <column name="user_id" type="STRING"/>
-            <column name="date_recorded" type="DATE"/>
-            <column name="body_weight_kg" type="NUMERIC"/>
-            <column name="height_cm" type="NUMERIC"/>
-        </loadData>
-    </changeSet>
+<!--    <changeSet id="2025-06-16-insert-user-metrics-from-csv" author="Rik Peeters" context="test" labels="dev">-->
+<!--        <loadData-->
+<!--                file="db/changelog/changes/data/user/user_metrics.csv"-->
+<!--                separator=";"-->
+<!--                tableName="user_metric">-->
+<!--            <column name="id" type="STRING"/>-->
+<!--            <column name="user_id" type="STRING"/>-->
+<!--            <column name="date_recorded" type="DATE"/>-->
+<!--            <column name="body_weight_kg" type="NUMERIC"/>-->
+<!--            <column name="height_cm" type="NUMERIC"/>-->
+<!--        </loadData>-->
+<!--    </changeSet>-->
 
 </databaseChangeLog>

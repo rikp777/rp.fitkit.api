@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="2025-09-05-insert-logbook-test-data" author="Rik Peeters" context="test" labels="dev">
+        <loadData
+                file="db/changelog/changes/data/logbook/daily_logs.csv"
+                separator=";"
+                tableName="daily_logs">
+            <column name="log_id" type="NUMERIC"/>
+            <column name="user_id" type="STRING"/>
+            <column name="log_date" type="DATE"/>
+        </loadData>
+
+        <loadData
+                file="db/changelog/changes/data/logbook/log_sections.csv"
+                separator=";"
+                tableName="log_sections">
+            <column name="section_id" type="NUMERIC"/>
+            <column name="log_id" type="NUMERIC"/>
+            <column name="section_type" type="STRING"/>
+            <column name="summary" type="STRING"/>
+            <column name="mood" type="STRING"/>
+        </loadData>
+
+        <loadData
+                file="db/changelog/changes/data/logbook/log_links.csv"
+                separator=";"
+                tableName="log_links">
+            <column name="link_id" type="NUMERIC"/>
+            <column name="source_section_id" type="NUMERIC"/>
+            <column name="anchor_text" type="STRING"/>
+            <column name="target_log_id" type="NUMERIC"/>
+        </loadData>
+
+        <sql>
+            SELECT setval('daily_logs_log_id_seq', (SELECT MAX(log_id) FROM daily_logs));
+            SELECT setval('log_sections_section_id_seq', (SELECT MAX(section_id) FROM log_sections));
+            SELECT setval('log_links_link_id_seq', (SELECT MAX(link_id) FROM log_links));
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

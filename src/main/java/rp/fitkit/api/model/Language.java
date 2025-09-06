@@ -10,7 +10,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @Data
 @NoArgsConstructor
 @Table("language")
-public abstract class Language implements Persistable<String> {
+public class Language implements Persistable<String> {
 
     @Id
     private String code;
@@ -35,5 +35,10 @@ public abstract class Language implements Persistable<String> {
     public Language markAsNew() {
         this.isNew = true;
         return this;
+    }
+
+    @Override
+    public String getId() {
+        return code;
     }
 }

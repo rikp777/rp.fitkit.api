@@ -5,87 +5,57 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import rp.fitkit.api.dto.CreateExerciseRequest;
-import rp.fitkit.api.dto.ExerciseDto;
-import rp.fitkit.api.dto.TranslationRequest;
-import rp.fitkit.api.dto.UpdateExerciseRequest;
-import rp.fitkit.api.model.Exercise;
-import rp.fitkit.api.model.ExerciseTranslation;
+import rp.fitkit.api.dto.*;
+import rp.fitkit.api.model.exercise.Exercise;
+import rp.fitkit.api.model.exercise.ExerciseMuscleGroup;
+import rp.fitkit.api.model.exercise.ExerciseTranslation;
+import rp.fitkit.api.repository.ExerciseMuscleGroupRepository;
 import rp.fitkit.api.repository.ExerciseRepository;
 import rp.fitkit.api.repository.ExerciseTranslationRepository;
 import rp.fitkit.api.repository.LanguageRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ExerciseService {
-
     private final ExerciseRepository exerciseRepository;
     private final ExerciseTranslationRepository exerciseTranslationRepository;
-    private final LanguageRepository languageRepository; // Toegevoegd voor de nieuwe logica
+    private final ExerciseMuscleGroupRepository exerciseMuscleGroupRepository;
+    private final MuscleGroupService muscleGroupService;
+    private final LanguageRepository languageRepository;
 
-    /**
-     * Haalt alle oefeningen op en combineert ze met hun vertaling in de opgegeven taal.
-     *
-     * @param languageCode De gewenste taal voor de naam en beschrijving.
-     * @return Een Flux van ExerciseDto's.
-     */
     public Flux<ExerciseDto> getAllExercises(String languageCode) {
         return exerciseRepository.findAll()
-                .flatMap(exercise -> findTranslationAndMapToDto(exercise, languageCode));
+                .flatMap(exercise -> findTranslationAndMuscleGroupsAndMapToDto(exercise, languageCode));
     }
 
-    /**
-     * Haalt één specifieke oefening op, gecombineerd met de vertaling in de opgegeven taal.
-     *
-     * @param id De ID van de oefening.
-     * @param languageCode De gewenste taal.
-     * @return Een Mono met de ExerciseDto, of een error als de oefening niet gevonden is.
-     */
     public Mono<ExerciseDto> getExerciseById(String id, String languageCode) {
         return exerciseRepository.findById(id)
-                .flatMap(exercise -> findTranslationAndMapToDto(exercise, languageCode))
-                .switchIfEmpty(Mono.error(new RuntimeException("Exercise not found with id: " + id))); // Simpele error handling
+                .flatMap(exercise -> findTranslationAndMuscleGroupsAndMapToDto(exercise, languageCode))
+                .switchIfEmpty(Mono.error(new RuntimeException("Exercise not found with id: " + id)));
     }
 
-    /**
-     * Creëert een nieuwe oefening en slaat alle meegeleverde vertalingen op.
-     * Deze operatie is transactioneel: het slaagt volledig, of helemaal niet.
-     *
-     * @param request Het request object met de data voor de nieuwe oefening.
-     * @return Een Mono met de DTO van de zojuist aangemaakte oefening, gebaseerd op de eerste vertaling in de lijst.
-     */
     @Transactional
     public Mono<ExerciseDto> createExercise(CreateExerciseRequest request) {
-        Exercise exercise = new Exercise(request.getMetValue(), request.getPrimaryMuscleGroup());
+        Exercise exercise = new Exercise(request.getMetValue(), request.getCode());
         exercise.markAsNew();
 
         return exerciseRepository.save(exercise)
                 .flatMap(savedExercise -> {
-                    Flux<ExerciseTranslation> saveTranslationsFlux = Flux.fromIterable(request.getTranslations())
-                            .flatMap(translationRequest -> {
-                                // 4. Maak en sla voor elk verzoek een ExerciseTranslation op
-                                ExerciseTranslation translation = new ExerciseTranslation(
-                                        savedExercise.getId(),
-                                        translationRequest.getLanguageCode(),
-                                        translationRequest.getName(),
-                                        translationRequest.getDescription(),
-                                        translationRequest.getInstructions()
-                                );
-                                return exerciseTranslationRepository.save(translation);
-                            });
+                    Mono<Void> saveTranslations = saveExerciseTranslations(savedExercise.getId(), request.getTranslations());
+                    Mono<Void> saveMuscleGroupAssociations = saveExerciseMuscleGroupAssociations(savedExercise.getId(), request.getMuscleGroupCodes());
 
-                    // 5. Voer het opslaan uit en map het resultaat naar een DTO.
-                    //    We gebruiken de eerste vertaling uit het request voor de response DTO.
-                    return saveTranslationsFlux.collectList().map(savedTranslations -> {
-                        if (savedTranslations.isEmpty()) {
-                            // Dit zou niet moeten gebeuren als de request validatie goed is, maar is een goede guard clause.
-                            return toDto(savedExercise, new ExerciseTranslation(savedExercise.getId(), "", "No translation provided", "", ""));
-                        }
-                        // Gebruik de eerste opgeslagen vertaling voor de response.
-                        return toDto(savedExercise, savedTranslations.get(0));
-                    });
+                    return Mono.when(saveTranslations, saveMuscleGroupAssociations)
+                            .then(Mono.defer(() -> {
+                                return findTranslationAndMuscleGroupsAndMapToDto(savedExercise,
+                                        request.getTranslations().stream()
+                                                .map(TranslationRequest::getLanguageCode)
+                                                .findFirst()
+                                                .orElse("en")
+                                );
+                            }));
                 });
     }
 
@@ -93,27 +63,36 @@ public class ExerciseService {
     public Mono<ExerciseDto> updateExercise(String id, UpdateExerciseRequest request) {
         return exerciseRepository.findById(id)
                 .flatMap(exercise -> {
-                    // Werk de basis-eigenschappen van de oefening bij
                     exercise.setMetValue(request.getMetValue());
-                    exercise.setPrimaryMuscleGroup(request.getPrimaryMuscleGroup());
 
-                    // Sla de bijgewerkte oefening op en verwijder vervolgens de oude vertalingen
                     return exerciseRepository.save(exercise)
-                            .flatMap(savedExercise ->
-                                    exerciseTranslationRepository.deleteByExerciseId(savedExercise.getId())
-                                            // Nadat de oude vertalingen zijn verwijderd, sla de nieuwe op
-                                            .then(saveOrUpdateTranslations(savedExercise, request.getTranslations()))
-                                            .map(savedTranslations -> toDto(savedExercise, savedTranslations.get(0)))
-                            );
+                            .flatMap(updatedExercise -> {
+                                Mono<Void> deleteOldTranslations = exerciseTranslationRepository.deleteByExerciseId(updatedExercise.getId());
+                                Mono<Void> deleteOldMuscleGroupAssociations = exerciseMuscleGroupRepository.deleteByExerciseId(updatedExercise.getId());
+
+                                Mono<Void> saveNewTranslations = saveExerciseTranslations(updatedExercise.getId(), request.getTranslations());
+                                Mono<Void> saveNewMuscleGroupAssociations = saveExerciseMuscleGroupAssociations(updatedExercise.getId(), request.getMuscleGroupCodes());
+
+                                return Mono.when(deleteOldTranslations, deleteOldMuscleGroupAssociations)
+                                        .then(Mono.when(saveNewTranslations, saveNewMuscleGroupAssociations))
+                                        .then(Mono.defer(() -> {
+                                            return findTranslationAndMuscleGroupsAndMapToDto(updatedExercise,
+                                                    request.getTranslations().stream()
+                                                            .map(TranslationRequest::getLanguageCode)
+                                                            .findFirst()
+                                                            .orElse("en")
+                                            );
+                                        }));
+                            });
                 })
                 .switchIfEmpty(Mono.error(new RuntimeException("Exercise not found with id: " + id)));
     }
 
-    private Mono<List<ExerciseTranslation>> saveOrUpdateTranslations(Exercise exercise, List<TranslationRequest> translations) {
+    private Mono<Void> saveExerciseTranslations(String exerciseId, List<TranslationRequest> translations) {
         return Flux.fromIterable(translations)
                 .flatMap(translationRequest -> {
                     ExerciseTranslation translation = new ExerciseTranslation(
-                            exercise.getId(),
+                            exerciseId,
                             translationRequest.getLanguageCode(),
                             translationRequest.getName(),
                             translationRequest.getDescription(),
@@ -121,30 +100,52 @@ public class ExerciseService {
                     );
                     return exerciseTranslationRepository.save(translation);
                 })
-                .collectList();
+                .then();
     }
 
-    /**
-     * Hulpfunctie om een Exercise te combineren met zijn vertaling.
-     * Zoekt de vertaling op en combineert de twee objecten in een DTO.
-     */
-    private Mono<ExerciseDto> findTranslationAndMapToDto(Exercise exercise, String languageCode) {
-        return exerciseTranslationRepository.findByExerciseIdAndLanguageCode(exercise.getId(), languageCode)
-                .defaultIfEmpty(new ExerciseTranslation(exercise.getId(), languageCode, "", "", ""))
-                .map(translation -> toDto(exercise, translation));
+    private Mono<Void> saveExerciseMuscleGroupAssociations(String exerciseId, List<String> muscleGroupCodes) {
+        if (muscleGroupCodes == null || muscleGroupCodes.isEmpty()) {
+            return Mono.empty();
+        }
+        return muscleGroupService.getMuscleGroupIdsByCodes(muscleGroupCodes)
+                .flatMapMany(muscleGroupIds ->
+                        Flux.fromIterable(muscleGroupIds)
+                                .map(muscleGroupId -> new ExerciseMuscleGroup(exerciseId, muscleGroupId))
+                                .flatMap(exerciseMuscleGroupRepository::save)
+                )
+                .then();
     }
 
-    /**
-     * Hulpfunctie die een Exercise en een ExerciseTranslation omzet naar een ExerciseDto.
-     */
-    private ExerciseDto toDto(Exercise exercise, ExerciseTranslation translation) {
+    private Mono<ExerciseDto> findTranslationAndMuscleGroupsAndMapToDto(Exercise exercise, String languageCode) {
+        Mono<ExerciseTranslation> translationMono = exerciseTranslationRepository.findByExerciseIdAndLanguageCode(exercise.getId(), languageCode)
+                .switchIfEmpty(Mono.defer(() -> {
+                    if (!"en-GB".equals(languageCode)) {
+                        return exerciseTranslationRepository.findByExerciseIdAndLanguageCode(exercise.getId(), "en-GB");
+                    }
+                    return Mono.empty();
+                }))
+                .defaultIfEmpty(new ExerciseTranslation(exercise.getId(), languageCode, "", "", ""));
+
+        Mono<List<MuscleGroupDto>> muscleGroupsMono = exerciseMuscleGroupRepository.findMuscleGroupIdsByExerciseId(exercise.getId())
+                .collect(Collectors.toSet())
+                .flatMap(ids -> muscleGroupService.getMuscleGroupsByIdsAndLanguageCode(ids, languageCode))
+                .map(responses -> responses.stream()
+                        .map(MuscleGroupServiceResponse::getMuscleGroupDto)
+                        .collect(Collectors.toList()));
+
+
+        return Mono.zip(translationMono, muscleGroupsMono)
+                .map(tuple -> toDto(exercise, tuple.getT1(), tuple.getT2()));
+    }
+
+    private ExerciseDto toDto(Exercise exercise, ExerciseTranslation translation, List<MuscleGroupDto> muscleGroups) {
         return new ExerciseDto(
                 exercise.getId(),
                 translation.getName(),
                 translation.getDescription(),
                 translation.getInstructions(),
                 exercise.getMetValue(),
-                exercise.getPrimaryMuscleGroup()
+                muscleGroups
         );
     }
 }

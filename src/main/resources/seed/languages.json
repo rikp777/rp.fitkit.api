@@ -1,0 +1,46 @@
+[
+  {
+    "code": "nl-NL",
+    "name": "Nederlands"
+  },
+  {
+    "code": "nl-LI",
+    "name": "Limburgs"
+  },
+  {
+    "code": "nl-FR",
+    "name": "Fries"
+  },
+  {
+    "code": "nl-GR",
+    "name": "Gronings"
+  },
+  {
+    "code": "en-GB",
+    "name": "English (UK)"
+  },
+  {
+    "code": "en-US",
+    "name": "English (US)"
+  },
+  {
+    "code": "fr-FR",
+    "name": "Français"
+  },
+  {
+    "code": "de-DE",
+    "name": "Deutsch"
+  },
+  {
+    "code": "es-ES",
+    "name": "Español"
+  },
+  {
+    "code": "it-IT",
+    "name": "Italiano"
+  },
+  {
+    "code": "pl-PL",
+    "name": "Polski"
+  }
+]

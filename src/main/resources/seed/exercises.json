@@ -1,0 +1,74 @@
+[
+  {
+    "metValue": 6.0,
+    "muscleGroupCodes": ["SHOULDERS", "TRICEPS"],
+    "translations": [
+      {
+        "languageCode": "nl-NL",
+        "name": "Schouderpers (Standaard)",
+        "description": "Druk gewicht boven het hoofd voor de schouders.",
+        "instructions": "Zittend of staand, houd dumbbells op schouderhoogte, druk omhoog."
+      },
+      {
+        "languageCode": "nl-LI",
+        "name": "Schouwerdrok (Limburgs)",
+        "description": "Gewich boave de kop drökke veur de sjouwers.",
+        "instructions": "Zittend of sjtaond, halt dumbbells op sjouwerhuuegte, drök omhoeag."
+      },
+      {
+        "languageCode": "nl-FR",
+        "name": "Skouderpres (Fries)",
+        "description": "Gewicht boppe de holle drukke foar de skouders.",
+        "instructions": "Sittend of steand, hâld dumbbells op skouderhichte, druk omheech."
+      },
+      {
+        "languageCode": "nl-GR",
+        "name": "Scholderprezen (Gronings)",
+        "description": "Gewicht boven kop drukken veur de scholders.",
+        "instructions": "Zittend of staand, hold dumbbells op scholderhichte, druk omhoog."
+      },
+      {
+        "languageCode": "en-GB",
+        "name": "Shoulder Press (UK)",
+        "description": "Press weight overhead for shoulders.",
+        "instructions": "Sit or stand, hold dumbbells at shoulder height, press up."
+      },
+      {
+        "languageCode": "en-US",
+        "name": "Shoulder Press (US)",
+        "description": "Press weight overhead for shoulders.",
+        "instructions": "Sit or stand, hold dumbbells at shoulder height, press up."
+      },
+      {
+        "languageCode": "fr-FR",
+        "name": "Développé Militaire (France)",
+        "description": "Pousser le poids au-dessus de la tête pour les épaules.",
+        "instructions": "Assis ou debout, tenir des haltères à hauteur d'épaule, pousser vers le haut."
+      },
+      {
+        "languageCode": "de-DE",
+        "name": "Schulterdrücken (Deutschland)",
+        "description": "Gewicht über den Kopf drücken für die Schultern.",
+        "instructions": "Sitzen oder stehen, Kurzhanteln auf Schulterhöhe halten, nach oben drücken."
+      },
+      {
+        "languageCode": "es-ES",
+        "name": "Press de Hombros",
+        "description": "Presionar peso por encima de la cabeza para hombros.",
+        "instructions": "Sentado o de pie, sostenga mancuernas a la altura del hombro, empuje hacia arriba."
+      },
+      {
+        "languageCode": "it-IT",
+        "name": "Spinte con Manubri",
+        "description": "Spingere il peso sopra la testa per le spalle.",
+        "instructions": "Siediti o stai in piedi, tieni i manubri all'altezza delle spalle, spingi verso l'alto."
+      },
+      {
+        "languageCode": "pl-PL",
+        "name": "Wyciskanie Hantli",
+        "description": "Wyciskanie ciężaru nad głowę na ramiona.",
+        "instructions": "Usiądź lub stań, trzymaj hantle na wysokości barków, wyciśnij w górę."
+      }
+    ]
+  }
+]

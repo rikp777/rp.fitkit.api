@@ -62,6 +62,15 @@ public class User implements Persistable<String>, UserDetails {
         return this.authorities;
     }
 
+    public void setAuthoritiesFromRoles(List<String> roles) {
+        if (roles == null) {
+            this.authorities = Collections.emptyList();
+            return;
+        }
+        this.authorities = roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .toList();
+    }
 
     @Override
     public String getPassword() {

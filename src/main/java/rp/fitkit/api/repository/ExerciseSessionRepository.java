@@ -3,7 +3,7 @@ package rp.fitkit.api.repository;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import reactor.core.publisher.Flux;
-import rp.fitkit.api.model.ExerciseSession;
+import rp.fitkit.api.model.exercise.ExerciseSession;
 
 public interface ExerciseSessionRepository extends R2dbcRepository<ExerciseSession, String> {
     @Query("""

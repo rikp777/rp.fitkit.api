@@ -31,6 +31,33 @@ public interface MentalHealthApi {
             @RequestParam(defaultValue = "en-US") String languageCode);
 
     /**
+     * Haalt een specifieke mentale gezondheidsstap op voor de momenteel ingelogde gebruiker.
+     *
+     * @param userDetails De details van de ingelogde gebruiker.
+     * @param stepId      De ID van de op te halen stap.
+     * @param languageCode De taalcode voor de vertalingen (optioneel, standaard is "en-US").
+     * @return Een Mono met de DTO die de stap vertegenwoordigt.
+     */
+    @GetMapping("/steps/{stepId}")
+    Mono<MentalHealthStepDto> getMentalHealthStepById(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long stepId,
+            @RequestParam(defaultValue = "en-US") String languageCode);
+
+    /**
+     * Haalt de voorgestelde mentale gezondheidsstap op voor de momenteel ingelogde gebruiker.
+     * De suggestie is gebaseerd op de eerste ontgrendelde stap die nog niet is voltooid.
+     *
+     * @param userDetails  De details van de ingelogde gebruiker.
+     * @param languageCode De taalcode voor de vertalingen (optioneel, standaard is "en-US").
+     * @return Een Mono met de DTO die de voorgestelde stap vertegenwoordigt, of leeg als alle stappen zijn voltooid.
+     */
+    @GetMapping("/steps/suggested")
+    Mono<MentalHealthStepDto> getSuggestedMentalHealthStep(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam(defaultValue = "en-US") String languageCode);
+
+    /**
      * Registreert dat de ingelogde gebruiker een specifieke stap heeft voltooid.
      *
      * @param userDetails De details van de ingelogde gebruiker.

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import rp.fitkit.api.dto.ExerciseSessionResponseDto;
-import rp.fitkit.api.model.ExerciseSession;
+import rp.fitkit.api.model.exercise.ExerciseSession;
 import rp.fitkit.api.repository.ExerciseSessionRepository;
 import rp.fitkit.api.repository.SetLogRepository;
 

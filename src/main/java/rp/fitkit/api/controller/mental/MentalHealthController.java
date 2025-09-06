@@ -25,6 +25,18 @@ public class MentalHealthController implements MentalHealthApi {
     }
 
     @Override
+    public Mono<MentalHealthStepDto> getSuggestedMentalHealthStep(UserDetails userDetails, String languageCode) {
+        String userId = ((User) userDetails).getId();
+        return mentalHealthService.getSuggestedStepForUser(userId, languageCode);
+    }
+
+    @Override
+    public Mono<MentalHealthStepDto> getMentalHealthStepById(UserDetails userDetails, Long stepId, String languageCode) {
+        String userId = ((User) userDetails).getId();
+        return mentalHealthService.getMentalHealthStepForUser(userId, stepId, languageCode);
+    }
+
+    @Override
     public Mono<ResponseEntity<Void>> performStepAction(UserDetails userDetails, Long stepId) {
 
         String userId = ((User) userDetails).getId();

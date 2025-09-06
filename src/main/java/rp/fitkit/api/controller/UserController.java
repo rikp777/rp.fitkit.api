@@ -17,7 +17,7 @@ import rp.fitkit.api.model.user.User;
 import rp.fitkit.api.service.user.UserService;
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1/auth")
 public class UserController {
 
     private final UserService userService;

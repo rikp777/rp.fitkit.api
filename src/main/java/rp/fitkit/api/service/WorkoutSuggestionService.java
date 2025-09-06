@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import rp.fitkit.api.exception.ResourceNotFoundException;
 import rp.fitkit.api.model.*;
 import reactor.core.publisher.Mono;
+import rp.fitkit.api.model.exercise.ExerciseSession;
 import rp.fitkit.api.model.user.UserSettings;
 import rp.fitkit.api.repository.*;
 import rp.fitkit.api.repository.user.UserSettingsRepository;

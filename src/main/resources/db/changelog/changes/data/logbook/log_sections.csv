@@ -1,0 +1,6 @@
+section_id;log_id;section_type;summary;mood
+1;1;MORNING;De dag begon goed, veel energie. Ik heb nagedacht over het nieuwe [project](log:2).;Energiek
+2;1;EVENING;De avond was rustig. Teruggedacht aan de [ochtend](log:1) en hoe de dag verliep.;Voldaan
+3;2;MORNING;Vandaag begonnen met het [project](log:2). Het was uitdagender dan verwacht, maar ik heb goede vooruitgang geboekt. Dit doet me denken aan de start van een vorig [initiatief](log:3).;Gefocust
+4;3;AFTERNOON;Gewerkt aan het [initiatief](log:3). Het voelt goed om de lessen van het eerdere [project](log:2) toe te passen.;Productief
+5;4;MORNING;Admin logboek. Dit zou niet zichtbaar moeten zijn voor andere gebruikers.;Vertrouwelijk

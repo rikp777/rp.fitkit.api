@@ -18,3 +18,25 @@ Als de API lokaal draait:
 - Swagger UI: http://localhost:6078/swagger-ui/index.html
 - OpenAPI JSON: http://localhost:6078/v3/api-docs
 
+#Notes
+Don't use oauth2 of organistaion like google or microsoft because I hate them. 
+
+#Notes
+Don't use oauth2 of organistaion like google or microsoft because I hate them.
+
+## Important Note on Database Seeding
+
+When you manually insert test data (e.g., using Liquibase's `<loadData>` or raw SQL scripts) and **provide explicit primary key values** for tables with auto-incrementing columns, you must also manually update PostgreSQL's sequence counter.
+
+**Why?** The database does exactly what you tell it to do: it inserts the data with the ID you provided. However, this process bypasses the sequence, and its internal counter does not get updated. This will cause `duplicate key` errors later when the application tries to insert a new row, as the sequence will try to generate an ID that already exists.
+
+**Solution:** After loading your data, you must run a command to synchronize the sequence. The best way to do this is to add a `<sql>` block at the end of your Liquibase data-loading changeset.
+
+**Example Command:**
+I added one in the `db/changelog/changesets/insert-logbook-data.xml` file for the `users` table:
+
+```sql 
+SELECT setval('users_id_seq', (SELECT MAX(id) FROM users));
+```
+
+This will ensure the application can generate new IDs without conflict.

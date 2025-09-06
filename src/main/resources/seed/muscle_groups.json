@@ -1,0 +1,856 @@
+[
+  {
+    "code": "BICEPS",
+    "latinName": "Biceps brachii",
+    "translations": [
+      {
+        "languageCode": "nl-NL",
+        "name": "Biceps",
+        "description": "De m. biceps brachii is een tweehoofdige spier aan de voorkant van de bovenarm die de elleboog buigt en de onderarm doet supineren; essentieel bij til- en trekbewegingen."
+      },
+      {
+        "languageCode": "nl-LI",
+        "name": "Biceps",
+        "description": "De m. biceps brachii is ’ne twéékoppege spier óp d’n voorkant van d’n bovenarm die d’n ellebeug buig en d’n óngerarm doot supinare; oesjentieël bie til- en trekbeweginge."
+      },
+      {
+        "languageCode": "nl-FR",
+        "name": "Biceps",
+        "description": "De musculus biceps brachii is in twakoppige spier oan ’e foarkant fan ’e boppe-earm dy’t de elleboech bûcht en de ûnderarm supinearret; essinsjeel by tillen en lûkbewegingen."
+      },
+      {
+        "languageCode": "nl-GR",
+        "name": "Biceps",
+        "description": "De m. biceps brachii is ’n tweikoppige spier an de voarkaant van de bovenarm dij de elleboog buigt en de onderarm supineert; belangriek bie til- en trekbewegingen."
+      },
+      {
+        "languageCode": "en-GB",
+        "name": "Biceps",
+        "description": "The biceps brachii is a two-headed muscle on the front of the upper arm that flexes the elbow and supinates the forearm; key for lifting and pulling motions."
+      },
+      {
+        "languageCode": "en-US",
+        "name": "Biceps",
+        "description": "The biceps brachii is a two-headed muscle on the front of the upper arm that flexes the elbow and supinates the forearm; key for lifting and pulling motions."
+      },
+      {
+        "languageCode": "fr-FR",
+        "name": "Biceps",
+        "description": "Le muscle biceps brachial est un muscle à deux chefs situé à l’avant du bras, responsable de la flexion du coude et de la supination de l’avant-bras ; il intervient dans les mouvements de port de charge et de tirage."
+      },
+      {
+        "languageCode": "de-DE",
+        "name": "Bizeps",
+        "description": "Der Musculus biceps brachii ist ein zweiköpfiger Muskel an der Vorderseite des Oberarms, der die Beugung des Ellenbogens und die Supination des Unterarms ermöglicht; wichtig bei Hebe- und Zugbewegungen."
+      },
+      {
+        "languageCode": "es-ES",
+        "name": "Bíceps",
+        "description": "El músculo bíceps braquial es un músculo de dos cabezas situado en la parte frontal del brazo que permite la flexión del codo y la supinación del antebrazo; fundamental en movimientos de tracción y levantamiento."
+      },
+      {
+        "languageCode": "it-IT",
+        "name": "Bicipiti",
+        "description": "Il muscolo bicipite brachiale è un muscolo a due capi situato nella parte anteriore del braccio, responsabile della flessione del gomito e della supinazione dell’avambraccio; fondamentale nei movimenti di sollevamento e trazione."
+      },
+      {
+        "languageCode": "pl-PL",
+        "name": "Biceps",
+        "description": "Mięsień dwugłowy ramienia (biceps) to dwugłowy mięsień z przodu ramienia odpowiedzialny za zginanie łokcia oraz odwracanie przedramienia; odgrywa ważną rolę przy podnoszeniu i przyciąganiu."
+      }
+    ]
+  },
+  {
+    "code": "SHOULDERS",
+    "latinName": "Deltoideus",
+    "translations": [
+      {
+        "languageCode": "nl-NL",
+        "name": "Schouders",
+        "description": "Het schoudergebied wordt vooral aangedreven door de driekoppige m. deltoideus rond het schoudergewricht; hij heft, buigt, strekt en roteert de arm en stabiliseert het gewricht bij duw- en gooi­bewegingen."
+      },
+      {
+        "languageCode": "nl-LI",
+        "name": "Sjouwerd",
+        "description": "’t Sjoldergebied weurt veural aangedreje door de driekoppege m. deltoideus roond ’t sjoldergewrich; hae hief, buk, strekt en rotear d’n ärm en stabilieseert ’t gewrich bie duw- en goojbeweginge."
+      },
+      {
+        "languageCode": "nl-FR",
+        "name": "Skouders",
+        "description": "It skoudergebiet wurdt benammen oandreaun troch de trijekoppige m. deltoideus om it skoudergewricht hinne; dy tilt, bûcht, striekt en draait de earm en stabilisearret it gewricht by druk- en goaibewegingen."
+      },
+      {
+        "languageCode": "nl-GR",
+        "name": "Scholders",
+        "description": "’t Scholdergebied wördt veural anjoagd deur de dreikoppige m. deltoideus rond ’t scholdergewricht; hai heft, buigt, strekt en roteert de arm en stabiliseert ’t gewricht bie duw- en gooibewegingen."
+      },
+      {
+        "languageCode": "en-GB",
+        "name": "Shoulders",
+        "description": "The shoulder region is powered mainly by the three-headed deltoid surrounding the glenohumeral joint; it abducts, flexes, extends and rotates the arm while keeping the joint stable during pressing and throwing movements."
+      },
+      {
+        "languageCode": "en-US",
+        "name": "Shoulders",
+        "description": "The shoulder region is powered mainly by the three-headed deltoid surrounding the glenohumeral joint; it abducts, flexes, extends and rotates the arm while keeping the joint stable during pressing and throwing movements."
+      },
+      {
+        "languageCode": "fr-FR",
+        "name": "Épaules",
+        "description": "Le groupe musculaire de l’épaule est dominé par le deltoïde à trois chefs qui entoure l’articulation gléno-humérale ; il élève, fléchit, étend et fait pivoter le bras tout en stabilisant l’épaule lors des poussées et des lancers."
+      },
+      {
+        "languageCode": "de-DE",
+        "name": "Schultern",
+        "description": "Die Schulterpartie wird vor allem vom dreiköpfigen Musculus deltoideus um das Glenohumeralgelenk gebildet; er hebt, beugt, streckt und rotiert den Arm und stabilisiert das Gelenk bei Druck- und Wurfbewegungen."
+      },
+      {
+        "languageCode": "es-ES",
+        "name": "Hombros",
+        "description": "La región del hombro está impulsada principalmente por el deltoides de tres cabezas que rodea la articulación glenohumeral; eleva, flexiona, extiende y rota el brazo, estabilizando el hombro en movimientos de empuje y lanzamiento."
+      },
+      {
+        "languageCode": "it-IT",
+        "name": "Spalle",
+        "description": "Il gruppo muscolare della spalla è dominato dal deltoide a tre capi che avvolge l’articolazione gleno-omerale; abduce, flette, estende e ruota il braccio, stabilizzando l’articolazione durante spinte e lanci."
+      },
+      {
+        "languageCode": "pl-PL",
+        "name": "Barki",
+        "description": "Obszar barku tworzy przede wszystkim trójgłowy mięsień naramienny otaczający staw ramienny; odwodzi, zgina, prostuje i obraca ramię, stabilizując staw podczas wypychania i rzutu."
+      }
+    ]
+  },
+  {
+    "code": "TRICEPS",
+    "latinName": "Triceps brachii",
+    "translations": [
+      {
+        "languageCode": "nl-NL",
+        "name": "Triceps",
+        "description": "De m. triceps brachii is een driehoofdige spier aan de achterkant van de bovenarm die de elleboog strekt en de schouder stabiliseert bij duw- en gooi­bewegingen."
+      },
+      {
+        "languageCode": "nl-LI",
+        "name": "Triceps",
+        "description": "De triceps brachii is ’ne driekoppege spier óp d’n achtekant van d’n bovenarm die d’n ellebeug strik en d’r sjolder stabilieseert bie duw- en goojbeweginge."
+      },
+      {
+        "languageCode": "nl-FR",
+        "name": "Triceps",
+        "description": "De musculus triceps brachii is in trijekoppige spier oan ’e efterkant fan ’e boppe-earm dy’t de elleboech strekt en de skouder stabilisearret by druk- en goaibewegingen."
+      },
+      {
+        "languageCode": "nl-GR",
+        "name": "Triceps",
+        "description": "De triceps brachii is ’n dreikoppige spier an de achterkaant van de bovenarm dij de elleboog strekt en de scholder stabiliseert bie duw- en gooibewegingen."
+      },
+      {
+        "languageCode": "en-GB",
+        "name": "Triceps",
+        "description": "The triceps brachii is a three-headed muscle on the back of the upper arm that extends the elbow and stabilises the shoulder during pressing, pushing and throwing actions."
+      },
+      {
+        "languageCode": "en-US",
+        "name": "Triceps",
+        "description": "The triceps brachii is a three-headed muscle on the back of the upper arm that extends the elbow and stabilizes the shoulder during pressing, pushing and throwing actions."
+      },
+      {
+        "languageCode": "fr-FR",
+        "name": "Triceps",
+        "description": "Le muscle triceps brachial est un muscle à trois chefs situé à l’arrière du bras qui assure l’extension du coude et la stabilisation de l’épaule lors des mouvements de poussée et de lancer."
+      },
+      {
+        "languageCode": "de-DE",
+        "name": "Trizeps",
+        "description": "Der Musculus triceps brachii ist ein dreiköpfiger Muskel an der Rückseite des Oberarms, der die Streckung des Ellenbogens ermöglicht und das Schultergelenk bei Druck- und Wurfbewegungen stabilisiert."
+      },
+      {
+        "languageCode": "es-ES",
+        "name": "Tríceps",
+        "description": "El músculo tríceps braquial es un músculo de tres cabezas en la parte posterior del brazo que extiende el codo y estabiliza el hombro durante los empujes y lanzamientos."
+      },
+      {
+        "languageCode": "it-IT",
+        "name": "Tricipiti",
+        "description": "Il muscolo tricipite brachiale è un muscolo a tre capi situato nella parte posteriore del braccio, responsabile dell’estensione del gomito e della stabilizzazione della spalla in spinta e lancio."
+      },
+      {
+        "languageCode": "pl-PL",
+        "name": "Triceps",
+        "description": "Mięsień trójgłowy ramienia (triceps) to trójgłowy mięsień z tyłu ramienia, który prostuje łokieć i stabilizuje bark podczas ruchów wypychania i rzutu."
+      }
+    ]
+  },
+  {
+    "code": "CHEST",
+    "latinName": "Pectoralis major",
+    "translations": [
+      {
+        "languageCode": "nl-NL",
+        "name": "Borst",
+        "description": "De m. pectoralis major is een grote, waaiervormige spier aan de voorkant van de borstkas die de arm naar het lichaam trekt, draait en buigt; cruciaal bij duw- en werpbewegingen."
+      },
+      {
+        "languageCode": "nl-LI",
+        "name": "Bórs",
+        "description": "De pectoralis major is ’ne groeëte, waajervórmige spier óp d’n voorkant van de bórs die d’n ärm nao ’t lief trèk, dreijt en buig; cruciaal bie duw- en wèrpbeweginge."
+      },
+      {
+        "languageCode": "nl-FR",
+        "name": "Boarst",
+        "description": "De musculus pectoralis major is in grutte, waaierfoarmige spier oan ’e foarkant fan ’e boarstkas dy’t de earm nei it lichem lûkt, draait en bûcht; krúsjaal by druk- en werpbewegingen."
+      },
+      {
+        "languageCode": "nl-GR",
+        "name": "Borst",
+        "description": "De m. pectoralis major is ’n grode, waaiervörmige spier an de voorkaant van de borstkas dij de arm noar ’t lief trekt, dreit en buigt; belangriek bie duw- en werpbewegingen."
+      },
+      {
+        "languageCode": "en-GB",
+        "name": "Chest",
+        "description": "The pectoralis major is a large, fan-shaped muscle on the front of the chest that adducts, rotates, and flexes the arm; crucial for pushing and throwing movements."
+      },
+      {
+        "languageCode": "en-US",
+        "name": "Chest",
+        "description": "The pectoralis major is a large, fan-shaped muscle on the front of the chest that adducts, rotates, and flexes the arm; crucial for pushing and throwing movements."
+      },
+      {
+        "languageCode": "fr-FR",
+        "name": "Poitrine",
+        "description": "Le muscle grand pectoral est un muscle large en forme d’éventail situé à l’avant de la poitrine qui assure l’adduction, la rotation et la flexion du bras ; crucial pour les mouvements de poussée et de lancer."
+      },
+      {
+        "languageCode": "de-DE",
+        "name": "Brust",
+        "description": "Der Musculus pectoralis major ist ein großer, fächerförmiger Muskel an der Vorderseite des Brustkorbs, der den Arm adduziert, rotiert und beugt; entscheidend für Druck- und Wurfbewegungen."
+      },
+      {
+        "languageCode": "es-ES",
+        "name": "Pecho",
+        "description": "El músculo pectoral mayor es un músculo grande en forma de abanico en la parte frontal del tórax que aduce, rota y flexiona el brazo; crucial para los movimientos de empuje y lanzamiento."
+      },
+      {
+        "languageCode": "it-IT",
+        "name": "Petto",
+        "description": "Il muscolo pettorale maggiore è un grande muscolo a forma di ventaglio situato nella parte anteriore del torace che adduce, ruota e flette il braccio; cruciale per i movimenti di spinta e lancio."
+      },
+      {
+        "languageCode": "pl-PL",
+        "name": "Klatka piersiowa",
+        "description": "Mięsień piersiowy większy to duży, wachlarzowaty mięsień z przodu klatki piersiowej, który przywodzi, obraca i zgina ramię; kluczowy dla ruchów wypychania i rzutu."
+      }
+    ]
+  },
+  {
+    "code": "BACK",
+    "latinName": "Latissimus dorsi",
+    "translations": [
+      {
+        "languageCode": "nl-NL",
+        "name": "Rug",
+        "description": "De m. latissimus dorsi is een grote, brede spier van de rug die de arm naar het lichaam trekt en roteert, en cruciaal is bij trek-, klim- en roeibewegingen."
+      },
+      {
+        "languageCode": "nl-LI",
+        "name": "Rögk",
+        "description": "De m. latissimus dorsi is ’ne groeëte, breije spier van de rögk die d’n ärm nao ’t lief trèk en rotear, en cruciaal is bie trèk-, klim- en roejbeweginge."
+      },
+      {
+        "languageCode": "nl-FR",
+        "name": "Rêch",
+        "description": "De musculus latissimus dorsi is in grutte, brede spier fan ’e rêch dy’t de earm nei it lichem lûkt en rotearret, en krúsjaal is by lûk-, klim- en roeibewegingen."
+      },
+      {
+        "languageCode": "nl-GR",
+        "name": "Rug",
+        "description": "De m. latissimus dorsi is ’n grode, brede spier van de rug dij de arm noar ’t lief trekt en roteert, en belangriek is bie trek-, klim- en roeibewegingen."
+      },
+      {
+        "languageCode": "en-GB",
+        "name": "Back",
+        "description": "The latissimus dorsi is a large, broad muscle of the back that adducts, extends, and internally rotates the arm; crucial for pulling, climbing, and rowing movements."
+      },
+      {
+        "languageCode": "en-US",
+        "name": "Back",
+        "description": "The latissimus dorsi is a large, broad muscle of the back that adducts, extends, and internally rotates the arm; crucial for pulling, climbing, and rowing movements."
+      },
+      {
+        "languageCode": "fr-FR",
+        "name": "Dos",
+        "description": "Le muscle grand dorsal est un muscle large et plat du dos qui assure l’adduction, l’extension et la rotation interne du bras ; crucial pour les mouvements de traction, d’escalade et d’aviron."
+      },
+      {
+        "languageCode": "de-DE",
+        "name": "Rücken",
+        "description": "Der Musculus latissimus dorsi ist ein großer, breiter Rückenmuskel, der den Arm adduziert, streckt und innenrotiert; entscheidend für Zug-, Kletter- und Ruderbewegungen."
+      },
+      {
+        "languageCode": "es-ES",
+        "name": "Espalda",
+        "description": "El músculo dorsal ancho es un músculo grande y ancho de la espalda que aduce, extiende y rota internamente el brazo; crucial para los movimientos de tracción, escalada y remo."
+      },
+      {
+        "languageCode": "it-IT",
+        "name": "Schiena",
+        "description": "Il muscolo gran dorsale è un muscolo grande e ampio della schiena che adduce, estende e ruota internamente il braccio; cruciale per i movimenti di trazione, arrampicata e canottaggio."
+      },
+      {
+        "languageCode": "pl-PL",
+        "name": "Plecy",
+        "description": "Mięsień najszerszy grzbietu to duży, szeroki mięsień pleców, który przywodzi, prostuje i obraca ramię do wewnątrz; kluczowy do podciągania, wspinaczki i wiosłowania."
+      }
+    ]
+  },
+  {
+    "code": "ABS",
+    "latinName": "Rectus abdominis",
+    "translations": [
+      {
+        "languageCode": "nl-NL",
+        "name": "Buikspieren",
+        "description": "De m. rectus abdominis is een paar lange, platte spieren aan de voorkant van de buik die de romp buigen en de bekken kantelen; essentieel voor stabiliteit en draaibewegingen."
+      },
+      {
+        "languageCode": "nl-LI",
+        "name": "Boeëkspier",
+        "description": "De m. rectus abdominis is ’n paar lange, platte spier óp d’n voorkant van de boeëk die de romp buig en de bekkekantel; oesjentieël veur stabiliteit en dreijbeweginge."
+      },
+      {
+        "languageCode": "nl-FR",
+        "name": "Buikspieren",
+        "description": "De musculus rectus abdominis is in pear lange, platte spieren oan ’e foarkant fan ’e búk dy’t de romp bûgje en de bekken kantelje; essinsjeel foar stabiliteit en draaibewegingen."
+      },
+      {
+        "languageCode": "nl-GR",
+        "name": "Buukspieren",
+        "description": "De m. rectus abdominis is ’n pear lange, platte spieren an de voorkaant van de buuk dij de romp buigt en de bekken kantelt; belangriek veur stabiliteit en dreibewegingen."
+      },
+      {
+        "languageCode": "en-GB",
+        "name": "Abs",
+        "description": "The rectus abdominis is a pair of long, flat muscles on the front of the abdomen that flex the trunk and tilt the pelvis; essential for stability and rotational movements."
+      },
+      {
+        "languageCode": "en-US",
+        "name": "Abs",
+        "description": "The rectus abdominis is a pair of long, flat muscles on the front of the abdomen that flex the trunk and tilt the pelvis; essential for stability and rotational movements."
+      },
+      {
+        "languageCode": "fr-FR",
+        "name": "Abdominaux",
+        "description": "Le muscle droit de l’abdomen est une paire de longs muscles plats situés à l’avant de l’abdomen qui fléchissent le tronc et inclinent le bassin ; essentiels pour la stabilité et les mouvements de rotation."
+      },
+      {
+        "languageCode": "de-DE",
+        "name": "Bauchmuskeln",
+        "description": "Der Musculus rectus abdominis ist ein Paar langer, flacher Muskeln an der Vorderseite des Bauches, die den Rumpf beugen und das Becken kippen; entscheidend für Stabilität und Rotationsbewegungen."
+      },
+      {
+        "languageCode": "es-ES",
+        "name": "Abdominales",
+        "description": "El músculo recto abdominal es un par de músculos largos y planos en la parte frontal del abdomen que flexionan el tronco e inclinan la pelvis; esenciales para la estabilidad y los movimientos de rotación."
+      },
+      {
+        "languageCode": "it-IT",
+        "name": "Addominali",
+        "description": "Il muscolo retto addominale è una coppia di muscoli lunghi e piatti situati nella parte anteriore dell’addome che flettono il tronco e inclinano il bacino; essenziali per la stabilità e i movimenti di rotazione."
+      },
+      {
+        "languageCode": "pl-PL",
+        "name": "Mięśnie brzucha",
+        "description": "Mięsień prosty brzucha to para długich, płaskich mięśni z przodu brzucha, które zginają tułów i pochylają miednicę; kluczowe dla stabilności i ruchów obrotowych."
+      }
+    ]
+  },
+  {
+    "code": "GLUTES",
+    "latinName": "Gluteus maximus",
+    "translations": [
+      {
+        "languageCode": "nl-NL",
+        "name": "Bilspieren",
+        "description": "De m. gluteus maximus is de grootste spier van de bil die de heup strekt en roteert; essentieel bij staan, lopen, rennen en springen."
+      },
+      {
+        "languageCode": "nl-LI",
+        "name": "Bielspier",
+        "description": "De m. gluteus maximus is de groeëtste spier van de biel die de heup strek en rotear; oesjentieël bie staon, loupe, renne en springe."
+      },
+      {
+        "languageCode": "nl-FR",
+        "name": "Bilspieren",
+        "description": "De musculus gluteus maximus is de grutste spier fan ’e bil dy’t de heup strekt en rotearret; essinsjeel by stean, rinnen, rinnen en springen."
+      },
+      {
+        "languageCode": "nl-GR",
+        "name": "Bilspieren",
+        "description": "De m. gluteus maximus is de grodste spier van de bil dij de heup strekt en roteert; belangriek bie stoan, lopen, rennen en springen."
+      },
+      {
+        "languageCode": "en-GB",
+        "name": "Glutes",
+        "description": "The gluteus maximus is the largest muscle of the buttocks that extends and externally rotates the hip; essential for standing, walking, running, and jumping."
+      },
+      {
+        "languageCode": "en-US",
+        "name": "Glutes",
+        "description": "The gluteus maximus is the largest muscle of the buttocks that extends and externally rotates the hip; essential for standing, walking, running, and jumping."
+      },
+      {
+        "languageCode": "fr-FR",
+        "name": "Fessiers",
+        "description": "Le muscle grand fessier est le plus grand muscle des fesses qui assure l’extension et la rotation externe de la hanche ; essentiel pour la station debout, la marche, la course et le saut."
+      },
+      {
+        "languageCode": "de-DE",
+        "name": "Gesäßmuskeln",
+        "description": "Der Musculus gluteus maximus ist der größte Gesäßmuskel, der die Hüfte streckt und außenrotiert; entscheidend für Stehen, Gehen, Laufen und Springen."
+      },
+      {
+        "languageCode": "es-ES",
+        "name": "Glúteos",
+        "description": "El músculo glúteo mayor es el músculo más grande de los glúteos que extiende y rota externamente la cadera; esencial para estar de pie, caminar, correr y saltar."
+      },
+      {
+        "languageCode": "it-IT",
+        "name": "Glutei",
+        "description": "Il muscolo grande gluteo è il muscolo più grande dei glutei che estende e ruota esternamente l’anca; essenziale per stare in piedi, camminare, correre e saltare."
+      },
+      {
+        "languageCode": "pl-PL",
+        "name": "Pośladki",
+        "description": "Mięsień pośladkowy wielki to największy mięsień pośladkowy, który prostuje i rotuje zewnętrznie staw biodrowy; kluczowy do stania, chodzenia, biegania i skakania."
+      }
+    ]
+  },
+  {
+    "code": "QUADRICEPS",
+    "latinName": "Quadriceps femoris",
+    "translations": [
+      {
+        "languageCode": "nl-NL",
+        "name": "Quadriceps",
+        "description": "De m. quadriceps femoris is een vierkoppige spier aan de voorkant van het bovenbeen die de knie strekt en de heup buigt; essentieel bij lopen, rennen en springen."
+      },
+      {
+        "languageCode": "nl-LI",
+        "name": "Quadriceps",
+        "description": "De quadriceps femoris is ’ne vierkoppege spier óp d’n voorkant van ’t bovenbein die de knie strik en de heup buig; oesjentieël bie loupe, renne en springe."
+      },
+      {
+        "languageCode": "nl-FR",
+        "name": "Quadriceps",
+        "description": "De musculus quadriceps femoris is in fjouwerkoppige spier oan ’e foarkant fan ’e boppefoet dy’t de knibbel strekt en de heup bûcht; essinsjeel by rinnen, rinnen en springen."
+      },
+      {
+        "languageCode": "nl-GR",
+        "name": "Quadriceps",
+        "description": "De m. quadriceps femoris is ’n vierkoppige spier an de voorkaant van ’t bovenbien dij de knie strekt en de heup buigt; belangriek bie lopen, rennen en springen."
+      },
+      {
+        "languageCode": "en-GB",
+        "name": "Quadriceps",
+        "description": "The quadriceps femoris is a four-headed muscle on the front of the thigh that extends the knee and flexes the hip; essential for walking, running, and jumping."
+      },
+      {
+        "languageCode": "en-US",
+        "name": "Quadriceps",
+        "description": "The quadriceps femoris is a four-headed muscle on the front of the thigh that extends the knee and flexes the hip; essential for walking, running, and jumping."
+      },
+      {
+        "languageCode": "fr-FR",
+        "name": "Quadriceps",
+        "description": "Le muscle quadriceps fémoral est un muscle à quatre chefs situé à l’avant de la cuisse qui assure l’extension du genou et la flexion de la hanche ; essentiel pour la marche, la course et le saut."
+      },
+      {
+        "languageCode": "de-DE",
+        "name": "Quadrizeps",
+        "description": "Der Musculus quadriceps femoris ist ein vierköpfiger Muskel an der Vorderseite des Oberschenkels, der das Knie streckt und die Hüfte beugt; entscheidend für Gehen, Laufen und Springen."
+      },
+      {
+        "languageCode": "es-ES",
+        "name": "Cuádriceps",
+        "description": "El músculo cuádriceps femoral es un músculo de cuatro cabezas en la parte frontal del muslo que extiende la rodilla y flexiona la cadera; esencial para caminar, correr y saltar."
+      },
+      {
+        "languageCode": "it-IT",
+        "name": "Quadricipiti",
+        "description": "Il muscolo quadricipite femorale è un muscolo a quattro capi situato nella parte anteriore della coscia che estende il ginocchio e flette l’anca; essenziale per camminare, correre e saltare."
+      },
+      {
+        "languageCode": "pl-PL",
+        "name": "Czworogłowy uda",
+        "description": "Mięsień czworogłowy uda to czterogłowy mięsień z przodu uda, który prostuje kolano i zgina biodro; kluczowy do chodzenia, biegania i skakania."
+      }
+    ]
+  },
+  {
+    "code": "HAMSTRINGS",
+    "latinName": "Hamstrings",
+    "translations": [
+      {
+        "languageCode": "nl-NL",
+        "name": "Hamstrings",
+        "description": "De hamstrings zijn een groep van drie spieren aan de achterkant van het bovenbeen die de knie buigen en de heup strekken; cruciaal bij rennen, springen en afremmen."
+      },
+      {
+        "languageCode": "nl-LI",
+        "name": "Hamstrings",
+        "description": "De hamstrings zeen ’n groep van driej spiere óp d’n achtekant van ’t bovenbein die de knie buig en de heup strikke; cruciaal bie renne, springe en aafremme."
+      },
+      {
+        "languageCode": "nl-FR",
+        "name": "Hamstrings",
+        "description": "De hamstrings binne in groep fan trije spieren oan ’e efterkant fan ’e boppefoet dy’t de knibbel bûgje en de heup strekke; krúsjaal by rinnen, springen en ôfremjen."
+      },
+      {
+        "languageCode": "nl-GR",
+        "name": "Hamstrings",
+        "description": "De hamstrings bin ’n groep van dreie spieren an de achterkaant van ’t bovenbien dij de knie buigt en de heup strekt; belangriek bie rennen, springen en aofremmen."
+      },
+      {
+        "languageCode": "en-GB",
+        "name": "Hamstrings",
+        "description": "The hamstrings are a group of three muscles on the back of the thigh that flex the knee and extend the hip; crucial for running, jumping, and deceleration."
+      },
+      {
+        "languageCode": "en-US",
+        "name": "Hamstrings",
+        "description": "The hamstrings are a group of three muscles on the back of the thigh that flex the knee and extend the hip; crucial for running, jumping, and deceleration."
+      },
+      {
+        "languageCode": "fr-FR",
+        "name": "Ischio-jambiers",
+        "description": "Les ischio-jambiers sont un groupe de trois muscles situés à l’arrière de la cuisse qui fléchissent le genou et étendent la hanche ; cruciaux pour la course, le saut et la décélération."
+      },
+      {
+        "languageCode": "de-DE",
+        "name": "Hamstrings",
+        "description": "Die Hamstrings sind eine Gruppe von drei Muskeln an der Rückseite des Oberschenkels, die das Knie beugen und die Hüfte strecken; entscheidend für Laufen, Springen und Abbremsen."
+      },
+      {
+        "languageCode": "es-ES",
+        "name": "Isquiotibiales",
+        "description": "Los isquiotibiales son un grupo de tres músculos en la parte posterior del muslo que flexionan la rodilla y extienden la cadera; cruciales para correr, saltar y desacelerar."
+      },
+      {
+        "languageCode": "it-IT",
+        "name": "Tendini del ginocchio",
+        "description": "I tendini del ginocchio sono un gruppo di tre muscoli situati nella parte posteriore della coscia che flettono il ginocchio ed estendono l’anca; cruciali per la corsa, il salto e la decelerazione."
+      },
+      {
+        "languageCode": "pl-PL",
+        "name": "Mięśnie dwugłowe uda",
+        "description": "Mięśnie dwugłowe uda to grupa trzech mięśni z tyłu uda, które zginają kolano i prostują biodro; kluczowe do biegania, skakania i zwalniania."
+      }
+    ]
+  },
+  {
+    "code": "CALVES",
+    "latinName": "Gastrocnemius and Soleus",
+    "translations": [
+      {
+        "languageCode": "nl-NL",
+        "name": "Kuiten",
+        "description": "De kuitspieren (m. gastrocnemius en m. soleus) bevinden zich aan de achterkant van het onderbeen en zijn essentieel voor het buigen van de enkel en het stabiliseren van het onderbeen bij lopen, rennen en springen."
+      },
+      {
+        "languageCode": "nl-LI",
+        "name": "Koeëte",
+        "description": "De koeëtespiere (m. gastrocnemius en m. soleus) bevinje zich óp d’n achtekant van ’t óngerbein en zeen oesjentieël veur ’t buige van d’n ankel en ’t stabilisere van ’t óngerbein bie loupe, renne en springe."
+      },
+      {
+        "languageCode": "nl-FR",
+        "name": "Keuten",
+        "description": "De keatspieren (m. gastrocnemius en m. soleus) lizze oan ’e efterkant fan ’e ûnderfoet en binne essinsjeel foar it bûgjen fan ’e ankel en it stabilisearjen fan ’e ûnderfoet by rinnen, rinnen en springen."
+      },
+      {
+        "languageCode": "nl-GR",
+        "name": "Kuiten",
+        "description": "De kuitspieren (m. gastrocnemius en m. soleus) bevinjen zich an de achterkaant van ’t onderbien en binnen belangriek veur ’t buigen van de ankel en ’t stabiliseren van ’t onderbien bie lopen, rennen en springen."
+      },
+      {
+        "languageCode": "en-GB",
+        "name": "Calves",
+        "description": "The calf muscles (gastrocnemius and soleus) are located on the back of the lower leg and are essential for ankle plantarflexion and stabilising the lower leg during walking, running, and jumping."
+      },
+      {
+        "languageCode": "en-US",
+        "name": "Calves",
+        "description": "The calf muscles (gastrocnemius and soleus) are located on the back of the lower leg and are essential for ankle plantarflexion and stabilizing the lower leg during walking, running, and jumping."
+      },
+      {
+        "languageCode": "fr-FR",
+        "name": "Mollets",
+        "description": "Les muscles du mollet (gastrocnémien et soléaire) sont situés à l’arrière de la jambe et sont essentiels pour la flexion plantaire de la cheville et la stabilisation de la jambe inférieure lors de la marche, de la course et du saut."
+      },
+      {
+        "languageCode": "de-DE",
+        "name": "Waden",
+        "description": "Die Wadenmuskeln (Musculus gastrocnemius und Musculus soleus) befinden sich an der Rückseite des Unterschenkels und sind entscheidend für die Plantarflexion des Sprunggelenks und die Stabilisierung des Unterschenkels beim Gehen, Laufen und Springen."
+      },
+      {
+        "languageCode": "es-ES",
+        "name": "Gemelos",
+        "description": "Los músculos de la pantorrilla (gemelos y sóleo) se encuentran en la parte posterior de la parte inferior de la pierna y son esenciales para la flexión plantar del tobillo y la estabilización de la parte inferior de la pierna al caminar, correr y saltar."
+      },
+      {
+        "languageCode": "it-IT",
+        "name": "Polpacci",
+        "description": "I muscoli del polpaccio (gastrocnemio e soleo) si trovano nella parte posteriore della parte inferiore della gamba e sono essenziali per la flessione plantare della caviglia e la stabilizzazione della parte inferiore della gamba durante la camminata, la corsa e il salto."
+      },
+      {
+        "languageCode": "pl-PL",
+        "name": "Łydki",
+        "description": "Mięśnie łydek (brzuchaty łydki i płaszczkowaty) znajdują się z tyłu podudzia i są kluczowe dla zgięcia podeszwowego stawu skokowego i stabilizacji podudzia podczas chodzenia, biegania i skakania."
+      }
+    ]
+  },
+  {
+    "code": "FOREARMS",
+    "latinName": "Flexor and extensor carpi muscles",
+    "translations": [
+      {
+        "languageCode": "nl-NL",
+        "name": "Onderarmen",
+        "description": "De onderarmspieren, waaronder de flexoren en extensoren van de pols en vingers, bevinden zich aan de voor- en achterkant van de onderarm en zijn essentieel voor grip, polsbewegingen en fijne motoriek."
+      },
+      {
+        "languageCode": "nl-LI",
+        "name": "Óngerärm",
+        "description": "De óngerärmspiere, woaronder de flexore en extensore van de pols en vengers, bevinje zich óp d’n voorkant en achtekant van d’n óngerärm en zeen oesjentieël veur grip, polsbeweginge en fiene motoriek."
+      },
+      {
+        "languageCode": "nl-FR",
+        "name": "Underarmen",
+        "description": "De ûnderearmspieren, wêrûnder de fleksoren en ekstensors fan ’e pols en fingers, lizze oan ’e foar- en efterkant fan ’e ûnderearm en binne essinsjeel foar grip, polsbewegingen en fine motoriek."
+      },
+      {
+        "languageCode": "nl-GR",
+        "name": "Onderarmen",
+        "description": "De onderarmspieren, woaronder de flexoren en extensoren van de pols en vingers, bevinjen zich an de voor- en achterkaant van de onderarm en binnen belangriek veur grip, polsbewegingen en fiene motoriek."
+      },
+      {
+        "languageCode": "en-GB",
+        "name": "Forearms",
+        "description": "The forearm muscles, including the wrist and finger flexors and extensors, are located on the front and back of the forearm and are essential for grip strength, wrist movements, and fine motor skills."
+      },
+      {
+        "languageCode": "en-US",
+        "name": "Forearms",
+        "description": "The forearm muscles, including the wrist and finger flexors and extensors, are located on the front and back of the forearm and are essential for grip strength, wrist movements, and fine motor skills."
+      },
+      {
+        "languageCode": "fr-FR",
+        "name": "Avant-bras",
+        "description": "Les muscles de l’avant-bras, incluant les fléchisseurs et extenseurs du poignet et des doigts, sont situés à l’avant et à l’arrière de l’avant-bras et sont essentiels pour la force de préhension, les mouvements du poignet et la motricité fine."
+      },
+      {
+        "languageCode": "de-DE",
+        "name": "Unterarme",
+        "description": "Die Unterarmmuskeln, einschließlich der Hand- und Fingerbeuger und -strecker, befinden sich an der Vorder- und Rückseite des Unterarms und sind entscheidend für Greifkraft, Handgelenksbewegungen und Feinmotorik."
+      },
+      {
+        "languageCode": "es-ES",
+        "name": "Antebrazos",
+        "description": "Los músculos del antebrazo, incluyendo los flexores y extensores de la muñeca y los dedos, se encuentran en la parte anterior y posterior del antebrazo y son esenciales para la fuerza de agarre, los movimientos de la muñeca y la motricidad fina."
+      },
+      {
+        "languageCode": "it-IT",
+        "name": "Avambracci",
+        "description": "I muscoli dell’avambraccio, inclusi i flessori ed estensori del polso e delle dita, si trovano nella parte anteriore e posteriore dell’avambraccio e sono essenziali per la forza di presa, i movimenti del polso e la motricità fine."
+      },
+      {
+        "languageCode": "pl-PL",
+        "name": "Przedramiona",
+        "description": "Mięśnie przedramion, w tym zginacze i prostowniki nadgarstka i palców, znajdują się z przodu i z tyłu przedramienia i są kluczowe dla siły chwytu, ruchów nadgarstka i precyzyjnych ruchów."
+      }
+    ]
+  },
+  {
+    "code": "TRAPS",
+    "latinName": "Trapezius",
+    "translations": [
+      {
+        "languageCode": "nl-NL",
+        "name": "Trapezius",
+        "description": "De trapezius is een grote, driehoekige spier die de nek en de bovenrug bedekt. Hij is essentieel voor het bewegen van de schouderbladen, het optrekken van de schouders en het kantelen en draaien van het hoofd."
+      },
+      {
+        "languageCode": "nl-LI",
+        "name": "Trapezius",
+        "description": "De trapezius is ’ne groeëte, driehookige spier die de nek en de bove rögk bedèk. Hae is oesjentieël veur ’t bewege van de sjolderbleje, ’t optrèkke van de sjolderd en ’t kantel en dreije van ’t hoof."
+      },
+      {
+        "languageCode": "nl-FR",
+        "name": "Trapezius",
+        "description": "De trapezius is in grutte, trijehoekige spier dy’t de nekke en de boppere rêch bedekt. Hy is essinsjeel foar it bewegen fan de skouderblêden, it optillen fan de skouders en it kanteljen en draaien fan de holle."
+      },
+      {
+        "languageCode": "nl-GR",
+        "name": "Trapezius",
+        "description": "De trapezius is ’n grode, dreihookige spier dij de nek en de bovenrug bedekt. Hai is belangriek veur ’t bewegen van de scholderbladen, ’t optrekken van de scholders en ’t kantelen en dreien van ’t hoofd."
+      },
+      {
+        "languageCode": "en-GB",
+        "name": "Traps",
+        "description": "The trapezius is a large, triangular muscle covering the neck and upper back. It is essential for moving the shoulder blades, shrugging the shoulders, and tilting and turning the head."
+      },
+      {
+        "languageCode": "en-US",
+        "name": "Traps",
+        "description": "The trapezius is a large, triangular muscle covering the neck and upper back. It is essential for moving the shoulder blades, shrugging the shoulders, and tilting and turning the head."
+      },
+      {
+        "languageCode": "fr-FR",
+        "name": "Trapèzes",
+        "description": "Le trapèze est un grand muscle triangulaire qui recouvre le cou et le haut du dos. Il est essentiel pour le mouvement des omoplates, le haussement d'épaules, et l'inclinaison et la rotation de la tête."
+      },
+      {
+        "languageCode": "de-DE",
+        "name": "Trapezmuskel",
+        "description": "Der Trapezmuskel ist ein großer, dreieckiger Muskel, der Nacken und oberen Rücken bedeckt. Er ist entscheidend für die Bewegung der Schulterblätter, das Achselzucken sowie das Neigen und Drehen des Kopfes."
+      },
+      {
+        "languageCode": "es-ES",
+        "name": "Trapecios",
+        "description": "El trapecio es un músculo grande y triangular que cubre el cuello y la parte superior de la espalda. Es esencial para mover los omóplatos, encoger los hombros e inclinar y girar la cabeza."
+      },
+      {
+        "languageCode": "it-IT",
+        "name": "Trapezio",
+        "description": "Il trapezio è un muscolo grande e triangolare che copre il collo e la parte superiore della schiena. È essenziale per il movimento delle scapole, l'elevazione delle spalle e l'inclinazione e la rotazione della testa."
+      },
+      {
+        "languageCode": "pl-PL",
+        "name": "Kaptury",
+        "description": "Mięsień czworoboczny (trapezowy) to duży, trójkątny mięsień pokrywający kark i górną część pleców. Jest kluczowy dla ruchu łopatek, wzruszania ramionami oraz przechylania i obracania głowy."
+      }
+    ]
+  },
+  {
+    "code": "OBLIQUES",
+    "latinName": "Obliquus externus/internus abdominis",
+    "translations": [
+      {
+        "languageCode": "nl-NL",
+        "name": "Schuine buikspieren",
+        "description": "De schuine buikspieren (m. obliquus externus en internus abdominis) bevinden zich aan de zijkanten van de romp en zijn essentieel voor het draaien en zijwaarts buigen van de romp, en voor de stabilisatie van de core."
+      },
+      {
+        "languageCode": "nl-LI",
+        "name": "Sjuus boeëkspier",
+        "description": "De sjuus boeëkspiere (m. obliquus externus en internus abdominis) bevinje zich óp de zijkante van de romp en zeen oesjentieël veur ’t dreije en zieëwaarts buige van de romp, en veur de stabilisasie van de core."
+      },
+      {
+        "languageCode": "nl-FR",
+        "name": "Skeane buikspieren",
+        "description": "De skeane búkspieren (m. obliquus externus en internus abdominis) lizze oan ’e sydkanten fan ’e romp en binne essinsjeel foar it draaien en sydlings bûgjen fan ’e romp, en foar de stabilisaasje fan ’e core."
+      },
+      {
+        "languageCode": "nl-GR",
+        "name": "Schun buukspieren",
+        "description": "De schun buukspieren (m. obliquus externus en internus abdominis) bevinjen zich an de ziedkaanten van de romp en binnen belangriek veur ’t dreien en ziedwaarts buigen van de romp, en veur de stabilisasie van de core."
+      },
+      {
+        "languageCode": "en-GB",
+        "name": "Obliques",
+        "description": "The oblique muscles (external and internal obliques) are located on the sides of the torso and are essential for rotating and side-bending the trunk, as well as for core stabilization."
+      },
+      {
+        "languageCode": "en-US",
+        "name": "Obliques",
+        "description": "The oblique muscles (external and internal obliques) are located on the sides of the torso and are essential for rotating and side-bending the trunk, as well as for core stabilization."
+      },
+      {
+        "languageCode": "fr-FR",
+        "name": "Obliques",
+        "description": "Les muscles obliques (oblique externe et interne de l'abdomen) sont situés sur les côtés du torse et sont essentiels pour la rotation et la flexion latérale du tronc, ainsi que pour la stabilisation du tronc."
+      },
+      {
+        "languageCode": "de-DE",
+        "name": "Schräge Bauchmuskeln",
+        "description": "Die schrägen Bauchmuskeln (Musculus obliquus externus und internus abdominis) befinden sich an den Seiten des Rumpfes und sind entscheidend für die Rotation und Seitenneigung des Rumpfes sowie für die Rumpfstabilisierung."
+      },
+      {
+        "languageCode": "es-ES",
+        "name": "Oblicuos",
+        "description": "Los músculos oblicuos (oblicuo externo e interno del abdomen) se encuentran en los lados del torso y son esenciales para rotar y flexionar lateralmente el tronco, así como para la estabilización del core."
+      },
+      {
+        "languageCode": "it-IT",
+        "name": "Obliqui",
+        "description": "I muscoli obliqui (obliquo esterno e interno dell'addome) si trovano sui lati del tronco e sono essenziali per la rotazione e la flessione laterale del tronco, nonché per la stabilizzazione del core."
+      },
+      {
+        "languageCode": "pl-PL",
+        "name": "Skośne mięśnie brzucha",
+        "description": "Mięśnie skośne brzucha (skośny zewnętrzny i wewnętrzny brzucha) znajdują się po bokach tułowia i są kluczowe dla rotacji i zgięcia bocznego tułowia, a także dla stabilizacji tułowia."
+      }
+    ]
+  },
+  {
+    "code": "LOWER_BACK",
+    "latinName": "Erector Spinae",
+    "translations": [
+      {
+        "languageCode": "nl-NL",
+        "name": "Onderrug",
+        "description": "De erector spinae is een groep spieren langs de wervelkolom in de onderrug die de rug strekt en rechtop houdt; cruciaal voor houding, stabiliteit en het heffen van objecten."
+      },
+      {
+        "languageCode": "nl-LI",
+        "name": "Óngerörgk",
+        "description": "De erector spinae is ’n groep spiere langs de wèrvelkolóm in d’n óngerörgk die de rögk strik en rechtop hieëlt; cruciaal veur haajing, stabiliteit en ’t hief van objekte."
+      },
+      {
+        "languageCode": "nl-FR",
+        "name": "Underreêch",
+        "description": "De erector spinae is in groep spieren lâns de rêchbonke yn ’e ûnderreêch dy’t de rêch strekt en rjochtop hâldt; krúsjaal foar hâlding, stabiliteit en it tillen fan objekten."
+      },
+      {
+        "languageCode": "nl-GR",
+        "name": "Onderrug",
+        "description": "De erector spinae is ’n groep spieren langs de wervelkolom in de onderrug dij de rug strekt en rechtop holdt; belangriek veur houding, stabiliteit en ’t heffen van objecten."
+      },
+      {
+        "languageCode": "en-GB",
+        "name": "Lower Back",
+        "description": "The erector spinae is a group of muscles running along the spine in the lower back that extend and straighten the back; crucial for posture, stability, and lifting objects."
+      },
+      {
+        "languageCode": "en-US",
+        "name": "Lower Back",
+        "description": "The erector spinae is a group of muscles running along the spine in the lower back that extend and straighten the back; crucial for posture, stability, and lifting objects."
+      },
+      {
+        "languageCode": "fr-FR",
+        "name": "Lombaires",
+        "description": "Les érecteurs du rachis sont un groupe de muscles situés le long de la colonne vertébrale dans le bas du dos qui étendent et redressent le dos ; cruciaux pour la posture, la stabilité et le levage d'objets."
+      },
+      {
+        "languageCode": "de-DE",
+        "name": "Unterer Rücken",
+        "description": "Die Erector spinae ist eine Muskelgruppe entlang der Wirbelsäule im unteren Rücken, die den Rücken streckt und aufrichtet; entscheidend für Haltung, Stabilität und das Heben von Gegenständen."
+      },
+      {
+        "languageCode": "es-ES",
+        "name": "Espalda Baja",
+        "description": "Los erectores de la columna son un grupo de músculos que recorren la columna vertebral en la parte baja de la espalda que extienden y enderezan la espalda; cruciales para la postura, la estabilidad y el levantamiento de objetos."
+      },
+      {
+        "languageCode": "it-IT",
+        "name": "Lombari",
+        "description": "Gli erettori spinali sono un gruppo di muscoli che corrono lungo la colonna vertebrale nella parte bassa della schiena che estendono e raddrizzano la schiena; cruciali per la postura, la stabilità e il sollevamento di oggetti."
+      },
+      {
+        "languageCode": "pl-PL",
+        "name": "Mięśnie prostowników grzbietu",
+        "description": "Mięśnie prostowników grzbietu to grupa mięśni biegnących wzdłuż kręgosłupa w dolnej części pleców, które prostują i utrzymują wyprostowaną postawę; kluczowe dla postawy, stabilności i podnoszenia przedmiotów."
+      }
+    ]
+  }
+]

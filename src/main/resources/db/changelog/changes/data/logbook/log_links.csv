@@ -1,0 +1,7 @@
+link_id;source_section_id;anchor_text;target_log_id
+1;1;project;2
+2;2;ochtend;1
+3;3;project;2
+4;3;initiatief;3
+5;4;initiatief;3
+6;4;project;2

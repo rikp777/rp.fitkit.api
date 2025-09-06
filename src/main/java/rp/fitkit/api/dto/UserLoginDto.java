@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserLoginDto {
 
-    @Schema(description = "Gebruikersnaam of e-mailadres om in te loggen.", example = "fitness_fanaat", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "Gebruikersnaam of e-mailadres om in te loggen.", example = "test", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank(message = "Username or email is required")
     private String usernameOrEmail;
 
-    @Schema(description = "Het wachtwoord van de gebruiker.", example = "wachtwoordVeilig123", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "Het wachtwoord van de gebruiker.", example = "password", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank(message = "Password is required")
     private String password;
 }

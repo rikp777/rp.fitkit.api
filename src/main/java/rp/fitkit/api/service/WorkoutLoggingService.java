@@ -8,7 +8,7 @@ import reactor.core.publisher.Sinks;
 import rp.fitkit.api.dto.ExerciseLogDto;
 import rp.fitkit.api.dto.ExerciseSessionResponseDto;
 import rp.fitkit.api.exception.ResourceNotFoundException;
-import rp.fitkit.api.model.ExerciseSession;
+import rp.fitkit.api.model.exercise.ExerciseSession;
 import rp.fitkit.api.model.SetLog;
 import rp.fitkit.api.repository.ExerciseSessionRepository;
 import rp.fitkit.api.repository.SetLogRepository;

@@ -10,5 +10,6 @@
     <include file="changes/insert-base-data.xml" relativeToChangelogFile="true"/>
     <include file="changes/insert-user-data.xml" relativeToChangelogFile="true"/>
     <include file="changes/insert-mental-health-data.xml" relativeToChangelogFile="true"/>
+    <include file="db/changelog/changes/insert-logbook-data.xml"/>
 
 </databaseChangeLog>
