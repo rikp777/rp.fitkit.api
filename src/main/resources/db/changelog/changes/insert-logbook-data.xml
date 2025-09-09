@@ -27,19 +27,21 @@
         </loadData>
 
         <loadData
-                file="db/changelog/changes/data/logbook/log_links.csv"
+                file="db/changelog/changes/data/logbook/log_entity_links.csv"
                 separator=";"
-                tableName="log_links">
+                tableName="log_entity_links">
             <column name="link_id" type="NUMERIC"/>
-            <column name="source_section_id" type="NUMERIC"/>
+            <column name="source_entity_type" type="STRING"/>
+            <column name="source_entity_id" type="NUMERIC"/>
             <column name="anchor_text" type="STRING"/>
-            <column name="target_log_id" type="NUMERIC"/>
+            <column name="target_entity_type" type="STRING"/>
+            <column name="target_entity_id" type="NUMERIC"/>
         </loadData>
 
         <sql>
             SELECT setval('daily_logs_log_id_seq', (SELECT MAX(log_id) FROM daily_logs));
             SELECT setval('log_sections_section_id_seq', (SELECT MAX(section_id) FROM log_sections));
-            SELECT setval('log_links_link_id_seq', (SELECT MAX(link_id) FROM log_links));
+            SELECT setval('log_entity_links_link_id_seq', (SELECT MAX(link_id) FROM log_entity_links));
         </sql>
     </changeSet>
 

@@ -7,22 +7,23 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import rp.fitkit.api.dto.logbook.FullLogbookDto;
 import rp.fitkit.api.dto.logbook.LinkPreviewDto;
 import rp.fitkit.api.dto.logbook.LogSectionDto;
 import rp.fitkit.api.dto.logbook.LogbookPreviewDto;
-import rp.fitkit.api.model.logbook.LogLink;
+import rp.fitkit.api.model.logbook.LogEntityLink;
 import rp.fitkit.api.model.logbook.LogSection;
+import rp.fitkit.api.model.logbook.Person;
 import rp.fitkit.api.model.root.DailyLog;
+import rp.fitkit.api.model.root.EntityType;
 import rp.fitkit.api.model.root.SectionType;
 import rp.fitkit.api.repository.logbook.DailyLogRepository;
-import rp.fitkit.api.repository.logbook.LogLinkRepository;
+import rp.fitkit.api.repository.logbook.LogEntityLinkRepository;
 import rp.fitkit.api.repository.logbook.LogSectionRepository;
+import rp.fitkit.api.repository.logbook.PersonRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -40,9 +41,9 @@ public class LogbookService {
 
     private final DailyLogRepository dailyLogRepository;
     private final LogSectionRepository logSectionRepository;
-    private final LogLinkRepository logLinkRepository;
+    private final LogEntityLinkRepository logEntityLinkRepository;
 
-    private final TransactionalOperator transactionalOperator;
+    private final PersonRepository personRepository;
 
     public Mono<Page<LogbookPreviewDto>> getPaginatedLogbooksForUser(String userId, LocalDate startDate, LocalDate endDate, Pageable pageable) {
         log.info("Fetching paginated logbooks for user: {}, from: {}, to: {}", userId, startDate, endDate);
@@ -145,8 +146,10 @@ public class LogbookService {
                     return logSectionRepository.save(section);
                 })
                 .flatMap(savedSection -> {
-                    // Re-create the links
-                    return logLinkRepository.deleteAllBySourceSectionId(savedSection.getId())
+                    return logEntityLinkRepository.deleteAllBySourceEntityTypeAndSourceEntityId(
+                                    EntityType.LOG_SECTION,
+                                    savedSection.getId().toString()
+                            )
                             .then(parseAndSaveLinks(savedSection));
                 });
     }
@@ -167,13 +170,18 @@ public class LogbookService {
 
                     // OUTGOING = previews based on TARGET content
                     Mono<List<LinkPreviewDto>> outgoingLinksMono = getSectionsForLog(dailyLog.getId())
-                            .map(LogSection::getId).collectList()
-                            .flatMapMany(ids -> ids.isEmpty() ? Flux.empty() : logLinkRepository.findBySourceSectionIdIn(ids))
+                            .map(section -> section.getId().toString())
+                            .collectList()
+                            .flatMapMany(sectionIds -> {
+                                if (sectionIds.isEmpty()) return Flux.empty();
+                                return logEntityLinkRepository.findBySourceEntityTypeAndSourceEntityIdIn(EntityType.LOG_SECTION, sectionIds);
+                            })
                             .flatMap(this::createOutgoingLinkPreview)
                             .collectList();
 
                     // INCOMING = backlinks, previews based on SOURCE context
-                    Mono<List<LinkPreviewDto>> incomingLinksMono = logLinkRepository.findByTargetLogId(dailyLog.getId())
+                    Mono<List<LinkPreviewDto>> incomingLinksMono = logEntityLinkRepository
+                            .findByTargetEntityTypeAndTargetEntityId(EntityType.DAILY_LOG, dailyLog.getId().toString())
                             .flatMap(this::createIncomingLinkPreview)
                             .collectList();
 
@@ -194,60 +202,47 @@ public class LogbookService {
     private Mono<LogSection> parseAndSaveLinks(LogSection section) {
         log.debug("Parsing links for sectionId: {}", section.getId());
         Matcher matcher = LINK_PATTERN.matcher(section.getSummary());
-        List<LogLink> linksToSave = new ArrayList<>();
+        List<LogEntityLink> linksToSave = new ArrayList<>();
+
         while (matcher.find()) {
-            LogLink link = new LogLink();
-            link.setSourceSectionId(section.getId());
-            link.setAnchorText(matcher.group(1));
-            link.setTargetLogId(Long.parseLong(matcher.group(2)));
-            linksToSave.add(link);
+            try {
+                String anchorText = matcher.group(1);
+                // Converteer de gevonden tekst (bv. "log") naar de juiste enum (bv. EntityType.DAILY_LOG)
+                String typeString = matcher.group(2).toUpperCase();
+                // We gebruiken DAILY_LOG als het type 'log' is, voor compatibiliteit.
+                if ("LOG".equals(typeString)) {
+                    typeString = "DAILY_LOG";
+                }
+                EntityType targetType = EntityType.valueOf(typeString);
+                String targetId = matcher.group(3);
+
+                LogEntityLink link = new LogEntityLink();
+                link.setSourceEntityType(EntityType.LOG_SECTION);
+                link.setSourceEntityId(section.getId().toString());
+                link.setAnchorText(anchorText);
+                link.setTargetEntityType(targetType);
+                link.setTargetEntityId(targetId);
+
+                linksToSave.add(link);
+            } catch (IllegalArgumentException e) {
+                log.warn("Invalid entity type found in link: '{}'. Skipping.", matcher.group(2));
+            }
         }
 
-        log.debug("Found {} links to save for sectionId: {}", linksToSave.size(), section.getId());
+        log.debug("Found {} valid links to save for sectionId: {}", linksToSave.size(), section.getId());
         if (linksToSave.isEmpty()) {
             return Mono.just(section);
         }
-        linksToSave.forEach(link ->
-                log.info("Attempting to save LogLink with values: sourceSectionId={}, anchorText='{}', targetLogId={}",
-                        link.getSourceSectionId(), link.getAnchorText(), link.getTargetLogId())
-        );
-        return logLinkRepository.saveAll(linksToSave)
+        return logEntityLinkRepository.saveAll(linksToSave)
                 .doOnComplete(() -> log.debug("Successfully saved {} links for sectionId: {}", linksToSave.size(), section.getId()))
                 .then(Mono.just(section));
     }
 
-    private Mono<LinkPreviewDto> createLinkPreview(LogLink link) {
-        log.debug("Creating link preview for linkId: {}", link.getId());
-        Mono<LogSection> sourceSectionMono = logSectionRepository.findById(link.getSourceSectionId());
-        Mono<DailyLog> sourceLogMono = sourceSectionMono.flatMap(s -> dailyLogRepository.findById(s.getDailyLogId()));
-        Mono<DailyLog> targetLogMono = dailyLogRepository.findById(link.getTargetLogId());
-
-        return Mono.zip(sourceSectionMono, sourceLogMono, targetLogMono)
-                .map(tuple -> {
-                    LogSection sourceSection = tuple.getT1();
-                    DailyLog sourceLog = tuple.getT2();
-                    DailyLog targetLog = tuple.getT3();
-                    String snippet = generateSnippet(sourceSection.getSummary(), link.getAnchorText());
-
-                    return new LinkPreviewDto(
-                            sourceLog.getId(),
-                            sourceLog.getLogDate(),
-                            sourceSection.getSectionType(),
-                            link.getAnchorText(),
-                            snippet,
-                            targetLog.getId(),
-                            targetLog.getLogDate()
-                    );
-                });
-    }
-
     private String generateSnippet(String summary, String anchorText) {
+        if (summary == null || anchorText == null) return "...";
         int index = summary.indexOf(anchorText);
-        if (index == -1) {
-            return anchorText;
-        }
+        if (index == -1) return createSummaryPreview(summary);
 
-        // Simpele implementatie: neem 30 karakters voor en na.
         int start = Math.max(0, index - 100);
         int end = Math.min(summary.length(), index + anchorText.length() + 100);
 
@@ -274,98 +269,116 @@ public class LogbookService {
         }
     }
 
-    private Mono<LinkPreviewDto> createOutgoingLinkPreview(LogLink link) {
-        log.debug("Creating OUTGOING link preview for linkId: {}", link.getId());
+    private Mono<LinkPreviewDto> createOutgoingLinkPreview(LogEntityLink link) {
+        log.debug("Creating OUTGOING link preview for linkId: {}, type: {}", link.getId(), link.getTargetEntityType());
 
-        // Source is still needed for metadata in LinkPreviewDto (e.g. section type)
-        Mono<LogSection> sourceSectionMono = logSectionRepository.findById(link.getSourceSectionId());
-        Mono<DailyLog> sourceLogMono = sourceSectionMono.flatMap(s -> dailyLogRepository.findById(s.getDailyLogId()));
-        Mono<DailyLog> targetLogMono = dailyLogRepository.findById(link.getTargetLogId());
+        // Hier komt de magie: afhankelijk van het type doel, roepen we een andere methode aan.
+        switch (link.getTargetEntityType()) {
+            case DAILY_LOG: return createDailyLogOutgoingPreview(link);
+            case PERSON: return createPersonOutgoingPreview(link);
+            default: return createGenericPreview(link);
+        }
+    }
 
-        // Compute snippet FROM TARGET
-        Mono<String> targetSnippetMono = bestTargetSnippet(link.getTargetLogId(), link.getAnchorText());
+    private Mono<LinkPreviewDto> createIncomingLinkPreview(LogEntityLink link) {
+        log.debug("Creating INCOMING link preview for linkId: {}, type: {}", link.getId(), link.getSourceEntityType());
 
-        return Mono.zip(sourceSectionMono, sourceLogMono, targetLogMono, targetSnippetMono)
+        switch (link.getSourceEntityType()) {
+            case LOG_SECTION: return createLogSectionIncomingPreview(link);
+            default: return createGenericPreview(link);
+        }
+    }
+
+    private Mono<LinkPreviewDto> createGenericPreview(LogEntityLink link) {
+        return Mono.just(new LinkPreviewDto(
+                null, link.getAnchorText(), "UNKNOWN", null, "0",
+                link.getAnchorText(), "Preview not implemented.", null
+        ));
+    }
+
+    private Mono<LinkPreviewDto> createDailyLogOutgoingPreview(LogEntityLink link) {
+        Mono<LogSection> sourceSectionMono = logSectionRepository.findById(Long.parseLong(link.getSourceEntityId()));
+        Mono<DailyLog> targetLogMono = dailyLogRepository.findById(Long.parseLong(link.getTargetEntityId()));
+        Mono<String> targetSnippetMono = bestTargetSnippetForDailyLog(Long.parseLong(link.getTargetEntityId()), link.getAnchorText());
+
+        return Mono.zip(sourceSectionMono, targetLogMono, targetSnippetMono)
                 .map(tuple -> {
-                    LogSection sourceSection = tuple.getT1();
-                    DailyLog sourceLog = tuple.getT2();
-                    DailyLog targetLog = tuple.getT3();
-                    String snippet = tuple.getT4();
-
+                    DailyLog targetLog = tuple.getT2();
                     return new LinkPreviewDto(
-                            sourceLog.getId(),
-                            sourceLog.getLogDate(),
-                            sourceSection.getSectionType(),
+                            tuple.getT1().getSectionType(),
                             link.getAnchorText(),
-                            snippet,                // << TARGET-based snippet
-                            targetLog.getId(),
-                            targetLog.getLogDate()
+                            link.getTargetEntityType().name(),
+                            null,
+                            link.getTargetEntityId(),
+                            targetLog.getLogDate().toString(),
+                            tuple.getT3(),
+                            "/api/logbook/by-date/" + targetLog.getLogDate()
                     );
                 });
     }
 
-    // INCOMING (backlinks): show SOURCE snippets (your current behavior)
-    private Mono<LinkPreviewDto> createIncomingLinkPreview(LogLink link) {
-        log.debug("Creating INCOMING link preview for linkId: {}", link.getId());
+    private Mono<LinkPreviewDto> createPersonOutgoingPreview(LogEntityLink link) {
+        Mono<LogSection> sourceSectionMono = logSectionRepository.findById(Long.parseLong(link.getSourceEntityId()));
+        Mono<Person> targetPersonMono = personRepository.findById(link.getTargetEntityId());
 
-        Mono<LogSection> sourceSectionMono = logSectionRepository.findById(link.getSourceSectionId());
+        return Mono.zip(sourceSectionMono, targetPersonMono)
+                .map(tuple -> {
+                    Person targetPerson = tuple.getT2();
+                    return new LinkPreviewDto(
+                            tuple.getT1().getSectionType(),
+                            link.getAnchorText(),
+                            link.getTargetEntityType().name(),
+                            null,
+                            link.getTargetEntityId(),
+                            targetPerson.getFullName(),
+                            targetPerson.getShortBio(),
+                            "/api/persons/by-date/" + targetPerson.getId()
+                    );
+                })
+                .defaultIfEmpty(new LinkPreviewDto(
+                        null, link.getAnchorText(), EntityType.PERSON.name(), null, link.getTargetEntityId(),
+                        "Unknown Person", "Person not found.", null
+                ));
+    }
+
+
+
+    private Mono<LinkPreviewDto> createLogSectionIncomingPreview(LogEntityLink link) {
+        Mono<LogSection> sourceSectionMono = logSectionRepository.findById(Long.parseLong(link.getSourceEntityId()));
         Mono<DailyLog> sourceLogMono = sourceSectionMono.flatMap(s -> dailyLogRepository.findById(s.getDailyLogId()));
-        Mono<DailyLog> targetLogMono = dailyLogRepository.findById(link.getTargetLogId());
 
-        return Mono.zip(sourceSectionMono, sourceLogMono, targetLogMono)
+        return Mono.zip(sourceSectionMono, sourceLogMono)
                 .map(tuple -> {
                     LogSection sourceSection = tuple.getT1();
                     DailyLog sourceLog = tuple.getT2();
-                    DailyLog targetLog = tuple.getT3();
-
-                    String snippet = generateSnippet(sourceSection.getSummary(), link.getAnchorText());
-
                     return new LinkPreviewDto(
-                            sourceLog.getId(),
-                            sourceLog.getLogDate(),
-                            sourceSection.getSectionType(),
+                            null,
                             link.getAnchorText(),
-                            snippet,                // << SOURCE-based snippet (backlinks)
-                            targetLog.getId(),
-                            targetLog.getLogDate()
+                            link.getSourceEntityType().name(),
+                            sourceSection.getSectionType(),
+                            link.getSourceEntityId(),
+                            "From log on " + sourceLog.getLogDate(),
+                            generateSnippet(sourceSection.getSummary(), link.getAnchorText()),
+                            "/api/logbook/by-date/" + sourceLog.getLogDate()
                     );
                 });
     }
 
-    /**
-     * Builds a target-centric snippet:
-     * 1) Try to find the anchor text in any section of the target log and return a contextual snippet.
-     * 2) Otherwise, pick the first non-blank section summary as a preview of the target.
-     * 3) Fall back to the anchor text if the target has no usable content.
-     */
-    private Mono<String> bestTargetSnippet(Long targetLogId, String anchorText) {
+    private Mono<String> bestTargetSnippetForDailyLog(Long targetLogId, String anchorText) {
         return logSectionRepository.findByDailyLogId(targetLogId)
                 .collectList()
                 .map(sections -> {
-                    if (sections.isEmpty()) {
-                        return anchorText; // nothing to show on target
-                    }
-
-                    // Prefer a section that actually mentions the anchor text
+                    if (sections.isEmpty()) return anchorText;
                     for (LogSection s : sections) {
-                        String summary = s.getSummary();
-                        if (summary != null && !summary.isBlank()) {
-                            int idx = summary.indexOf(anchorText);
-                            if (idx >= 0) {
-                                return generateSnippet(summary, anchorText);
-                            }
+                        if (s.getSummary() != null && s.getSummary().contains(anchorText)) {
+                            return generateSnippet(s.getSummary(), anchorText);
                         }
                     }
-
-                    // Otherwise, first non-blank summary (trimmed)
                     for (LogSection s : sections) {
-                        String summary = s.getSummary();
-                        if (summary != null && !summary.isBlank()) {
-                            return createSummaryPreview(summary);
+                        if (s.getSummary() != null && !s.getSummary().isBlank()) {
+                            return createSummaryPreview(s.getSummary());
                         }
                     }
-
-                    // Absolute fallback
                     return anchorText;
                 });
     }

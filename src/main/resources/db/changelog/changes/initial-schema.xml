@@ -580,6 +580,7 @@
 
     <!-- Mental Logbook Tables -->
     <changeSet id="create-logbook-tables" author="Rik Peeters">
+        <!-- Daily Logs Table -->
         <createTable tableName="daily_logs">
             <column name="log_id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -595,6 +596,7 @@
         <addUniqueConstraint tableName="daily_logs" columnNames="user_id, log_date"
                              constraintName="uq_daily_logs_user_date"/>
 
+        <!-- Log Sections Table -->
         <createTable tableName="log_sections">
             <column name="section_id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -609,25 +611,77 @@
             <column name="summary" type="TEXT"/>
             <column name="mood" type="VARCHAR(255)"/>
         </createTable>
-
         <addUniqueConstraint
                 tableName="log_sections"
                 columnNames="log_id, section_type"
                 constraintName="uq_log_section_log_type"/>
+    </changeSet>
 
-        <createTable tableName="log_links">
+    <!-- Universal Linking Table -->
+    <changeSet id="create-universal-link-table" author="Rik Peeters">
+        <createTable tableName="log_entity_links">
             <column name="link_id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="source_section_id" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="fk_link_source_section"
-                             references="log_sections(section_id)" deleteCascade="true"/>
+
+            <column name="source_entity_type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
             </column>
+            <column name="source_entity_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
             <column name="anchor_text" type="VARCHAR(255)"/>
-            <column name="target_log_id" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="fk_link_target_log" references="daily_logs(log_id)"
-                             deleteCascade="true"/>
+
+            <column name="target_entity_type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="target_entity_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <!--
+             Note to self: We can't use foreign keys on polymorphic columns (source_entity_id/target_entity_id)
+             because they can refer to different tables.
+             This referential integrity must be managed by the application.
+        -->
+
+        <createIndex indexName="idx_log_entity_links_source"
+                     tableName="log_entity_links">
+            <column name="source_entity_type"/>
+            <column name="source_entity_id"/>
+        </createIndex>
+        <createIndex indexName="idx_log_entity_links_target"
+                     tableName="log_entity_links">
+            <column name="target_entity_type"/>
+            <column name="target_entity_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create-persons-table" author="Rik Peeters">
+        <createTable tableName="persons">
+            <column name="person_id" type="VARCHAR(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="VARCHAR(36)">
+                <constraints nullable="false" foreignKeyName="fk_person_user" references="app_user(id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="full_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="short_bio" type="TEXT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="visibility" type="VARCHAR(20)" defaultValue="PRIVATE">
+                <constraints nullable="false"/>
+            </column>
+            <!-- todo: geboortedatum, relatie, etc. -->
+        </createTable>
+
+        <createIndex indexName="idx_persons_user_id" tableName="persons">
+            <column name="user_id"/>
+        </createIndex>
     </changeSet>
 </databaseChangeLog>

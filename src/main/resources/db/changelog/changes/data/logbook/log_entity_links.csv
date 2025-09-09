@@ -1,0 +1,8 @@
+link_id;source_entity_type;source_entity_id;anchor_text;target_entity_type;target_entity_id
+1;LOG_SECTION;1;project;DAILY_LOG;2
+2;LOG_SECTION;2;ochtend;DAILY_LOG;1
+3;LOG_SECTION;3;project;DAILY_LOG;2
+4;LOG_SECTION;3;initiatief;DAILY_LOG;3
+5;LOG_SECTION;4;initiatief;DAILY_LOG;3
+6;LOG_SECTION;4;project;DAILY_LOG;2
+
