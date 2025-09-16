@@ -1,12 +1,91 @@
 section_id;log_id;section_type;summary;mood
-1;1;MORNING;De dag begon goed, veel energie. Ik heb nagedacht over het nieuwe [project](log:2).;Energiek
-2;1;EVENING;De avond was rustig. Teruggedacht aan de [ochtend](log:1) en hoe de dag verliep.;Voldaan
-3;2;MORNING;Vandaag begonnen met het [project](log:2). Het was uitdagender dan verwacht, maar ik heb goede vooruitgang geboekt. Dit doet me denken aan de start van een vorig [initiatief](log:3).;Gefocust
-4;3;AFTERNOON;Gewerkt aan het [initiatief](log:3). Het voelt goed om de lessen van het eerdere [project](log:2) toe te passen.;Productief
-5;4;MORNING;Admin logboek. Dit zou niet zichtbaar moeten zijn voor andere gebruikers.;Vertrouwelijk
-6;5;MORNING;Na het weekend er weer in komen. Het [project](log:2) liep tegen een onverwachte bug aan. Frustrerend, want nu moet ik een deel van de logica herzien.;Gefrustreerd
-7;5;EVENING;Na het avondeten een ingeving gekregen voor de bug van vanochtend. Ik denk dat de oplossing simpeler is dan ik dacht. Morgen met een frisse blik proberen. Het voelt als het begin van het [initiatief](log:3), waar ik ook even vastliep.;Hoopvol
-8;6;MORNING;De oplossing van gisteravond werkte! De bug in het [project](log:2) is opgelost. Wat een opluchting. Alle frustratie van [gisteren](log:5) is nu weg.;Opgelucht
-9;7;MORNING;Nieuwe week. Vandaag de focus op het organiseren van mijn digitale documenten. Voelt een beetje als een 'reset'.;Georganiseerd
-10;7;EVENING;Het opruimen is goed gelukt. Geeft een helder hoofd. Tijdens het opruimen een idee gekregen voor een [persoonlijk dashboard](log:8) om mijn leven beter te structureren.;Inspiratie
-11;8;AFTERNOON;Het idee voor het [persoonlijke dashboard](log:8) verder uitgewerkt. Het moet financiën, taken en notities combineren. Een soort 'mission control'. Dit is een vervolg op mijn eerdere gedachte over [digitale organisatie](log:7).;Creatief
+12;9;MORNING;Goede focus vandaag. De laatste loodjes van het [project](log:2) afronden.;Gefocust
+13;9;AFTERNOON;Project afgerond! Nu officieel beginnen met het plannen van de [API-integratie](log:15).;Opgelucht
+14;9;EVENING;Viering van de project afronding. Nadenken over de lessen die ik heb geleerd.;Voldaan
+15;10;MORNING;Eerste dag volledig op de [API-integratie](log:15). De architectuur uitgetekend.;Creatief
+16;10;AFTERNOON;Een proof-of-concept gebouwd voor de authenticatie. Het werkt! Dit voelt als het begin van het [initiatief](log:3).;Energiek
+17;10;EVENING;Ontspannen na een intensieve dag. Mijn nieuwe [hardloop](log:16) schema helpt echt om mijn hoofd leeg te maken.;Helder
+18;11;MORNING;Verder gewerkt aan de data-modellen voor de [API-integratie](log:15).;Productief
+19;11;AFTERNOON;Wat onverwachte complexiteit tegengekomen. Moet de aanpak misschien herzien.;Onzeker
+20;11;EVENING;Gesproken met een collega over het probleem van vanmiddag. Zijn feedback was zeer nuttig.;Dankbaar
+21;12;MORNING;Weekend! Geen werk, focus op mijn [hardloop](log:16) doel. 5km gehaald!;Trots
+22;12;AFTERNOON;Huis opgeruimd en boodschappen gedaan. Nodig na een drukke week.;Georganiseerd
+23;12;EVENING;Film gekeken. Morgen weer fris aan de slag.;Ontspannen
+24;13;MORNING;Zondag rustdag. Boek gelezen en nagedacht over de [API-integratie](log:15) aanpak.;Inspiratie
+25;13;AFTERNOON;Lange wandeling gemaakt. De natuur geeft altijd nieuwe perspectieven.;Rustig
+26;13;EVENING;Voorbereidingen voor de komende werkweek.;Voorbereid
+27;14;MORNING;Nieuwe week, nieuwe moed. De [API-integratie](log:15) met een frisse blik bekeken en een doorbraak gehad!;Gemotiveerd
+28;14;AFTERNOON;De oplossing van vanochtend geïmplementeerd. Werkt perfect. De lessen van het oude [project](log:2) waren hierbij cruciaal.;Zelfverzekerd
+29;14;EVENING;Avondje vrij. Het succes van vandaag gevierd.;Blij
+30;15;MORNING;Officiële start van de [API-integratie](log:15). Dit is de basis voor de toekomst.;Belangrijk
+31;15;AFTERNOON;De externe API documentatie is onduidelijk. Dit gaat meer tijd kosten dan verwacht.;Gefrustreerd
+32;15;EVENING;Contact opgenomen met support van de externe partij. Afwachten nu.;Afwachtend
+33;16;MORNING;Mijn [hardloop](log:16) schema weer opgepakt. Het helpt om de frustratie van het werk te verwerken.;Actief
+34;16;AFTERNOON;Nog geen reactie op mijn supportvraag. Ondertussen werk ik aan de UI-componenten.;Geduldig
+35;16;EVENING;Nagedacht over alternatieve oplossingen voor de [API-integratie](log:15), mocht support niet helpen.;Strategisch
+36;17;MORNING;Reactie van support! Ze hebben een cruciale tip gegeven.;Opgelucht
+37;17;AFTERNOON;Met de tip van support een grote stap vooruit gemaakt. De data stroomt nu!;Productief
+38;17;EVENING;Het voelt goed om eindelijk vooruitgang te boeken na de [vertraging](log:15) van gisteren.;Tevreden
+39;18;MORNING;De data die binnenkomt van de API is inconsistent. Meer validatie nodig.;Uitgedaagd
+40;18;AFTERNOON;Robuuste validatie en error handling gebouwd voor de [API-integratie](log:15).;Secuur
+41;18;EVENING;De code is nu veel stabieler. Een goede les in defensief programmeren.;Wijzer
+42;19;MORNING;Weekend. Tijd voor een lange duurloop. Mijn [hardloop](log:16) doel komt steeds dichterbij.;Vastberaden
+43;19;AFTERNOON;Sociale afspraak met vrienden. Even niet aan code denken.;Sociaal
+44;19;EVENING;Terugblik op de week. Ondanks de tegenslagen met de [API-integratie](log:15), toch veel geleerd.;Reflectief
+45;20;MORNING;Rustige zondag. Wat side-projectjes bekeken.;Nieuwsgierig
+46;20;AFTERNOON;Een idee gekregen om de lessen van het [initiatief](log:3) te combineren met de nieuwe API.;Inspiratie
+47;20;EVENING;Plannen gemaakt voor de laatste fase van de [API-integratie](log:15).;Gefocust
+48;21;MORNING;Laatste week voor de deadline. Alle tests moeten groen zijn.;Gespannen
+49;21;AFTERNOON;Een paar lastige bugs gevonden in de edge cases van de [API-integratie](log:15).;Zorgelijk
+50;21;EVENING;Laat door gewerkt om de bugs op te lossen. Het is gelukt!;Doorzetter
+51;22;MORNING;Alle features zijn nu code-complete. Starten met de documentatie.;Methodisch
+52;22;AFTERNOON;Documentatie schrijven is niet mijn favoriete bezigheid, maar wel belangrijk voor het [project](log:2).;Gedisciplineerd
+53;22;EVENING;De eerste versie van de documentatie is klaar. Morgen reviewen.;Voldaan
+54;23;MORNING;Feedback op de documentatie verwerkt. Alles is nu klaar voor de demo.;Voorbereid
+55;23;AFTERNOON;De [demo](log:24) voorbereid. Alle stappen doorgelopen.;Nauwkeurig
+56;23;EVENING;Zenuwachtig voor de [demo](log:24) van morgen.;Zenuwachtig
+57;24;MORNING;De [demo](log:24) van de [API-integratie](log:15) gegeven. Het ging perfect!;Extatisch
+58;24;AFTERNOON;Positieve feedback ontvangen. Iedereen is enthousiast over de nieuwe mogelijkheden.;Trots
+59;24;EVENING;Viering van de succesvolle [demo](log:24)! Een belangrijke mijlpaal.;Feestelijk
+60;25;MORNING;Een dagje vrij genomen na de drukke periode. Uitslapen.;Uitgerust
+61;25;AFTERNOON;Niks doen. Precies wat ik nodig had.;Leeg
+62;25;EVENING;Nadenken over de [volgende stappen](log:26) voor het project.;Dromerig
+63;26;MORNING;Brainstormsessie over de [volgende stappen](log:26). Veel goede ideeën.;Creatief
+64;26;AFTERNOON;De ideeën geclusterd en een roadmap opgesteld. De toekomst ziet er goed uit!;Optimistisch
+65;26;EVENING;Teruggekeken op het hele traject van het [project](log:2) tot de [API-integratie](log:15).;Sentimenteel
+66;27;MORNING;Weekend. Een 10km [hardloop](log:16) wedstrijd gelopen!;Euforisch
+67;27;AFTERNOON;Spierpijn, maar een voldaan gevoel.;Pijnlijk
+68;27;EVENING;Gezellig met familie. Opladen voor de nieuwe uitdagingen.;Warm
+69;28;MORNING;Zondag. Huiselijke klusjes.;Praktisch
+70;28;AFTERNOON;De roadmap voor de [volgende stappen](log:26) verder verfijnd.;Gedetailleerd
+71;28;EVENING;Klaar voor een nieuwe start maandag.;Energiek
+72;29;MORNING;Start van een nieuw hoofdstuk. Het [initiatief](log:3) krijgt nu de volle aandacht.;Hernieuwd
+73;29;AFTERNOON;De eerste taken voor het vernieuwde [initiatief](log:3) opgepakt.;Proactief
+74;29;EVENING;Voelt goed om met iets nieuws te beginnen.;Fris
+75;30;MORNING;Een architectuur review gepland met het team.;Samenwerking
+76;30;AFTERNOON;De plannen voor het [initiatief](log:3) gepresenteerd en waardevolle input gekregen.;Constructief
+77;30;EVENING;De input van het team verwerkt. Het plan is nu nog sterker.;Verbeterd
+78;31;MORNING;Refactoringsdag. Oude code van het eerste [project](log:2) opschonen.;Opgeruimd
+79;31;AFTERNOON;Veel technische schuld weggewerkt. De code is nu veel leesbaarder.;Schoon
+80;31;EVENING;Tevreden met het resultaat. Een schone basis is essentieel.;Tevreden
+81;32;MORNING;Mijn [hardloop](log:16) schema aangepast. Tijd voor een nieuw doel.;Ambitieus
+82;32;AFTERNOON;Onderzoek gedaan naar nieuwe technologieën die we kunnen gebruiken voor het [initiatief](log:3).;Onderzoekend
+83;32;EVENING;Een veelbelovende library gevonden. Morgen een test mee opzetten.;Enthousiast
+84;33;MORNING;Testopstelling voor de nieuwe library gebouwd. Eerste resultaten zijn positief.;Hoopvol
+85;33;AFTERNOON;De library geïntegreerd in een deel van het [initiatief](log:3). Het werkt en versimpelt veel.;Efficiënt
+86;33;EVENING;Deze week veel bereikt. Goed gevoel over de voortgang.;Positief
+87;34;MORNING;Vrijdag, bijna weekend. De laatste taken van de week afronden.;Productief
+88;34;AFTERNOON;Weekoverleg. De voortgang van het [initiatief](log:3) gedeeld met het team.;Communicatief
+89;34;EVENING;Weekend! Tijd om te ontspannen.;Vrij
+90;35;MORNING;Uitslapen en een rustig ontbijt.;Langzaam
+91;35;AFTERNOON;Hobbyproject. Even iets heel anders dan werk.;Speels
+92;35;EVENING;Gezelschapsspelletjes met vrienden.;Gezellig
+93;36;MORNING;Lange duurloop. Genieten van het weer.;Dankbaar
+94;36;AFTERNOON;De planning voor de komende sprint gemaakt. Het [initiatief](log:3) gaat nu echt vorm krijgen.;Concreet
+95;36;EVENING;Voorbereid op de week. Alle taken staan klaar.;Gestructureerd
+96;37;MORNING;Sprint gestart. Volle focus op de eerste user story.;Gefocust
+97;37;AFTERNOON;Pair programming met een collega. Samen een lastig probleem opgelost.;Teamwork
+98;37;EVENING;Een productieve dag. Het is fijn om samen te werken.;Verbonden
+99;38;MORNING;Verder met de user story. De flow te pakken.;Vloeiend
+100;38;AFTERNOON;Een onverwacht probleem met de database. Moet dieper graven.;Analytisch
+101;38;EVENING;Het databaseprobleem is complexer dan gedacht. Dit was een zware dag.;Vermoeid
