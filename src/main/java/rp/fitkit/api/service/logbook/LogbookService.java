@@ -10,10 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import rp.fitkit.api.dto.logbook.FullLogbookDto;
-import rp.fitkit.api.dto.logbook.LinkPreviewDto;
-import rp.fitkit.api.dto.logbook.LogSectionDto;
-import rp.fitkit.api.dto.logbook.LogbookPreviewDto;
+import rp.fitkit.api.dto.logbook.*;
 import rp.fitkit.api.model.logbook.LogEntityLink;
 import rp.fitkit.api.model.logbook.LogSection;
 import rp.fitkit.api.model.logbook.Person;
@@ -27,10 +24,14 @@ import rp.fitkit.api.repository.logbook.PersonRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+//todo encrypt logbook data in db with jasypt
 
 @Service
 @RequiredArgsConstructor
@@ -74,7 +75,14 @@ public class LogbookService {
                                                             .findFirst()
                                                             .map(this::createSummaryPreview)
                                                             .orElse("");
-                                                    return new LogbookPreviewDto(log.getId(), log.getLogDate(), preview);
+
+                                                    List<String> moods = sections.stream()
+                                                            .map(LogSection::getMood)
+                                                            .filter(mood -> mood != null && !mood.isBlank())
+                                                            .distinct()
+                                                            .collect(Collectors.toList());
+
+                                                    return new LogbookPreviewDto(log.getId(), log.getLogDate(), preview, moods);
                                                 })
                                                 .collect(Collectors.toList());
                                         log.info("Successfully created page with {} logbook previews for user {}", previews.size(), userId);
@@ -199,6 +207,63 @@ public class LogbookService {
                 });
     }
 
+    public Mono<GraphDataDto> getKeywordGraphData(String userId) {
+        // 1. Fetch ALL links created by the user. This is our raw data.
+        // For now, let's assume a method that can get all links for a user.
+        // A custom query as described above would be the most efficient way.
+        // We will simulate it by fetching all links for now.
+        return logEntityLinkRepository.findAll() // Replace with a more efficient findAllByUserId if possible
+                .collectList()
+                .flatMap(allLinks -> {
+
+                    // 2. Create NODES and calculate their weights (total occurrences)
+                    Map<String, Long> nodeWeights = allLinks.stream()
+                            .collect(Collectors.groupingBy(LogEntityLink::getAnchorText, Collectors.counting()));
+
+                    List<GraphNodeDto> nodes = nodeWeights.entrySet().stream()
+                            .map(entry -> new GraphNodeDto(entry.getKey(), entry.getKey(), entry.getValue().intValue()))
+                            .toList();
+
+                    // 3. To find EDGES, first group links by the DailyLog they belong to.
+                    Mono<Map<Long, Long>> sectionToLogMapMono = logSectionRepository.findAll() // Again, should be scoped to user
+                            .collectMap(LogSection::getId, LogSection::getDailyLogId);
+
+                    return sectionToLogMapMono.map(sectionToLogMap -> {
+                        Map<Long, List<String>> keywordsByLogId = allLinks.stream()
+                                .filter(link -> sectionToLogMap.containsKey(Long.parseLong(link.getSourceEntityId())))
+                                .collect(Collectors.groupingBy(
+                                        link -> sectionToLogMap.get(Long.parseLong(link.getSourceEntityId())),
+                                        Collectors.mapping(LogEntityLink::getAnchorText, Collectors.toList())
+                                ));
+
+                        // 4. Calculate EDGE weights (how many times keywords appear together)
+                        Map<String, Integer> edgeWeights = new HashMap<>();
+                        for (List<String> keywordsInLog : keywordsByLogId.values()) {
+                            List<String> uniqueKeywords = keywordsInLog.stream().distinct().sorted().toList();
+                            if (uniqueKeywords.size() < 2) continue;
+
+                            // Generate all pairs of keywords in this log
+                            for (int i = 0; i < uniqueKeywords.size(); i++) {
+                                for (int j = i + 1; j < uniqueKeywords.size(); j++) {
+                                    // Create a stable key, e.g., "initiatief::project"
+                                    String key = uniqueKeywords.get(i) + "::" + uniqueKeywords.get(j);
+                                    edgeWeights.put(key, edgeWeights.getOrDefault(key, 0) + 1);
+                                }
+                            }
+                        }
+
+                        // 5. Create the Edge DTOs
+                        List<GraphEdgeDto> edges = edgeWeights.entrySet().stream()
+                                .map(entry -> {
+                                    String[] keys = entry.getKey().split("::");
+                                    return new GraphEdgeDto(keys[0], keys[1], entry.getValue());
+                                })
+                                .toList();
+
+                        return new GraphDataDto(nodes, edges);
+                    });
+                });
+    }
     private Mono<LogSection> parseAndSaveLinks(LogSection section) {
         log.debug("Parsing links for sectionId: {}", section.getId());
         Matcher matcher = LINK_PATTERN.matcher(section.getSummary());

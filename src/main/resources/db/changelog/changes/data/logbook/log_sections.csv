@@ -4,3 +4,9 @@ section_id;log_id;section_type;summary;mood
 3;2;MORNING;Vandaag begonnen met het [project](log:2). Het was uitdagender dan verwacht, maar ik heb goede vooruitgang geboekt. Dit doet me denken aan de start van een vorig [initiatief](log:3).;Gefocust
 4;3;AFTERNOON;Gewerkt aan het [initiatief](log:3). Het voelt goed om de lessen van het eerdere [project](log:2) toe te passen.;Productief
 5;4;MORNING;Admin logboek. Dit zou niet zichtbaar moeten zijn voor andere gebruikers.;Vertrouwelijk
+6;5;MORNING;Na het weekend er weer in komen. Het [project](log:2) liep tegen een onverwachte bug aan. Frustrerend, want nu moet ik een deel van de logica herzien.;Gefrustreerd
+7;5;EVENING;Na het avondeten een ingeving gekregen voor de bug van vanochtend. Ik denk dat de oplossing simpeler is dan ik dacht. Morgen met een frisse blik proberen. Het voelt als het begin van het [initiatief](log:3), waar ik ook even vastliep.;Hoopvol
+8;6;MORNING;De oplossing van gisteravond werkte! De bug in het [project](log:2) is opgelost. Wat een opluchting. Alle frustratie van [gisteren](log:5) is nu weg.;Opgelucht
+9;7;MORNING;Nieuwe week. Vandaag de focus op het organiseren van mijn digitale documenten. Voelt een beetje als een 'reset'.;Georganiseerd
+10;7;EVENING;Het opruimen is goed gelukt. Geeft een helder hoofd. Tijdens het opruimen een idee gekregen voor een [persoonlijk dashboard](log:8) om mijn leven beter te structureren.;Inspiratie
+11;8;AFTERNOON;Het idee voor het [persoonlijke dashboard](log:8) verder uitgewerkt. Het moet financiën, taken en notities combineren. Een soort 'mission control'. Dit is een vervolg op mijn eerdere gedachte over [digitale organisatie](log:7).;Creatief

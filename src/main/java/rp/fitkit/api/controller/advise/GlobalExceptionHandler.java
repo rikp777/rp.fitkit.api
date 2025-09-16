@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.support.WebExchangeBindException;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import rp.fitkit.api.exception.InvalidDateRangeException;
 import rp.fitkit.api.exception.ResourceNotFoundException;
 import rp.fitkit.api.exception.UserAlreadyExistsException;
 
@@ -31,6 +33,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static rp.fitkit.api.controller.advise.ApiErrorCode.*;
 
 @RestControllerAdvice
 @Slf4j
@@ -64,7 +68,7 @@ public class GlobalExceptionHandler {
                     }
                     return Map.of(
                             "message", message,
-                            "code", "VALIDATION_ERROR"
+                            "code", VALIDATION_ERROR.getCode()
                     );
                 })
                 .toList();
@@ -82,7 +86,6 @@ public class GlobalExceptionHandler {
         return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail));
     }
 
-
     @ExceptionHandler(ResourceNotFoundException.class)
     public Mono<ResponseEntity<ProblemDetail>> handleResourceNotFoundException(ResourceNotFoundException ex, ServerWebExchange exchange) {
         Locale locale = resolveLocaleFromExchange(exchange);
@@ -92,7 +95,7 @@ public class GlobalExceptionHandler {
         problemDetail.setTitle(title);
         problemDetail.setInstance(resolvePathFromServerWebExchange(exchange));
         problemDetail.setProperty("timestamp", LocalDateTime.now());
-        problemDetail.setProperty("errorCode", "RESOURCE_NOT_FOUND");
+        problemDetail.setProperty("errorCode", RESOURCE_NOT_FOUND);
         return Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(problemDetail));
     }
 
@@ -105,7 +108,7 @@ public class GlobalExceptionHandler {
         problemDetail.setTitle(title);
         problemDetail.setInstance(resolvePathFromServerWebExchange(exchange));
         problemDetail.setProperty("timestamp", LocalDateTime.now());
-        problemDetail.setProperty("errorCode", "USER_ALREADY_EXISTS");
+        problemDetail.setProperty("errorCode", USER_ALREADY_EXISTS);
         return Mono.just(ResponseEntity.status(HttpStatus.CONFLICT).body(problemDetail));
     }
 
@@ -118,7 +121,7 @@ public class GlobalExceptionHandler {
         problemDetail.setTitle(title);
         problemDetail.setInstance(resolvePathFromServerWebExchange(exchange));
         problemDetail.setProperty("timestamp", LocalDateTime.now());
-        problemDetail.setProperty("errorCode", "BAD_CREDENTIALS");
+        problemDetail.setProperty("errorCode", BAD_CREDENTIALS);
         return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(problemDetail));
     }
 
@@ -131,7 +134,7 @@ public class GlobalExceptionHandler {
         problemDetail.setTitle(title);
         problemDetail.setInstance(resolvePathFromServerWebExchange(exchange));
         problemDetail.setProperty("timestamp", LocalDateTime.now());
-        problemDetail.setProperty("errorCode", "ACCESS_DENIED");
+        problemDetail.setProperty("errorCode", ACCESS_DENIED);
         return Mono.just(ResponseEntity.status(HttpStatus.FORBIDDEN).body(problemDetail));
     }
 
@@ -145,7 +148,7 @@ public class GlobalExceptionHandler {
         problemDetail.setTitle(title);
         problemDetail.setInstance(resolvePathFromServerWebExchange(exchange));
         problemDetail.setProperty("timestamp", LocalDateTime.now());
-        problemDetail.setProperty("errorCode", "DATA_INTEGRITY_VIOLATION");
+        problemDetail.setProperty("errorCode", DATA_INTEGRITY_VIOLATION);
         return Mono.just(ResponseEntity.status(HttpStatus.CONFLICT).body(problemDetail));
     }
 
@@ -159,7 +162,7 @@ public class GlobalExceptionHandler {
         problemDetail.setTitle(title);
         problemDetail.setInstance(resolvePathFromServerWebExchange(exchange));
         problemDetail.setProperty("timestamp", LocalDateTime.now());
-        problemDetail.setProperty("errorCode", "UNEXPECTED_ERROR");
+        problemDetail.setProperty("errorCode", UNEXPECTED_ERROR);
         return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(problemDetail));
     }
 
@@ -173,7 +176,24 @@ public class GlobalExceptionHandler {
         problemDetail.setTitle(title);
         problemDetail.setInstance(resolvePathFromServerWebExchange(exchange));
         problemDetail.setProperty("timestamp", LocalDateTime.now());
-        problemDetail.setProperty("errorCode", "GENERIC_ERROR");
+        problemDetail.setProperty("errorCode", GENERIC_ERROR);
         return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(problemDetail));
     }
+
+    @ExceptionHandler(InvalidDateRangeException.class)
+    public Mono<ResponseEntity<ProblemDetail>> handleInvalidDateRangeException(InvalidDateRangeException ex, ServerWebExchange exchange) {
+        Locale locale = resolveLocaleFromExchange(exchange);
+        log.warn("Ongeldig datumbereik opgevangen: {}", ex.getMessage());
+
+        String title = messageSource.getMessage("error.client.request.title", null, "Invalid Request", locale);
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(ex.getStatusCode(), ex.getReason());
+        problemDetail.setTitle(title);
+        problemDetail.setInstance(resolvePathFromServerWebExchange(exchange));
+        problemDetail.setProperty("timestamp", LocalDateTime.now());
+        problemDetail.setProperty("errorCode", ApiErrorCode.INVALID_DATE_RANGE);
+
+        return Mono.just(ResponseEntity.status(ex.getStatusCode()).body(problemDetail));
+    }
+
 }

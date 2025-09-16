@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserLoginDto {
 
-    @Schema(description = "Gebruikersnaam of e-mailadres om in te loggen.", example = "test", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotBlank(message = "Username or email is required")
-    private String usernameOrEmail;
+    @Schema(description = "De gebruikersnaam van de gebruiker.", example = "test", requiredMode = Schema.RequiredMode.REQUIRED)
+    @NotBlank(message = "Username is required")
+    private String username;
 
     @Schema(description = "Het wachtwoord van de gebruiker.", example = "password", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank(message = "Password is required")

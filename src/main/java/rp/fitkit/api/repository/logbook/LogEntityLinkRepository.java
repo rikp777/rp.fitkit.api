@@ -9,6 +9,7 @@ import rp.fitkit.api.model.root.EntityType;
 
 import java.util.List;
 
+
 /**
  * Repository for managing {@link LogEntityLink} entities.
  * This interface handles all database operations for the generic linking system.
@@ -27,6 +28,15 @@ public interface LogEntityLinkRepository extends R2dbcRepository<LogEntityLink, 
     Flux<LogEntityLink> findBySourceEntityTypeAndSourceEntityIdIn(EntityType sourceEntityType, List<String> sourceEntityIds);
 
     /**
+     * Finds all links that originate from a specific type of source entity.
+     * Used in the graph view to find all potential edges.
+     *
+     * @param sourceEntityType The type of the source entity (e.g., LOG_SECTION).
+     * @return A Flux of matching entity links.
+     */
+    Flux<LogEntityLink> findBySourceEntityType(EntityType sourceEntityType); // <-- Added
+
+    /**
      * Finds all links that point to a specific target entity.
      * This is used to find all incoming "backlinks" to a daily log.
      *
@@ -35,6 +45,17 @@ public interface LogEntityLinkRepository extends R2dbcRepository<LogEntityLink, 
      * @return A Flux of matching entity links.
      */
     Flux<LogEntityLink> findByTargetEntityTypeAndTargetEntityId(EntityType targetEntityType, String targetEntityId);
+
+    /**
+     * Finds all links that point to a specific set of target entities.
+     * Used in the graph view to calculate the weight of nodes.
+     *
+     * @param targetEntityType The type of the target entity (e.g., DAILY_LOG).
+     * @param targetEntityIds  A list of target entity IDs.
+     * @return A Flux of matching entity links.
+     */
+    Flux<LogEntityLink> findByTargetEntityTypeAndTargetEntityIdIn(EntityType targetEntityType, List<String> targetEntityIds); // <-- Added
+
 
     /**
      * Deletes all links that originate from a specific source entity.
@@ -46,4 +67,3 @@ public interface LogEntityLinkRepository extends R2dbcRepository<LogEntityLink, 
      */
     Mono<Void> deleteAllBySourceEntityTypeAndSourceEntityId(EntityType sourceEntityType, String sourceEntityId);
 }
-

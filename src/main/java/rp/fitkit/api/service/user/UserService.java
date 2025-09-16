@@ -79,8 +79,8 @@ public class UserService {
      * @return Een Mono die de User bevat bij succes, of een error Mono bij falen.
      */
     public Mono<LoginResponseDto> loginUserAndGenerateToken(UserLoginDto loginDto) {
-        return userRepository.findByUsername(loginDto.getUsernameOrEmail())
-                .switchIfEmpty(userRepository.findByEmail(loginDto.getUsernameOrEmail()))
+        return userRepository.findByUsername(loginDto.getUsername())
+                .switchIfEmpty(userRepository.findByEmail(loginDto.getUsername()))
                 .flatMap(user -> userRoleRepository.findByUserId(user.getId())
                         .map(UserRole::getRoleName)
                         .map(SimpleGrantedAuthority::new)

@@ -5,4 +5,10 @@ link_id;source_entity_type;source_entity_id;anchor_text;target_entity_type;targe
 4;LOG_SECTION;3;initiatief;DAILY_LOG;3
 5;LOG_SECTION;4;initiatief;DAILY_LOG;3
 6;LOG_SECTION;4;project;DAILY_LOG;2
-
+7;LOG_SECTION;6;project;DAILY_LOG;2
+8;LOG_SECTION;7;initiatief;DAILY_LOG;3
+9;LOG_SECTION;8;project;DAILY_LOG;2
+10;LOG_SECTION;8;gisteren;DAILY_LOG;5
+11;LOG_SECTION;10;persoonlijk dashboard;DAILY_LOG;8
+12;LOG_SECTION;11;persoonlijke dashboard;DAILY_LOG;8
+13;LOG_SECTION;11;digitale organisatie;DAILY_LOG;7
