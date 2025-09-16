@@ -208,51 +208,48 @@ public class LogbookService {
     }
 
     public Mono<GraphDataDto> getKeywordGraphData(String userId) {
-        // 1. Fetch ALL links created by the user. This is our raw data.
-        // For now, let's assume a method that can get all links for a user.
-        // A custom query as described above would be the most efficient way.
-        // We will simulate it by fetching all links for now.
-        return logEntityLinkRepository.findAll() // Replace with a more efficient findAllByUserId if possible
+        return logEntityLinkRepository.findAllByUserId(userId)
                 .collectList()
-                .flatMap(allLinks -> {
+                .flatMap(userLinks -> {
+                    if (userLinks.isEmpty()) {
+                        return Mono.just(new GraphDataDto(List.<GraphNodeDto>of(), List.<GraphEdgeDto>of()));
+                    }
 
-                    // 2. Create NODES and calculate their weights (total occurrences)
-                    Map<String, Long> nodeWeights = allLinks.stream()
+                    Map<String, Long> nodeWeights = userLinks.stream()
                             .collect(Collectors.groupingBy(LogEntityLink::getAnchorText, Collectors.counting()));
 
                     List<GraphNodeDto> nodes = nodeWeights.entrySet().stream()
                             .map(entry -> new GraphNodeDto(entry.getKey(), entry.getKey(), entry.getValue().intValue()))
                             .toList();
 
-                    // 3. To find EDGES, first group links by the DailyLog they belong to.
-                    Mono<Map<Long, Long>> sectionToLogMapMono = logSectionRepository.findAll() // Again, should be scoped to user
+                    List<Long> relevantSectionIds = userLinks.stream()
+                            .map(link -> Long.parseLong(link.getSourceEntityId()))
+                            .distinct()
+                            .toList();
+
+                    Mono<Map<Long, Long>> sectionToLogMapMono = logSectionRepository.findAllById(relevantSectionIds)
                             .collectMap(LogSection::getId, LogSection::getDailyLogId);
 
                     return sectionToLogMapMono.map(sectionToLogMap -> {
-                        Map<Long, List<String>> keywordsByLogId = allLinks.stream()
-                                .filter(link -> sectionToLogMap.containsKey(Long.parseLong(link.getSourceEntityId())))
+                        Map<Long, List<String>> keywordsByLogId = userLinks.stream()
                                 .collect(Collectors.groupingBy(
                                         link -> sectionToLogMap.get(Long.parseLong(link.getSourceEntityId())),
                                         Collectors.mapping(LogEntityLink::getAnchorText, Collectors.toList())
                                 ));
 
-                        // 4. Calculate EDGE weights (how many times keywords appear together)
                         Map<String, Integer> edgeWeights = new HashMap<>();
                         for (List<String> keywordsInLog : keywordsByLogId.values()) {
                             List<String> uniqueKeywords = keywordsInLog.stream().distinct().sorted().toList();
                             if (uniqueKeywords.size() < 2) continue;
 
-                            // Generate all pairs of keywords in this log
                             for (int i = 0; i < uniqueKeywords.size(); i++) {
                                 for (int j = i + 1; j < uniqueKeywords.size(); j++) {
-                                    // Create a stable key, e.g., "initiatief::project"
                                     String key = uniqueKeywords.get(i) + "::" + uniqueKeywords.get(j);
                                     edgeWeights.put(key, edgeWeights.getOrDefault(key, 0) + 1);
                                 }
                             }
                         }
 
-                        // 5. Create the Edge DTOs
                         List<GraphEdgeDto> edges = edgeWeights.entrySet().stream()
                                 .map(entry -> {
                                     String[] keys = entry.getKey().split("::");
@@ -264,6 +261,7 @@ public class LogbookService {
                     });
                 });
     }
+
     private Mono<LogSection> parseAndSaveLinks(LogSection section) {
         log.debug("Parsing links for sectionId: {}", section.getId());
         Matcher matcher = LINK_PATTERN.matcher(section.getSummary());

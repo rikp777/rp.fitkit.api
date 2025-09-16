@@ -1,5 +1,6 @@
 package rp.fitkit.api.repository.logbook;
 
+import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
@@ -66,4 +67,17 @@ public interface LogEntityLinkRepository extends R2dbcRepository<LogEntityLink, 
      * @return A Mono that completes when the deletion is done.
      */
     Mono<Void> deleteAllBySourceEntityTypeAndSourceEntityId(EntityType sourceEntityType, String sourceEntityId);
+
+    /**
+     * Finds all links that originate from any log section belonging to a specific user.
+     * This is an efficient way to gather all links for a user for graph generation.
+     *
+     * @param userId The ID of the user.
+     * @return A Flux of all matching entity links.
+     */
+    @Query("SELECT l.* FROM log_entity_links l " +
+            "JOIN log_sections s ON l.source_entity_id = s.section_id::text " +
+            "JOIN daily_logs d ON s.log_id = d.log_id " +
+            "WHERE d.user_id = :userId AND l.source_entity_type = 'LOG_SECTION'")
+    Flux<LogEntityLink> findAllByUserId(String userId);
 }
