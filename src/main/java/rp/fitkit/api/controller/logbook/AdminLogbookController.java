@@ -22,21 +22,20 @@ public class AdminLogbookController {
 
     private final AdminLogbookService adminLogbookService;
 
-    @GetMapping
-    public Mono<Page<DailyLog>> getAllDailyLogs(Pageable pageable) {
-        return adminLogbookService.getAllDailyLogs(pageable);
-    }
-
     @GetMapping("/search")
     public Mono<Page<DailyLog>> searchDailyLogsByUsername(
+            @RequestHeader("X-Support-Justification") String justification,
             @RequestParam String username,
             Pageable pageable) {
-        return adminLogbookService.searchDailyLogsByUsername(username, pageable);
+        return adminLogbookService.searchDailyLogsByUsername(justification, username, pageable);
     }
 
+
     @DeleteMapping("/{logId}")
-    public Mono<ResponseEntity<Void>> deleteDailyLog(@PathVariable Long logId) {
-        return adminLogbookService.deleteDailyLog(logId)
+    public Mono<ResponseEntity<Void>> deleteDailyLog(
+            @RequestHeader("X-Support-Justification") String justification,
+            @PathVariable Long logId) {
+        return adminLogbookService.deleteDailyLog(justification, logId)
                 .then(Mono.just(ResponseEntity.noContent().<Void>build()));
     }
 }

@@ -12,9 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import rp.fitkit.api.dto.logbook.*;
 import rp.fitkit.api.exception.InvalidDateRangeException;
+import rp.fitkit.api.model.audit.AuditAction;
 import rp.fitkit.api.model.logbook.LogSection;
+import rp.fitkit.api.model.root.DailyLog;
 import rp.fitkit.api.model.root.SectionType;
 import rp.fitkit.api.model.user.User;
+import rp.fitkit.api.service.audit.AuditService;
 import rp.fitkit.api.service.logbook.LogbookService;
 
 import java.time.LocalDate;
@@ -26,6 +29,7 @@ import java.time.temporal.ChronoUnit;
 public class LogbookController implements LogbookApi {
 
     private final LogbookService logbookService;
+    private final AuditService auditService;
 
     @Override
     @GetMapping
@@ -63,7 +67,13 @@ public class LogbookController implements LogbookApi {
         Sort.Direction direction = Sort.Direction.fromString(sortDirection);
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortField));
 
-        return logbookService.getPaginatedLogbooksForUser(user.getId(), start, end, pageable);
+        return logbookService.getPaginatedLogbooksForUser(user.getId(), start, end, pageable)
+                .flatMap(pageResult -> auditService.logUserAction(
+                        AuditAction.VIEW,
+                        "LogbookHistory",
+                        user.getId(),
+                        pageResult
+                ));
     }
 
     @Override
@@ -79,7 +89,13 @@ public class LogbookController implements LogbookApi {
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate date
     ) {
-        return logbookService.getFullLogbook(user.getId(), date);
+        return logbookService.getFullLogbook(user.getId(), date)
+                .flatMap(logbookDto -> auditService.logUserAction(
+                        AuditAction.VIEW,
+                        DailyLog.class.getSimpleName(),
+                        logbookDto.getLogId().toString(),
+                        logbookDto
+                ));
     }
 
     @Override
@@ -91,7 +107,13 @@ public class LogbookController implements LogbookApi {
             @RequestHeader(name = "Accept-Language", defaultValue = "en-GB")
             String languageCode
     ) {
-        return logbookService.getFullLogbook(user.getId(), LocalDate.now());
+        return logbookService.getFullLogbook(user.getId(), LocalDate.now())
+                .flatMap(logbookDto -> auditService.logUserAction(
+                        AuditAction.VIEW,
+                        DailyLog.class.getSimpleName(),
+                        logbookDto.getLogId().toString(),
+                        logbookDto
+                ));
     }
 
     @Override
@@ -119,6 +141,12 @@ public class LogbookController implements LogbookApi {
                         sectionType,
                         request.getSummary(),
                         request.getMood()
+                ))
+                .flatMap(savedSection -> auditService.logUserAction(
+                        AuditAction.UPDATE,
+                        LogSection.class.getSimpleName(),
+                        savedSection.getId().toString(),
+                        savedSection
                 ))
                 .map(this::toLogSectionDto);
     }

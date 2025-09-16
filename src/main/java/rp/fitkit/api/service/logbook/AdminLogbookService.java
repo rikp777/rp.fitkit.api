@@ -8,10 +8,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import rp.fitkit.api.exception.ResourceNotFoundException;
+import rp.fitkit.api.model.audit.AuditAction;
 import rp.fitkit.api.model.root.DailyLog;
 import rp.fitkit.api.model.user.User;
 import rp.fitkit.api.repository.logbook.DailyLogRepository;
 import rp.fitkit.api.repository.user.UserRepository;
+import rp.fitkit.api.service.audit.AuditService;
+import rp.fitkit.api.service.audit.ConsentService;
 
 import java.util.List;
 
@@ -21,67 +24,67 @@ import java.util.List;
 public class AdminLogbookService {
     private final DailyLogRepository dailyLogRepository;
     private final UserRepository userRepository;
+    private final ConsentService consentService;
+    private final AuditService auditService;
 
-    public Mono<Page<DailyLog>> getAllDailyLogs(Pageable pageable) {
-        log.info("Admin fetching all daily logs. Page: {}, Size: {}.", pageable.getPageNumber(), pageable.getPageSize());
 
-        return this.dailyLogRepository.count()
-                .doOnSuccess(total -> log.debug("Total daily logs in DB: {}", total))
-                .flatMap(total ->
-                        this.dailyLogRepository.findAll(pageable.getSort())
-                                .skip(pageable.getOffset())
-                                .take(pageable.getPageSize())
-                                .collectList()
-                                .doOnSuccess(list -> log.info("Returning page with {} of {} total daily logs.", list.size(), total))
-                                .map(list -> new PageImpl<>(list, pageable, total))
-                );
-    }
+    public Mono<Page<DailyLog>> searchDailyLogsByUsername(String justification, String username, Pageable pageable) {
+        log.info("Admin searching for daily logs for username: '{}' with justification '{}'", username, justification);
 
-    public Mono<Page<DailyLog>> searchDailyLogsByUsername(String username, Pageable pageable) {
-        log.info("Admin searching for daily logs by username containing: '{}'. Page: {}, Size: {}", username, pageable.getPageNumber(), pageable.getPageSize());
-
-        if (username == null || username.isBlank()) {
-            log.warn("Search username is blank, returning empty page.");
-            return Mono.just(Page.empty(pageable));
-        }
-
-        return userRepository.findByUsernameContainingIgnoreCase(username)
-                .map(User::getId)
-                .collectList()
-                .doOnSuccess(userIds -> log.debug("Found {} user(s) matching search term '{}': {}", userIds.size(), username, userIds))
-                .flatMap(userIds -> {
-                    if (userIds.isEmpty()) {
-                        log.info("No users found for search term: '{}'. Returning empty page.", username);
-                        return Mono.just(Page.empty(pageable));
-                    }
-
-                    Mono<Long> totalMono = dailyLogRepository
-                            .countByUserIdIn(userIds)
-                            .doOnSuccess(count -> log.debug("Found a total of {} log(s) for the matched users.", count));
-
-                    Mono<List<DailyLog>> contentMono = dailyLogRepository.findByUserIdIn(userIds, pageable.getSort())
+        return consentService.findAndValidateConsent(justification, username)
+                .then(userRepository.findByUsername(username))
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("User not found with username: " + username)))
+                .flatMap(user -> {
+                    Mono<Long> totalMono = dailyLogRepository.countByUserId(user.getId());
+                    Mono<List<DailyLog>> contentMono = dailyLogRepository.findByUserId(user.getId(), pageable.getSort())
                             .skip(pageable.getOffset())
                             .take(pageable.getPageSize())
                             .collectList();
 
                     return Mono.zip(contentMono, totalMono)
-                            .doOnSuccess(tuple -> log.info("Returning page with {} of {} total search results for username '{}'", tuple.getT1().size(), tuple.getT2(), username))
+                            .flatMap(tuple ->
+                                    auditService.logAdminAction(
+                                            justification,
+                                            AuditAction.SEARCH,
+                                            user,
+                                            DailyLog.class.getSimpleName(),
+                                            "multiple",
+                                            tuple
+                                    )
+                            )
                             .map(tuple -> new PageImpl<>(tuple.getT1(), pageable, tuple.getT2()));
                 });
     }
 
-
-    public Mono<Void> deleteDailyLog(Long logId) {
-        log.info("Admin attempting to delete daily log with ID: {}", logId);
+    public Mono<Void> deleteDailyLog(String justification, Long logId) {
+        log.info("Admin attempting to delete daily log with ID: {} for justification: {}", logId, justification);
 
         return dailyLogRepository.findById(logId)
-                .switchIfEmpty(Mono.defer(() -> {
-                    log.warn("Admin tried to delete non-existent log with ID: {}", logId);
-                    return Mono.error(new ResourceNotFoundException("DailyLog not found with id: " + logId));
-                }))
-                .doOnSuccess(dailyLog -> log.debug("Found log to delete: {}. Proceeding with deletion.", dailyLog))
-                .flatMap(dailyLogRepository::delete)
-                .doOnSuccess(v -> log.info("Successfully deleted daily log with ID: {}", logId));
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("DailyLog not found with id: " + logId)))
+                .flatMap(dailyLog ->
+                        userRepository.findById(dailyLog.getUserId())
+                                .switchIfEmpty(Mono.error(new ResourceNotFoundException("User not found for logId: " + logId)))
+                                .flatMap(user ->
+                                        // Validate consent for the user who owns the log.
+                                        consentService.findAndValidateConsent(justification, user.getUsername())
+                                                .then(
+                                                        // Delete the log.
+                                                        dailyLogRepository.delete(dailyLog)
+                                                                .then(
+                                                                        // Audit the action.
+                                                                        auditService.logAdminAction(
+                                                                                justification,
+                                                                                AuditAction.DELETE,
+                                                                                user,
+                                                                                DailyLog.class.getSimpleName(),
+                                                                                logId.toString(),
+                                                                                Mono.empty()
+                                                                        )
+                                                                )
+                                                )
+                                )
+                ).then();
     }
 }
+
 
