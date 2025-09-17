@@ -1,5 +1,6 @@
 package rp.fitkit.api.controller.audit;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -7,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import rp.fitkit.api.dto.audit.Consent;
+import rp.fitkit.api.model.audit.Consent;
 import rp.fitkit.api.dto.audit.ConsentRequestDto;
 import rp.fitkit.api.dto.audit.ConsentResponseDto;
 import rp.fitkit.api.model.user.User;
@@ -19,6 +20,7 @@ import java.time.temporal.ChronoUnit;
 @RestController
 @RequestMapping("/api/v1/consent")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class ConsentController {
 
     private final ConsentRepository consentRepository;

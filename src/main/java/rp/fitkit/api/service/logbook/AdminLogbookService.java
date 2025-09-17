@@ -42,17 +42,17 @@ public class AdminLogbookService {
                             .collectList();
 
                     return Mono.zip(contentMono, totalMono)
-                            .flatMap(tuple ->
+                            .map(tuple -> new PageImpl<>(tuple.getT1(), pageable, tuple.getT2()))
+                            .flatMap(page ->
                                     auditService.logAdminAction(
                                             justification,
                                             AuditAction.SEARCH,
                                             user,
                                             DailyLog.class.getSimpleName(),
                                             "multiple",
-                                            tuple
+                                            page
                                     )
-                            )
-                            .map(tuple -> new PageImpl<>(tuple.getT1(), pageable, tuple.getT2()));
+                            );
                 });
     }
 

@@ -72,6 +72,12 @@ public class User implements Persistable<String>, UserDetails {
                 .toList();
     }
 
+    public boolean isPremium() {
+        return this.authorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(role -> role.equals("ROLE_PREMIUM") || role.equals("ROLE_ADMIN"));
+    }
+
     @Override
     public String getPassword() {
         return this.passwordHash;

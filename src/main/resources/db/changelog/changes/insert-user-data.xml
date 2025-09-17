@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="2025-06-16-insert-test-users-from-csv" author="Rik Peeters" context="test" labels="dev">
+    <changeSet id="insert-test-users" author="Rik Peeters" context="test" labels="dev">
         <loadData
                 file="db/changelog/changes/data/user/users.csv"
                 separator=";"
@@ -18,7 +18,8 @@
         </loadData>
     </changeSet>
 
-    <changeSet id="2025-08-30-insert-user-roles" author="Rik Peeters" context="test" labels="dev">
+    <!-- Note to self: First the user data must be loaded, then the roles can be assigned to the users-->
+    <changeSet id="insert-user-roles" author="Rik Peeters" context="test" labels="dev">
         <loadData
                 file="db/changelog/changes/data/user/user_roles.csv"
                 separator=";"

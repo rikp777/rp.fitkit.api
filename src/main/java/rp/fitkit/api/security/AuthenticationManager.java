@@ -6,10 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
+import rp.fitkit.api.service.user.CustomUserDetailsService;
 import rp.fitkit.api.util.JwtUtil;
 
 
@@ -19,7 +19,7 @@ import rp.fitkit.api.util.JwtUtil;
 public class AuthenticationManager implements ReactiveAuthenticationManager {
 
     private final JwtUtil jwtUtil;
-    private final ReactiveUserDetailsService userDetailsService;
+    private final CustomUserDetailsService userDetailsService;
 
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {

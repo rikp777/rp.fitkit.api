@@ -3,7 +3,7 @@ package rp.fitkit.api.service.audit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import rp.fitkit.api.dto.audit.Consent;
+import rp.fitkit.api.model.audit.Consent;
 import rp.fitkit.api.exception.ConsentException;
 import rp.fitkit.api.repository.audit.ConsentRepository;
 import rp.fitkit.api.repository.user.UserRepository;

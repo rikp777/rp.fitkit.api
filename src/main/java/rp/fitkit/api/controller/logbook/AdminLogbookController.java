@@ -13,7 +13,7 @@ import rp.fitkit.api.model.root.DailyLog;
 import rp.fitkit.api.service.logbook.AdminLogbookService;
 
 @RestController
-@RequestMapping("/api/v1/admin/logbooks")
+@RequestMapping("/api/v1/admin/logbook")
 @RequiredArgsConstructor
 @Tag(name = "Logbook (Admin)", description = "Admin-only endpoints for managing user logbooks.")
 @SecurityRequirement(name = "bearerAuth")

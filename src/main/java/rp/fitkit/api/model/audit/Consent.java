@@ -1,4 +1,4 @@
-package rp.fitkit.api.dto.audit;
+package rp.fitkit.api.model.audit;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +9,7 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.time.Instant;
 import java.util.UUID;
 
-@Table("support_consent")
+@Table("consent")
 @Data
 @NoArgsConstructor
 public class Consent {

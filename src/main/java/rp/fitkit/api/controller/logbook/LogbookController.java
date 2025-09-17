@@ -69,6 +69,7 @@ public class LogbookController implements LogbookApi {
 
         return logbookService.getPaginatedLogbooksForUser(user.getId(), start, end, pageable)
                 .flatMap(pageResult -> auditService.logUserAction(
+                        user,
                         AuditAction.VIEW,
                         "LogbookHistory",
                         user.getId(),
@@ -91,6 +92,7 @@ public class LogbookController implements LogbookApi {
     ) {
         return logbookService.getFullLogbook(user.getId(), date)
                 .flatMap(logbookDto -> auditService.logUserAction(
+                        user,
                         AuditAction.VIEW,
                         DailyLog.class.getSimpleName(),
                         logbookDto.getLogId().toString(),
@@ -109,6 +111,7 @@ public class LogbookController implements LogbookApi {
     ) {
         return logbookService.getFullLogbook(user.getId(), LocalDate.now())
                 .flatMap(logbookDto -> auditService.logUserAction(
+                        user,
                         AuditAction.VIEW,
                         DailyLog.class.getSimpleName(),
                         logbookDto.getLogId().toString(),
@@ -143,6 +146,7 @@ public class LogbookController implements LogbookApi {
                         request.getMood()
                 ))
                 .flatMap(savedSection -> auditService.logUserAction(
+                        user,
                         AuditAction.UPDATE,
                         LogSection.class.getSimpleName(),
                         savedSection.getId().toString(),
