@@ -7,6 +7,17 @@ spring:
   application:
     name: api
 
+  devtools:
+    restart:
+      enabled: false
+  web:
+    resources:
+      chain:
+        cache: false
+      cache:
+        period: 0
+
+
   r2dbc:
     url: r2dbc:postgresql://localhost:5432/fitkit
     username: fitkit
@@ -24,6 +35,8 @@ fitkit:
   api:
     jwt:
       expirationMs: 3600000
+      expiration-ms: 900000 # 15 minutes
+      refresh-token-expiration-ms: 604800000 # 7 days
 
 management:
   endpoints:

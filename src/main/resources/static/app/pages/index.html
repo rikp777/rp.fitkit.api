@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirecting...</title>
+    <script>
+        (function() {
+            const token = localStorage.getItem('accessToken');
+            if (token) {
+                window.location.href = '/dashboard';
+            } else {
+                window.location.href = '/auth/login';
+            }
+        })();
+    </script>
+</head>
+<body>
+<p>Redirecting...</p>
+</body>
+</html>

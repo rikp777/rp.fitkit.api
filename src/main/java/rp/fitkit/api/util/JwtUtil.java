@@ -21,21 +21,31 @@ public class JwtUtil {
     @Value("${fitkit.api.jwt.secret}")
     private String jwtSecretString;
 
-    @Value("${fitkit.api.jwt.expirationMs}") // 1 uur in milliseconden
+    @Value("${fitkit.api.jwt.expirationMs}")
     private long jwtExpirationMs;
+
+    @Value("${fitkit.api.jwt.refresh-token-expiration-ms}")
+    private long refreshTokenExpirationMs;
 
     private SecretKey getSigningKey() {
         byte[] keyBytes = Base64.getDecoder().decode(jwtSecretString);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(User user) {
+    public String generateAccessToken(User user) {
+        return generateToken(user.getUsername(), jwtExpirationMs);
+    }
 
+    public String generateRefreshToken(User user) {
+        return generateToken(user.getUsername(), refreshTokenExpirationMs);
+    }
+
+    private String generateToken(String subject, long expirationMs) {
         return Jwts.builder()
                 .claims()
-                .subject(user.getUsername())
+                .subject(subject)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
+                .expiration(new Date(System.currentTimeMillis() + expirationMs))
                 .and()
                 .signWith(getSigningKey())
                 .compact();

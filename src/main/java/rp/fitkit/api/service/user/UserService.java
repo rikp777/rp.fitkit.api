@@ -89,18 +89,31 @@ public class UserService {
                             user.setAuthorities(authorities);
 
                             if (passwordEncoder.matches(loginDto.getPassword(), user.getPasswordHash())) {
-                                String token = jwtUtil.generateToken(user);
+                                String accessToken = jwtUtil.generateAccessToken(user);
+                                String refreshToken = jwtUtil.generateRefreshToken(user);
                                 UserResponseDto userDetails = new UserResponseDto(
                                         user.getId(),
                                         user.getUsername(),
                                         user.getEmail(),
                                         user.getDateJoined()
                                 );
-                                return Mono.just(new LoginResponseDto(token, "Bearer", userDetails));
+                                return Mono.just(new LoginResponseDto(accessToken, refreshToken, "Bearer", userDetails));
                             } else {
                                 return Mono.error(new BadCredentialsException("Ongeldige inloggegevens."));
                             }
                         }))
                 .switchIfEmpty(Mono.error(new BadCredentialsException("Gebruiker niet gevonden of ongeldige inloggegevens.")));
+    }
+
+
+    public Mono<String> refreshAccessToken(String refreshToken) {
+        if (!jwtUtil.validateToken(refreshToken)) {
+            return Mono.error(new BadCredentialsException("Invalid refresh token."));
+        }
+
+        String username = jwtUtil.getUsernameFromToken(refreshToken);
+        return userRepository.findByUsername(username)
+                .switchIfEmpty(Mono.error(new BadCredentialsException("User not found for refresh token.")))
+                .map(jwtUtil::generateAccessToken);
     }
 }

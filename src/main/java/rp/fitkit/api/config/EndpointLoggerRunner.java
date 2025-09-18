@@ -28,7 +28,7 @@ public class EndpointLoggerRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        log.info("=== API Endpoints Overview ===");
+        log.debug("=== API Endpoints Overview ===");
 
         Set<String> configuredRateLimitedPaths = rateLimitingFilter.getRateLimitedPaths();
 
@@ -40,8 +40,8 @@ public class EndpointLoggerRunner implements ApplicationRunner {
                 .max()
                 .orElse(0) + 5;
 
-        log.info(String.format(" %-" + finalMaxStatusLength + "s %-" + finalMaxPathLength + "s %s", "Status", "Endpoint", "Methode(s)"));
-        log.info(String.format(" %-" + finalMaxStatusLength + "s %-" + finalMaxPathLength + "s %s", "------", "--------", "-----------"));
+        log.debug(String.format(" %-" + finalMaxStatusLength + "s %-" + finalMaxPathLength + "s %s", "Status", "Endpoint", "Methode(s)"));
+        log.debug(String.format(" %-" + finalMaxStatusLength + "s %-" + finalMaxPathLength + "s %s", "------", "--------", "-----------"));
 
         requestMappingHandlerMapping.getHandlerMethods().entrySet().stream()
                 .sorted(Map.Entry.comparingByKey(Comparator.comparing(RequestMappingInfo::toString)))
@@ -58,10 +58,10 @@ public class EndpointLoggerRunner implements ApplicationRunner {
                         String status = hasRateLimiter ? "[RATE LIMITED]" : "[OPEN]";
                         String method = mappingInfo.getMethodsCondition().getMethods().toString();
 
-                        log.info(String.format(" %-" + finalMaxStatusLength + "s %-" + finalMaxPathLength + "s %s", status, pattern, method));
+                        log.debug(String.format(" %-" + finalMaxStatusLength + "s %-" + finalMaxPathLength + "s %s", status, pattern, method));
                     });
                 });
-        log.info("=== Endpoints Overview Complete ===");
+        log.debug("=== Endpoints Overview Complete ===");
     }
 }
 

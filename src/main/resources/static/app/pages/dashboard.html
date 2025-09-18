@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO and Metadata -->
+    <title>Dashboard | FitKit</title>
+    <meta name="description" content="Your personal dashboard for tracking fitness, meals, and mental health with FitKit.">
+    <meta name="robots" content="noindex, nofollow">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style type="text/tailwindcss">
+        @layer components {
+            .card {
+                @apply bg-gray-800 p-8 rounded-lg shadow-md w-full;
+            }
+            .btn-secondary {
+                @apply flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-500;
+            }
+            .category-card {
+                @apply block bg-gray-700/50 p-6 rounded-lg shadow-lg transition-all duration-200 cursor-pointer hover:bg-gray-700 hover:scale-[1.02];
+            }
+            @keyframes heartbeat {
+                0%, 100% {
+                    transform: scale(1);
+                    animation-timing-function: ease-in-out;
+                }
+                50% {
+                    transform: scale(1.05);
+                    animation-timing-function: ease-in-out;
+                }
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 flex flex-col min-h-screen">
+
+<div class="flex-grow flex items-center justify-center px-6 py-12 lg:px-8">
+    <div class="w-full max-w-md">
+        <div class="card">
+            <h1 id="greeting" class="text-center text-2xl font-bold leading-9 tracking-tight text-white">Loading...</h1>
+
+            <!-- Feature Cards -->
+            <div class="mt-8 grid grid-cols-1 gap-4">
+                <!-- Fitness Card -->
+                <a href="#" class="category-card">
+                    <div class="flex items-center">
+                        <span class="text-3xl mr-4">🏋️</span>
+                        <div>
+                            <h3 class="font-semibold text-white">Fitness</h3>
+                            <p class="text-sm text-gray-400">Track your workouts and progress.</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-right">
+                        <span class="text-sm font-medium text-gray-300" id="fitness-log-count">... logs</span>
+                    </div>
+                </a>
+
+                <!-- Food Card -->
+                <a href="#" class="category-card">
+                    <div class="flex items-center">
+                        <span class="text-3xl mr-4">🥗</span>
+                        <div>
+                            <h3 class="font-semibold text-white">Food</h3>
+                            <p class="text-sm text-gray-400">Log your meals and nutrition.</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-right">
+                        <span class="text-sm font-medium text-gray-300" id="food-log-count">... logs</span>
+                    </div>
+                </a>
+
+                <!-- Mental Health Card -->
+                <a href="/mental-health/dashboard/today" class="category-card">
+                    <div class="flex items-center">
+                        <span class="text-3xl mr-4">🧘</span>
+                        <div>
+                            <h3 class="font-semibold text-white">Mental Health</h3>
+                            <p class="text-sm text-gray-400">Journal your thoughts and habits.</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-right">
+                        <span class="text-sm font-medium text-gray-300" id="mental-health-log-count">... journals</span>
+                    </div>
+                </a>
+            </div>
+
+            <div class="mt-8 border-t border-white/10 pt-8">
+                <button id="logoutButton" class="btn-secondary">Logout</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer id="page-footer" class="text-center py-4 text-gray-400 text-sm">
+    <!-- injected by app.js -->
+</footer>
+
+<script src="/js/config.js"></script>
+<script src="/js/app.js"></script>
+<script src="/js/dashboard.js"></script>
+
+</body>
+</html>

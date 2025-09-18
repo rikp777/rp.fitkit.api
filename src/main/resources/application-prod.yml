@@ -13,3 +13,5 @@ fitkit:
   api:
     jwt:
       secret: cHJvZC1zZWNyZXQtdXNlLWtleS1oZXJlLWZvci1zYWZldHk=
+      expiration-ms: 900000 # 15 minutes
+      refresh-token-expiration-ms: 604800000 # 7 days

@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO and Metadata -->
+    <title>Register | FitKit</title>
+    <meta name="description" content="Create a new FitKit account to start tracking your fitness, meals and mental health">
+    <meta name="robots" content="noindex, nofollow">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style type="text/tailwindcss">
+        @layer components {
+            .card {
+                @apply bg-gray-800 p-8 rounded-lg shadow-md w-full;
+            }
+            .form-label {
+                @apply block text-sm font-medium leading-6 text-white;
+            }
+            .form-input {
+                @apply block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6;
+            }
+            .btn-primary {
+                @apply flex w-full items-center justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500;
+            }
+            @keyframes heartbeat {
+                0%, 100% {
+                    transform: scale(1);
+                    animation-timing-function: ease-in-out;
+                }
+                50% {
+                    transform: scale(1.05);
+                    animation-timing-function: ease-in-out;
+                }
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 flex flex-col min-h-screen">
+
+<div class="flex-grow flex items-center justify-center px-6 py-12 lg:px-8">
+    <div class="w-full max-w-sm">
+        <div class="sm:mx-auto sm:w-full sm:max-w-sm text-center">
+            <h1 class="text-4xl font-bold text-indigo-500">FitKit</h1>
+            <p class="mt-2 text-sm text-gray-400">Internal POC Client</p>
+            <h2 class="mt-6 text-2xl font-bold leading-9 tracking-tight text-white">Create a new account</h2>
+        </div>
+
+        <div class="mt-10">
+            <div class="card">
+                <form id="registerForm" class="space-y-6">
+                    <div>
+                        <label for="username" class="form-label">Username</label>
+                        <div class="mt-2">
+                            <input id="username" name="username" type="text" required class="form-input">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="email" class="form-label">Email address</label>
+                        <div class="mt-2">
+                            <input id="email" name="email" type="email" autocomplete="email" required class="form-input">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="password" class="form-label">Password</label>
+                        <div class="mt-2 relative">
+                            <input id="password" name="password" type="password" required class="form-input pr-10">
+                            <span class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" id="togglePassword">
+                                <svg id="eyeIcon" class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.022 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                                </svg>
+                                <svg id="eyeSlashIcon" class="h-5 w-5 text-gray-400 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                     <path d="M13.586 12.414a5.001 5.001 0 01-5.172-5.172l5.172 5.172z" />
+                                     <path fill-rule="evenodd" d="M.458 10c1.274-4.057 5.022-7 9.542-7 .833 0 1.64.122 2.4.35l-1.4 1.4A5.01 5.01 0 0010 5a5.01 5.01 0 00-5 5c0 .356.037.705.107 1.044l-1.74 1.74A9.954 9.954 0 01.458 10zm11.378 2.828a5.003 5.003 0 01-2.828 2.828l-1.274 1.274A9.954 9.954 0 0010 17c4.978 0 8.768-2.943 10.042-7a9.954 9.954 0 00-2.31-3.668l-1.464 1.464A6.98 6.98 0 0115 10c0 .356-.037.705-.107 1.044l-1.74 1.74a5.003 5.003 0 01-1.274.044z" clip-rule="evenodd" />
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button type="submit" id="registerButton" class="btn-primary" disabled>
+                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" id="spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span id="buttonText">Create Account</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div id="message" class="mt-4 text-center text-white"></div>
+            <p class="mt-10 text-center text-sm text-gray-400">
+                Already have an account?
+                <a href="/auth/login" class="font-semibold leading-6 text-indigo-400 hover:text-indigo-300">Sign in</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<footer id="page-footer" class="text-center py-4 text-gray-400 text-sm">
+    <!-- injected by app.js -->
+</footer>
+
+<script src="/js/config.js"></script>
+<script src="/js/app.js"></script>
+<script src="/js/register.js"></script>
+</body>
+</html>

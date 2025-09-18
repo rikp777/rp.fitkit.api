@@ -10,10 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
-import rp.fitkit.api.dto.LoginResponseDto;
-import rp.fitkit.api.dto.UserLoginDto;
-import rp.fitkit.api.dto.UserRegistrationDto;
-import rp.fitkit.api.dto.UserResponseDto;
+import rp.fitkit.api.dto.*;
 import rp.fitkit.api.model.user.User;
 import rp.fitkit.api.service.user.UserService;
 
@@ -53,7 +50,14 @@ public class UserController {
             @Valid UserLoginDto loginDto
     ) {
         return userService.loginUserAndGenerateToken(loginDto)
-                .map(loginResponse -> ResponseEntity.ok(loginResponse));
+                .map(ResponseEntity::ok);
+    }
+
+    @PostMapping("/refresh")
+    public Mono<ResponseEntity<AccessTokenResponseDto>> refreshToken(@RequestBody RefreshTokenRequestDto request) {
+        return userService.refreshAccessToken(request.getRefreshToken())
+                .map(newAccessToken -> ResponseEntity.ok(new AccessTokenResponseDto(newAccessToken, "Bearer")))
+                .onErrorResume(e -> Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()));
     }
 
     @GetMapping("/me")
