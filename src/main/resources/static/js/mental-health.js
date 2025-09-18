@@ -442,24 +442,29 @@
 
         entries.forEach((entry) => {
             const li = document.createElement('li');
-            li.className = 'border-b border-gray-700 pb-2';
+            li.className = 'border-b border-gray-700 last:border-b-0';
+
+            const a = document.createElement('a');
+            a.href = `/mental-health/dashboard/${entry.logDate}`;
+            a.className = 'block p-3 rounded-lg hover:bg-gray-700/50 transition-colors';
 
             const sectionType = entry.sectionType
                 ? entry.sectionType.charAt(0).toUpperCase() + entry.sectionType.slice(1).toLowerCase()
                 : 'General';
 
-            li.innerHTML = `
-        <div class="flex items-center justify-between">
-          <p class="font-semibold text-white">${escapeHTML(formatDate(entry.logDate))}</p>
-          <span class="px-2 py-1 text-xs font-semibold rounded-full bg-indigo-500 text-white">${escapeHTML(
+            a.innerHTML = `
+            <div class="flex items-center justify-between">
+                <p class="font-semibold text-white">${escapeHTML(formatDate(entry.logDate))}</p>
+                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-indigo-500 text-white">${escapeHTML(
                 sectionType
             )}</span>
-        </div>
-        <p class="text-sm text-gray-400 truncate mt-1">${
+            </div>
+            <p class="text-sm text-gray-400 truncate mt-1">${
                 entry.summaryPreview ? escapeHTML(entry.summaryPreview) : 'No summary available.'
             }</p>
-      `;
+        `;
 
+            li.appendChild(a);
             els.list.appendChild(li);
         });
     }
