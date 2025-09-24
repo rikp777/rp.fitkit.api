@@ -7,22 +7,19 @@ import jakarta.validation.constraints.Max;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 import rp.fitkit.api.dto.audit.AuditLogDto;
 import rp.fitkit.api.exception.InvalidSortFieldException;
-import rp.fitkit.api.model.audit.AuditLog;
 import rp.fitkit.api.model.user.User;
-import rp.fitkit.api.repository.audit.AuditLogRepository;
 import rp.fitkit.api.service.audit.AuditService;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @RestController
@@ -78,6 +75,38 @@ public class AuditController {
                         resultPage.getNumber(), resultPage.getTotalPages(), user.getId()
                 ));
     }
+
+
+    @GetMapping("/by-date")
+    public Mono<Page<AuditLogDto>> getMyAuditHistoryByDate(
+            @AuthenticationPrincipal
+            User user,
+
+            @RequestParam
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate date,
+
+            @RequestParam(defaultValue = "0")
+            int page,
+
+            @RequestParam(defaultValue = "5") @Max(100)
+            int size,
+
+            @RequestParam(defaultValue = "timestamp,desc")
+            String[] sort
+    ) {
+        log.debug("Request getMyAuditHistoryByDate for user: {}, date: {}, page: {}, size: {}, sort: {}",
+                user.getId(), date, page, size, String.join(",", sort));
+
+        Pageable pageable = createPageable(page, size, sort);
+
+        return auditService.getAuditHistoryForUserByDate(user, date, pageable)
+                .doOnSuccess(resultPage -> log.debug(
+                        "Successfully returned audit page {}/{} for user {} on date {}",
+                        resultPage.getNumber(), resultPage.getTotalPages(), user.getId(), date
+                ));
+    }
+
 
     private Pageable createPageable(int page, int size, String[] sort) {
         String sortField = sort[0];

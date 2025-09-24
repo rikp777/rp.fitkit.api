@@ -17,6 +17,8 @@ import rp.fitkit.api.model.exercise.ExerciseSession;
 import rp.fitkit.api.model.user.User;
 import rp.fitkit.api.service.WorkoutLoggingService;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/v1/log")
 @AllArgsConstructor
@@ -31,7 +33,7 @@ public class WorkoutLoggingController {
             @AuthenticationPrincipal UserDetails userDetails,
             @Valid @RequestBody ExerciseLogDto logDto
     ) {
-        String userId = ((User) userDetails).getId();
+        UUID userId = ((User) userDetails).getId();
         return loggingService.logWorkoutSession(userId, logDto)
                 .map(savedSession -> ResponseEntity.status(HttpStatus.CREATED).body(savedSession));
     }

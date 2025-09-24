@@ -6,6 +6,7 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @Table("daily_logs")
@@ -16,7 +17,7 @@ public class DailyLog {
     private Long id;
 
     @Column("user_id")
-    private String userId;
+    private UUID userId;
 
     @Column("log_date")
     private LocalDate logDate;

@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @Table("performed_action")
@@ -16,7 +17,7 @@ public class PerformedAction {
     @Id
     private Long id;
 
-    private String userId;
+    private UUID userId;
 
     private Long mentalHealthStepId;
 

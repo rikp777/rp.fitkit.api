@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import rp.fitkit.api.dto.*;
+import rp.fitkit.api.dto.auth.*;
 import rp.fitkit.api.model.user.User;
 import rp.fitkit.api.service.user.UserService;
 

@@ -13,6 +13,7 @@ import rp.fitkit.api.model.user.User;
 import rp.fitkit.api.service.StatisticsService;
 
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -31,7 +32,7 @@ public class StatisticsController {
             @PathVariable String exerciseName
     ) {
         log.info("Fetching progress chart data for exercise: {}", exerciseName);
-        String userId = ((User) userDetails).getId();
+        UUID userId = ((User) userDetails).getId();
         return statisticsService.getEstimated1rmHistory(userId, exerciseName)
                 .collectList();
     }

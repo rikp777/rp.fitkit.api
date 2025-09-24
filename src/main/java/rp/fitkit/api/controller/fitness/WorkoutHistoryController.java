@@ -17,6 +17,7 @@ import rp.fitkit.api.service.WorkoutHistoryService;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/history")
@@ -30,7 +31,7 @@ public class WorkoutHistoryController {
     public Mono<Map<LocalDate, List<ExerciseSessionResponseDto>>> getFullWorkoutHistory(
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        String userId = ((User) userDetails).getId();
+        UUID userId = ((User) userDetails).getId();
         return historyService.getFullHistoryGroupedByDate(userId);
     }
 
@@ -39,7 +40,7 @@ public class WorkoutHistoryController {
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable String exerciseName
     ) {
-        String userId = ((User) userDetails).getId();
+        UUID userId = ((User) userDetails).getId();
         return historyService.getHistoryForExercise(userId, exerciseName);
     }
 }

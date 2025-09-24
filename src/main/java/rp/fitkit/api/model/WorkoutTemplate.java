@@ -13,13 +13,13 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @Table("workout_template")
-public class WorkoutTemplate implements Persistable<String> {
+public class WorkoutTemplate implements Persistable<UUID> {
 
     @Id
-    private String id;
+    private UUID id;
 
     @Column("workout_plan_id")
-    private String workoutPlanId;
+    private UUID workoutPlanId;
 
     private String name;
 
@@ -29,8 +29,8 @@ public class WorkoutTemplate implements Persistable<String> {
     @Transient
     private boolean isNew;
 
-    public WorkoutTemplate(String workoutPlanId, String name, Integer dayOfWeek) {
-        this.id = UUID.randomUUID().toString();
+    public WorkoutTemplate(UUID workoutPlanId, String name, Integer dayOfWeek) {
+        this.id = UUID.randomUUID();
         this.workoutPlanId = workoutPlanId;
         this.name = name;
         this.dayOfWeek = dayOfWeek;

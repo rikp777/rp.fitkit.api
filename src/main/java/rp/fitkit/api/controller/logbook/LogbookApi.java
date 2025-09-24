@@ -21,6 +21,23 @@ import java.time.LocalDate;
 public interface LogbookApi {
 
     /**
+     * Retrieves the total count of all daily log entries for the authenticated user.
+     * <p>
+     * This method provides a simple statistic for how many days the user has created a log.
+     *
+     * @param user The authenticated user, injected by the security context.
+     * @return A {@link Mono} that emits the total count as a {@link Long}.
+     */
+    @Operation(
+            summary = "Get Total Log Count",
+            description = "Retrieves the total number of daily log entries (i.e., days with at least one entry) for the authenticated user."
+    )
+    Mono<Long> getTotalLogCount(
+            @Parameter(hidden = true)
+            User user
+    );
+
+    /**
      * Fetches a paginated list of logbook previews for the authenticated user.
      * <p>
      * This method retrieves historical logbook entries within a specified date range,

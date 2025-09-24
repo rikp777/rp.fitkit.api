@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,7 +17,7 @@ public class UserStepProgress {
     @Id
     private Long id;
 
-    private String userId;
+    private UUID userId;
 
     private Long mentalHealthStepId;
 

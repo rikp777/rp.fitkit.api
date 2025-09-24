@@ -17,22 +17,34 @@ import java.util.List;
 import java.util.UUID;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @ToString(exclude = {"passwordHash"})
+@EqualsAndHashCode(of = "id")
 @Table("app_user")
-public class User implements Persistable<String>, UserDetails {
+public class User implements Persistable<UUID>, UserDetails {
     @Id
-    private String id;
+    private UUID id;
 
     private String username;
     private String email;
 
-
     @Column("password_hash")
     private String passwordHash;
+
     @Column("date_joined")
     private LocalDate dateJoined;
+
+    @Column("is_enabled")
+    private boolean enabled = true;
+
+    @Column("is_account_non_locked")
+    private boolean accountNonLocked = true;
+
+    @Column("is_account_non_expired")
+    private boolean accountNonExpired = true;
+
+    @Column("is_credentials_non_expired")
+    private boolean credentialsNonExpired = true;
 
     @Transient
     private boolean isNew;
@@ -41,13 +53,18 @@ public class User implements Persistable<String>, UserDetails {
     private Collection<? extends GrantedAuthority> authorities = Collections.emptyList();
 
     public User(String username, String email, String passwordHash) {
-        this.id = UUID.randomUUID().toString();
+        this.id = UUID.randomUUID();
         this.dateJoined = LocalDate.now();
         this.isNew = true;
 
         this.username = username;
         this.email = email;
         this.passwordHash = passwordHash;
+    }
+
+    public void setPassword(String newPasswordHash) {
+        this.passwordHash = newPasswordHash;
+        this.credentialsNonExpired = true;
     }
 
     @Override
@@ -71,6 +88,9 @@ public class User implements Persistable<String>, UserDetails {
                 .map(SimpleGrantedAuthority::new)
                 .toList();
     }
+    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        this.authorities = authorities;
+    }
 
     public boolean isPremium() {
         return this.authorities.stream()
@@ -86,25 +106,25 @@ public class User implements Persistable<String>, UserDetails {
     @Override
     @Transient
     public boolean isAccountNonExpired() {
-        return true;
+        return this.accountNonExpired;
     }
 
     @Override
     @Transient
     public boolean isAccountNonLocked() {
-        return true;
+        return this.accountNonLocked;
     }
 
     @Override
     @Transient
     public boolean isCredentialsNonExpired() {
-        return true;
+        return this.credentialsNonExpired;
     }
+
 
     @Override
     @Transient
     public boolean isEnabled() {
-        return true;
+        return this.enabled;
     }
-
 }

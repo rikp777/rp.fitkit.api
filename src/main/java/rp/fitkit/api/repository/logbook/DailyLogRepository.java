@@ -9,15 +9,16 @@ import rp.fitkit.api.model.root.DailyLog;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.UUID;
 
 @Repository
 public interface DailyLogRepository extends R2dbcRepository<DailyLog, Long> {
-    Flux<DailyLog> findByUserId(String userId, Sort sort);
-    Mono<DailyLog> findByUserIdAndLogDate(String userId, LocalDate date);
-    Flux<DailyLog> findByUserIdIn(Collection<String> userIds, Sort sort);
-    Mono<Long> countByUserId(String userId);
-    Mono<Long> countByUserIdIn(Collection<String> userIds);
-    Flux<DailyLog> findByUserIdAndLogDateBetween(String userId, LocalDate startDate, LocalDate endDate, Sort sort);
-    Mono<Long> countByUserIdAndLogDateBetween(String userId, LocalDate startDate, LocalDate endDate);
+    Flux<DailyLog> findByUserId(UUID userId, Sort sort);
+    Mono<DailyLog> findByUserIdAndLogDate(UUID userId, LocalDate date);
+    Flux<DailyLog> findByUserIdIn(Collection<UUID> userIds, Sort sort);
+    Mono<Long> countByUserId(UUID userId);
+    Mono<Long> countByUserIdIn(Collection<UUID> userIds);
+    Flux<DailyLog> findByUserIdAndLogDateBetween(UUID userId, LocalDate startDate, LocalDate endDate, Sort sort);
+    Mono<Long> countByUserIdAndLogDateBetween(UUID userId, LocalDate startDate, LocalDate endDate);
 }
 

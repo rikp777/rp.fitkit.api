@@ -56,5 +56,6 @@ public class FullLogbookDto {
     private List<LogSectionDto> sections;
     private List<LinkPreviewDto> outgoingLinks;
     private List<LinkPreviewDto> incomingLinks;
+    private MoodStatsDto moodStats;
 }
 

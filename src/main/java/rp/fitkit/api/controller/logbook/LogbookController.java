@@ -31,6 +31,21 @@ public class LogbookController implements LogbookApi {
     private final LogbookService logbookService;
     private final AuditService auditService;
 
+    @GetMapping("/stats/total-count")
+    public Mono<Long> getTotalLogCount(
+            @AuthenticationPrincipal
+            User user
+    ) {
+        return logbookService.getTotalLogCountForUser(user.getId())
+                .flatMap(count -> auditService.logUserAction(
+                        user,
+                        AuditAction.VIEW,
+                        "LogbookStats",
+                        user.getId().toString(),
+                        count
+                ));
+    }
+
     @Override
     @GetMapping
     public Mono<Page<LogbookPreviewDto>> getLogbookHistory(
@@ -72,7 +87,7 @@ public class LogbookController implements LogbookApi {
                         user,
                         AuditAction.VIEW,
                         "LogbookHistory",
-                        user.getId(),
+                        user.getId().toString(),
                         pageResult
                 ));
     }

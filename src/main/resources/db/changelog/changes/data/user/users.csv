@@ -2,3 +2,4 @@ id;username;email;password_hash;date_joined
 6ca7de68-de98-4d1e-b304-c01660a1654b;admin;admin@fitkit.com;$2a$12$ORj1BxrK3Z18jXpwEQ95Gepp3tbyb0LxCUPS8y1xrrhy.w4HcCi8e;2025-03-10
 6cdf73f6-2dd6-4b49-9bfb-6edf4d44dc0c;test;test@fitkit.com;$2a$12$ORj1BxrK3Z18jXpwEQ95Gepp3tbyb0LxCUPS8y1xrrhy.w4HcCi8e;2025-03-09
 66d3d2bb-707b-490f-acdb-ff1afd9bcd76;premium;premium@fitkit.com;$2a$12$ORj1BxrK3Z18jXpwEQ95Gepp3tbyb0LxCUPS8y1xrrhy.w4HcCi8e;2025-03-08
+a1b2c3d4-e5f6-7890-1234-567890abcdef;rowan_finch;rowan.finch@owlpost.wiz;$2a$12$ORj1BxrK3Z18jXpwEQ95Gepp3tbyb0LxCUPS8y1xrrhy.w4HcCi8e;2025-03-08

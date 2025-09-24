@@ -73,12 +73,12 @@ class MentalHealthServiceTest {
     void getMentalHealthStepsForUser_WithPartialProgress() {
         // Arrange
         when(stepRepository.findAll()).thenReturn(Flux.just(step1, step2));
-        when(userStepProgressRepository.findByUserId("user-123")).thenReturn(Flux.just(new UserStepProgress(100L, "user-123", 1L, 4)));
+        when(userStepProgressRepository.findByUserId(null)).thenReturn(Flux.just(new UserStepProgress(100L, "user-123", 1L, 4)));
         when(translationRepository.findByMentalHealthStepIdAndLanguageCode(1L, "en-US")).thenReturn(Mono.just(translation1));
         when(translationRepository.findByMentalHealthStepIdAndLanguageCode(2L, "en-US")).thenReturn(Mono.just(translation2));
 
         // Act
-        var result = mentalHealthService.getMentalHealthStepsForUser("user-123", "en-US");
+        var result = mentalHealthService.getMentalHealthStepsForUser(null, "en-US");
 
         // Assert
         StepVerifier.create(result)
@@ -100,12 +100,12 @@ class MentalHealthServiceTest {
     void getMentalHealthStepsForUser_WhenRequirementsMet() {
         // Arrange
         when(stepRepository.findAll()).thenReturn(Flux.just(step1, step2));
-        when(userStepProgressRepository.findByUserId("user-123")).thenReturn(Flux.just(progressForStep1));
+        when(userStepProgressRepository.findByUserId(null)).thenReturn(Flux.just(progressForStep1));
         when(translationRepository.findByMentalHealthStepIdAndLanguageCode(1L, "en-US")).thenReturn(Mono.just(translation1));
         when(translationRepository.findByMentalHealthStepIdAndLanguageCode(2L, "en-US")).thenReturn(Mono.just(translation2));
 
         // Act
-        var result = mentalHealthService.getMentalHealthStepsForUser("user-123", "en-US");
+        var result = mentalHealthService.getMentalHealthStepsForUser(null, "en-US");
 
         // Assert
         StepVerifier.create(result)
@@ -177,7 +177,7 @@ class MentalHealthServiceTest {
         var progressStep2 = new UserStepProgress(101L, "user-123", 2L, 2); // Step 2 is incomplete
 
         when(stepRepository.findAll()).thenReturn(Flux.just(step1, step2));
-        when(userStepProgressRepository.findByUserId("user-123")).thenReturn(Flux.just(progressStep1, progressStep2));
+        when(userStepProgressRepository.findByUserId(null)).thenReturn(Flux.just(progressStep1, progressStep2));
         when(translationRepository.findByMentalHealthStepIdAndLanguageCode(2L, "en-US")).thenReturn(Mono.just(translation2));
 
         // Act
@@ -202,7 +202,7 @@ class MentalHealthServiceTest {
         var progressStep2 = new UserStepProgress(101L, "user-123", 2L, 5);
 
         when(stepRepository.findAll()).thenReturn(Flux.just(step1, step2));
-        when(userStepProgressRepository.findByUserId("user-123")).thenReturn(Flux.just(progressStep1, progressStep2));
+        when(userStepProgressRepository.findByUserId(null)).thenReturn(Flux.just(progressStep1, progressStep2));
 
         // Act
         var result = mentalHealthService.getSuggestedStepForUser("user-123", "en-US");
@@ -296,7 +296,7 @@ class MentalHealthServiceTest {
     void getMentalHealthStepsForUser_performanceCheck() {
         // Arrange
         when(stepRepository.findAll()).thenReturn(Flux.just(step1, step2));
-        when(userStepProgressRepository.findByUserId("user-123")).thenReturn(Flux.just(progressForStep1));
+        when(userStepProgressRepository.findByUserId(null)).thenReturn(Flux.just(progressForStep1));
         when(translationRepository.findByMentalHealthStepIdAndLanguageCode(1L, "en-US")).thenReturn(Mono.just(translation1));
         when(translationRepository.findByMentalHealthStepIdAndLanguageCode(2L, "en-US")).thenReturn(Mono.just(translation2));
 
@@ -318,7 +318,7 @@ class MentalHealthServiceTest {
         var progressStep2 = new UserStepProgress(101L, "user-123", 2L, 2); // Step 2 is incomplete
 
         when(stepRepository.findAll()).thenReturn(Flux.just(step1, step2));
-        when(userStepProgressRepository.findByUserId("user-123")).thenReturn(Flux.just(progressStep1, progressStep2));
+        when(userStepProgressRepository.findByUserId(null)).thenReturn(Flux.just(progressStep1, progressStep2));
         when(translationRepository.findByMentalHealthStepIdAndLanguageCode(2L, "en-US")).thenReturn(Mono.just(translation2));
 
         // Act
@@ -337,7 +337,7 @@ class MentalHealthServiceTest {
         // Arrange
         when(stepRepository.findById(1L)).thenReturn(Mono.just(step1));
         when(performedActionRepository.save(any(PerformedAction.class))).thenReturn(Mono.just(new PerformedAction()));
-        when(userStepProgressRepository.findByUserIdAndMentalHealthStepId("user-123", 1L)).thenReturn(Mono.empty());
+        when(userStepProgressRepository.findByUserIdAndMentalHealthStepId(null, 1L)).thenReturn(Mono.empty());
         when(userStepProgressRepository.save(any(UserStepProgress.class))).thenReturn(Mono.just(new UserStepProgress()));
 
         // Act

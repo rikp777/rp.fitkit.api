@@ -61,10 +61,25 @@
         </header>
 
         <main class="flex-1 p-8 overflow-y-auto">
-            <h1 class="text-4xl font-bold">Dashboard</h1>
-            <p class="mt-2 text-gray-400">An overview of your mental well-being.</p>
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-4xl font-bold">Dashboard</h1>
+                    <p class="mt-2 text-gray-400">An overview of your mental well-being.</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button id="prev-day-btn" title="Previous Day" class="p-2 rounded-md bg-gray-700 hover:bg-gray-600 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>
+                    <button id="today-btn" class="px-4 py-2 text-sm font-semibold rounded-md bg-gray-700 hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                        Today
+                    </button>
+                    <button id="next-day-btn" title="Next Day" class="p-2 rounded-md bg-gray-700 hover:bg-gray-600 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            </div>
 
-            <div class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="mt-8 grid grid-cols-1 xl:grid-cols-3 gap-6">
 
                 <div class="lg:col-span-2 space-y-6">
                     <div class="content-card space-y-4">
@@ -235,6 +250,24 @@
                             </li>
                         </ul>
                     </div>
+
+                    <div class="content-card">
+                        <div class="flex justify-between items-center">
+                            <h2 id="audit-title" class="text-2xl font-semibold text-white">Audit Log</h2>
+                            <div>
+                                <label for="audit-page-size-selector" class="text-sm text-gray-400 mr-2">Show:</label>
+                                <select id="audit-page-size-selector" class="bg-gray-700 text-white rounded-md p-1">
+                                    <option value="5" selected>5</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                </select>
+                            </div>
+                        </div>
+                        <ul class="mt-4 space-y-3" id="audit-log-list">
+                        </ul>
+                        <div id="audit-pagination-container"
+                             class="mt-6 flex justify-center items-center space-x-2 text-sm"></div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -244,40 +277,11 @@
     </div>
 </div>
 
-<script src="/js/config.js"></script>
-<script src="/js/app.js"></script>
-<script src="/js/mental-health.js"></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        checkAuth();
-
-        const mentalHealthNavItems = [
-            {icon: '🏠', label: 'Dashboard', href: '/mental-health/dashboard'},
-            {icon: '📓', label: 'Journal', href: '#'},
-            {icon: '🎯', label: 'Habit Tracker', href: '#'},
-            {icon: '📈', label: 'Mood Analysis', href: '#'}
-        ];
-
-        const moduleInfo = {
-            title: 'FitKit',
-            subtitle: 'Mental Health',
-            link: '/mental-health/dashboard'
-        };
-
-        renderSidenav(moduleInfo, mentalHealthNavItems, window.location.pathname);
-
-        initializeSidenavToggle();
-    });
-</script>
-
+<script type="module" src="/src/main.js"></script>
 
 <div id="link-popover" class="fixed bg-gray-800 rounded-lg shadow-2xl z-50 w-full max-w-md hidden p-4 transition-opacity duration-200 opacity-0 pointer-events-auto">
     <div id="popover-title" class="text-lg font-bold text-white border-b border-gray-700 pb-2 mb-2"></div>
     <div id="popover-content" class="text-gray-300 text-sm max-h-48 overflow-y-auto"></div>
 </div>
-
-
-
 </body>
 </html>

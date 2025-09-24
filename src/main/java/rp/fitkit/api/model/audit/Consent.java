@@ -16,14 +16,14 @@ public class Consent {
 
     @Id
     private UUID id;
-    private String userId;
+    private UUID userId;
     private String justification;
     @CreatedDate
     private Instant grantedAt;
     private Instant expiresAt;
     private Instant revokedAt;
 
-    public Consent(String userId, String justification, Instant expiresAt) {
+    public Consent(UUID userId, String justification, Instant expiresAt) {
         this.id = UUID.randomUUID();
         this.userId = userId;
         this.justification = justification;

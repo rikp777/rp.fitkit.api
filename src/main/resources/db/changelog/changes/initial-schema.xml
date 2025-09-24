@@ -26,7 +26,7 @@
 
     <changeSet id="create-table-app_user" author="Rik Peeters">
         <createTable tableName="app_user">
-            <column name="id" type="VARCHAR(36)">
+            <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="username" type="VARCHAR(255)">
@@ -42,12 +42,41 @@
                 <constraints nullable="false"/>
             </column>
 
+            <column name="is_enabled" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_account_non_locked" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_account_non_expired" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_credentials_non_expired" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-password_recovery_codes" author="Rik Peeters">
+        <createTable tableName="password_recovery_codes">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="UUID">
+                <constraints nullable="false" foreignKeyName="fk_recovery_code_user" references="app_user(id)"/>
+            </column>
+            <column name="code_hash" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="is_used" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 
     <changeSet id="create-table-user_role" author="Rik Peeters">
         <createTable tableName="user_role">
-            <column name="user_id" type="VARCHAR(36)">
+            <column name="user_id" type="UUID">
                 <constraints nullable="false" primaryKey="true"
                              foreignKeyName="fk_user_role_user"
                              references="app_user(id)"
@@ -62,10 +91,9 @@
         </createTable>
     </changeSet>
 
-
     <changeSet id="create-table-exercise" author="Rik Peeters">
         <createTable tableName="exercise">
-            <column name="id" type="VARCHAR(36)">
+            <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="met_value" type="DOUBLE">
@@ -77,7 +105,7 @@
 
     <changeSet id="create-table-exercise_translation" author="Rik Peeters">
         <createTable tableName="exercise_translation">
-            <column name="exercise_id" type="VARCHAR(36)">
+            <column name="exercise_id" type="UUID">
                 <constraints nullable="false" primaryKey="true" foreignKeyName="fk_ex_trans_exercise"
                              references="exercise(id)" deleteCascade="true"/>
             </column>
@@ -95,10 +123,10 @@
 
     <changeSet id="create-table-user_metric" author="Rik Peeters">
         <createTable tableName="user_metric">
-            <column name="id" type="VARCHAR(36)">
+            <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="user_id" type="VARCHAR(36)">
+            <column name="user_id" type="UUID">
                 <constraints nullable="false" foreignKeyName="fk_user_metric_user" references="app_user(id)"
                              deleteCascade="true"/>
             </column>
@@ -114,13 +142,13 @@
 
     <changeSet id="create-table-exercise_session" author="Rik Peeters">
         <createTable tableName="exercise_session">
-            <column name="id" type="VARCHAR(36)">
+            <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="user_id" type="VARCHAR(36)">
+            <column name="user_id" type="UUID">
                 <constraints nullable="false" foreignKeyName="fk_ex_session_user" references="app_user(id)"/>
             </column>
-            <column name="exercise_id" type="VARCHAR(36)">
+            <column name="exercise_id" type="UUID">
                 <constraints nullable="false" foreignKeyName="fk_ex_session_exercise" references="exercise(id)"/>
             </column>
             <column name="session_date" type="DATE">
@@ -136,7 +164,7 @@
             <column name="id" type="VARCHAR(36)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="exercise_session_id" type="VARCHAR(36)">
+            <column name="exercise_session_id" type="UUID">
                 <constraints nullable="false" foreignKeyName="fk_set_log_session" references="exercise_session(id)"
                              deleteCascade="true"/>
             </column>
@@ -156,7 +184,7 @@
             <column name="id" type="VARCHAR(36)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="user_id" type="VARCHAR(36)">
+            <column name="user_id" type="UUID">
                 <constraints nullable="false" foreignKeyName="fk_workout_plan_user" references="app_user(id)"
                              deleteCascade="true"/>
             </column>
@@ -195,7 +223,7 @@
                 <constraints nullable="false" foreignKeyName="fk_ex_tmpl_workout" references="workout_template(id)"
                              deleteCascade="true"/>
             </column>
-            <column name="exercise_id" type="VARCHAR(36)">
+            <column name="exercise_id" type="UUID">
                 <constraints nullable="false" foreignKeyName="fk_ex_tmpl_exercise" references="exercise(id)"/>
             </column>
             <column name="target_sets" type="INT"/>
@@ -306,7 +334,7 @@
     <changeSet id="create-table-product" author="jouw-naam">
         <createTable tableName="product">
             <column name="id" type="VARCHAR(36)"><constraints primaryKey="true" nullable="false"/></column>
-            <column name="user_id" type="VARCHAR(36)"/>
+            <column name="user_id" type="UUID"/>
             <column name="base_name" type="VARCHAR(255)"><constraints nullable="false"/></column>
         </createTable>
     </changeSet>
@@ -384,7 +412,7 @@
     <changeSet id="create-table-recipe" author="jouw-naam">
         <createTable tableName="recipe">
             <column name="id" type="VARCHAR(36)"><constraints primaryKey="true" nullable="false"/></column>
-            <column name="user_id" type="VARCHAR(36)"/>
+            <column name="user_id" type="UUID"/>
             <column name="prep_time_minutes" type="INT"/>
             <column name="cook_time_minutes" type="INT"/>
             <column name="servings" type="INT"/>
@@ -494,7 +522,7 @@
             <column name="id" type="VARCHAR(36)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="user_id" type="VARCHAR(36)">
+            <column name="user_id" type="UUID">
                 <constraints nullable="false" foreignKeyName="fk_cons_log_user" references="app_user(id)"
                              deleteCascade="true"/>
             </column>
@@ -543,7 +571,7 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="user_id" type="VARCHAR(36)">
+            <column name="user_id" type="UUID">
                 <constraints nullable="false" foreignKeyName="fk_perf_action_user" references="app_user(id)"
                              deleteCascade="true"/>
             </column>
@@ -562,7 +590,7 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="user_id" type="VARCHAR(36)">
+            <column name="user_id" type="UUID">
                 <constraints nullable="false" foreignKeyName="fk_user_step_prog_user" references="app_user(id)"
                              deleteCascade="true"/>
             </column>
@@ -585,7 +613,7 @@
             <column name="log_id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="user_id" type="VARCHAR(36)">
+            <column name="user_id" type="UUID">
                 <constraints nullable="false" foreignKeyName="fk_daily_log_user" references="app_user(id)"
                              deleteCascade="true"/>
             </column>
@@ -664,7 +692,7 @@
             <column name="person_id" type="VARCHAR(36)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="user_id" type="VARCHAR(36)">
+            <column name="user_id" type="UUID">
                 <constraints nullable="false" foreignKeyName="fk_person_user" references="app_user(id)"
                              deleteCascade="true"/>
             </column>
@@ -690,7 +718,7 @@
             <column name="id" type="VARCHAR(36)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="user_id" type="VARCHAR(36)">
+            <column name="user_id" type="UUID">
                 <constraints nullable="false" foreignKeyName="fk_consent_user" references="app_user(id)"
                              deleteCascade="true"/>
             </column>
@@ -710,14 +738,14 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="actor_id" type="VARCHAR(36)"/>
-            <column name="actor_username" type="VARCHAR(255)"/>
+            <column name="actor_id" type="UUID"/>
+            <column name="actor_username" type="VARCHAR(36)"/>
             <column name="actor_roles" type="VARCHAR(255)"/>
             <column name="action" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="subject_id" type="VARCHAR(36)"/>
-            <column name="subject_username" type="VARCHAR(255)"/>
+            <column name="subject_id" type="UUID"/>
+            <column name="subject_username" type="VARCHAR(36)"/>
             <column name="entity_type" type="VARCHAR(255)"/>
             <column name="entity_id" type="VARCHAR(255)"/>
             <column name="justification" type="TEXT"/>

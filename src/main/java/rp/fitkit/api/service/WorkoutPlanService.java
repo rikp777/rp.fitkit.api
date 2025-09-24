@@ -17,6 +17,7 @@ import rp.fitkit.api.model.WorkoutTemplate;
 import rp.fitkit.api.repository.*;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,13 +39,13 @@ public class WorkoutPlanService {
         this.exerciseRepository = exerciseRepository;
     }
 
-    public Flux<WorkoutPlanDto> getPlansForUser(String userId) {
+    public Flux<WorkoutPlanDto> getPlansForUser(UUID userId) {
         log.info("Fetching all workout plans for user ID: {}", userId);
         return planRepository.findByUserId(userId)
                 .flatMap(this::hydratePlan);
     }
 
-    public Mono<WorkoutPlanDto> getPlanByIdAndUser(String planId, String userId) {
+    public Mono<WorkoutPlanDto> getPlanByIdAndUser(UUID planId, UUID userId) {
         log.info("Fetching workout plan with ID: {} for user ID: {}", planId, userId);
         return planRepository.findById(planId)
                 .filter(plan -> plan.getUserId().equals(userId))
@@ -52,7 +53,7 @@ public class WorkoutPlanService {
     }
 
     @Transactional
-    public Mono<WorkoutPlanDto> createWorkoutPlan(WorkoutPlanDto planDto, String userId) {
+    public Mono<WorkoutPlanDto> createWorkoutPlan(WorkoutPlanDto planDto, UUID userId) {
         log.info("Creating a new workout plan named '{}' for user '{}'", planDto.getName(), userId);
 
         WorkoutPlan plan = new WorkoutPlan();
@@ -79,7 +80,7 @@ public class WorkoutPlanService {
                 });
     }
 
-    private Mono<WorkoutTemplateDto> createAndSaveTemplate(WorkoutTemplateDto templateDto, String planId) {
+    private Mono<WorkoutTemplateDto> createAndSaveTemplate(WorkoutTemplateDto templateDto, UUID planId) {
         WorkoutTemplate template = new WorkoutTemplate();
         template.setWorkoutPlanId(planId);
         template.setName(templateDto.getName());
@@ -153,7 +154,7 @@ public class WorkoutPlanService {
 
 
     @Transactional
-    public Mono<Void> deletePlan(String planId, String userId) {
+    public Mono<Void> deletePlan(UUID planId, UUID userId) {
         return planRepository.findById(planId)
                 .switchIfEmpty(Mono.error(new ResourceNotFoundException("Plan met ID " + planId + " niet gevonden.")))
                 .flatMap(plan -> {

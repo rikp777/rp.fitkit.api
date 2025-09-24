@@ -23,10 +23,7 @@ import rp.fitkit.api.repository.logbook.LogSectionRepository;
 import rp.fitkit.api.repository.logbook.PersonRepository;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -45,8 +42,15 @@ public class LogbookService {
     private final LogEntityLinkRepository logEntityLinkRepository;
 
     private final PersonRepository personRepository;
+    private final MoodAnalysisService moodAnalysisService;
 
-    public Mono<Page<LogbookPreviewDto>> getPaginatedLogbooksForUser(String userId, LocalDate startDate, LocalDate endDate, Pageable pageable) {
+    public Mono<Long> getTotalLogCountForUser(UUID userId) {
+        log.info("Fetching total log count for user: {}", userId);
+        return dailyLogRepository.countByUserId(userId)
+                .doOnSuccess(count -> log.info("Found a total of {} log entries for user: {}", count, userId));
+    }
+
+    public Mono<Page<LogbookPreviewDto>> getPaginatedLogbooksForUser(UUID userId, LocalDate startDate, LocalDate endDate, Pageable pageable) {
         log.info("Fetching paginated logbooks for user: {}, from: {}, to: {}", userId, startDate, endDate);
         Mono<Long> totalMono = dailyLogRepository.countByUserIdAndLogDateBetween(userId, startDate, endDate);
         Flux<DailyLog> logsFlux = dailyLogRepository.findByUserIdAndLogDateBetween(userId, startDate, endDate, pageable.getSort());
@@ -96,7 +100,7 @@ public class LogbookService {
     /**
      * Zoekt een daglog voor een gebruiker op een specifieke datum, of maakt een nieuwe aan als deze niet bestaat.
      */
-    public Mono<DailyLog> findOrCreateDailyLog(String userId, LocalDate date) {
+    public Mono<DailyLog> findOrCreateDailyLog(UUID userId, LocalDate date) {
         log.debug("Attempting to find or create daily log for user: {} on date: {}", userId, date);
 
         return dailyLogRepository.findByUserIdAndLogDate(userId, date)
@@ -168,7 +172,7 @@ public class LogbookService {
         return logSectionRepository.findByDailyLogId(logId);
     }
 
-    public Mono<FullLogbookDto> getFullLogbook(String userId, LocalDate date) {
+    public Mono<FullLogbookDto> getFullLogbook(UUID userId, LocalDate date) {
         log.info("Fetching full logbook for user: {} on date: {}", userId, date);
         return findOrCreateDailyLog(userId, date)
                 .flatMap(dailyLog -> {
@@ -194,20 +198,27 @@ public class LogbookService {
                             .collectList();
 
                     return Mono.zip(sectionsMono, outgoingLinksMono, incomingLinksMono)
-                            .doOnSuccess(tuple -> log.info(
-                                    "Assembled full logbook for logId: {}. Found {} sections, {} outgoing links, {} incoming links.",
-                                    dailyLog.getId(), tuple.getT1().size(), tuple.getT2().size(), tuple.getT3().size()))
-                            .map(tuple -> new FullLogbookDto(
-                                    dailyLog.getId(),
-                                    dailyLog.getLogDate(),
-                                    tuple.getT1(),
-                                    tuple.getT2(),
-                                    tuple.getT3()
-                            ));
+                            .map(tuple -> {
+                                List<LogSectionDto> sections = tuple.getT1();
+                                List<LinkPreviewDto> outgoingLinks = tuple.getT2();
+                                List<LinkPreviewDto> incomingLinks = tuple.getT3();
+
+                                MoodStatsDto moodStats = moodAnalysisService.calculateMoodStats(sections);
+
+                                return new FullLogbookDto(
+                                        dailyLog.getId(),
+                                        dailyLog.getLogDate(),
+                                        sections,
+                                        outgoingLinks,
+                                        incomingLinks,
+                                        moodStats
+                                );
+                            });
                 });
+
     }
 
-    public Mono<GraphDataDto> getKeywordGraphData(String userId) {
+    public Mono<GraphDataDto> getKeywordGraphData(UUID userId) {
         return logEntityLinkRepository.findAllByUserId(userId)
                 .collectList()
                 .flatMap(userLinks -> {

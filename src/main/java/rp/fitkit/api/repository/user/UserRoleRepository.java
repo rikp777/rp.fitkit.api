@@ -5,8 +5,10 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import rp.fitkit.api.model.user.UserRole;
 
+import java.util.UUID;
+
 @Repository
-public interface UserRoleRepository extends R2dbcRepository<UserRole, String> {
-    Flux<UserRole> findByUserId(String userId);
+public interface UserRoleRepository extends R2dbcRepository<UserRole, UUID> {
+    Flux<UserRole> findByUserId(UUID userId);
 }
 

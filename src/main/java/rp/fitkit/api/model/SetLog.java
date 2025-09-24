@@ -18,12 +18,12 @@ import java.util.UUID;
 @ToString
 
 @Table("set_log")
-public class SetLog implements Persistable<String> {
+public class SetLog implements Persistable<UUID> {
     @Id
-    private String id;
+    private UUID id;
 
     @Column("exercise_session_id")
-    private String exerciseSessionId;
+    private UUID exerciseSessionId;
 
     private int reps;
     private double weight;
@@ -32,8 +32,8 @@ public class SetLog implements Persistable<String> {
     @Transient
     private boolean isNew;
 
-    public SetLog(String exerciseSessionId, int reps, double weight, int rpe) {
-        this.id = UUID.randomUUID().toString();
+    public SetLog(UUID exerciseSessionId, int reps, double weight, int rpe) {
+        this.id = UUID.randomUUID();
         this.isNew = true;
         this.exerciseSessionId = exerciseSessionId;
         this.reps = reps;

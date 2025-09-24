@@ -1,4 +1,4 @@
-package rp.fitkit.api.dto;
+package rp.fitkit.api.dto.auth;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

@@ -16,6 +16,8 @@ import rp.fitkit.api.model.user.User;
 import rp.fitkit.api.model.WorkoutSuggestion;
 import rp.fitkit.api.service.WorkoutSuggestionService;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/v1/suggestions")
 @AllArgsConstructor
@@ -29,9 +31,9 @@ public class WorkoutSuggestionController {
     public Mono<WorkoutSuggestion> getPlannedWorkoutSuggestion(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam @NotBlank(message = "Exercise Template ID is required")
-            String exerciseTemplateId
+            UUID exerciseTemplateId
     ) {
-        String userId = ((User) userDetails).getId();
+        UUID userId = ((User) userDetails).getId();
         return suggestionService.getSuggestionForPlannedExercise(userId, exerciseTemplateId);
     }
 
@@ -41,7 +43,7 @@ public class WorkoutSuggestionController {
             @RequestParam @NotBlank(message = "Exercise Name is required")
             String exerciseName
     ) {
-        String userId = ((User) userDetails).getId();
+        UUID userId = ((User) userDetails).getId();
         return suggestionService.getSuggestionForAdHocExercise(userId, exerciseName);
     }
 }

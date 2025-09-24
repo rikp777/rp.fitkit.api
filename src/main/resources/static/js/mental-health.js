@@ -10,7 +10,9 @@
         linkDataMap: new Map(),
         timers: {
             popoverHide: null
-        }
+        },
+        auditCurrentPage: 0,
+        auditPageSize: 5
     };
 
     const els = {
@@ -283,7 +285,7 @@
 
                 if (res.status === 404) {
                     SECTION_TYPES.forEach(showSectionPlaceholder);
-                    renderMoodStats([]);
+                    renderMoodStats(null);
                     return;
                 }
                 throw new Error('Failed to load log for the selected date');
@@ -334,11 +336,11 @@
                 view.removeAttribute('aria-busy');
             });
 
-            renderMoodStats(Array.isArray(data.sections) ? data.sections : []);
+            renderMoodStats(data.moodStats);
             initializePopoverSystem();
         } catch (err) {
             console.error('Could not pre-load log:', err);
-            renderMoodStats([]);
+            renderMoodStats(null);
             SECTION_TYPES.forEach(showSectionPlaceholder);
         }
     }
@@ -396,7 +398,11 @@
 
             saveButton.textContent = 'Saved ✔️';
 
-            await Promise.all([loadLogForDate(), fetchAndRenderJournals(0)]);
+            await Promise.all([
+                loadLogForDate(),
+                fetchAndRenderJournals(0)],
+                window.refreshAudits()
+            );
 
         } catch (err) {
             console.error(`Error saving ${sectionType} section:`, err);
@@ -509,42 +515,29 @@
         els.pagination.appendChild(makeBtn('Last &raquo;', totalPages - 1, isLast));
     }
 
-    function renderMoodStats(sections) {
+    function renderMoodStats(moodStats) {
         const moodContainer = qs('#mood-stats-container');
         if (!moodContainer) return;
 
-        //todo remove and replace with machine learning in be
-        const moodCategories = {
-            Positive: ['Opgelucht', 'Productief', 'Tevreden', 'Energiek', 'Blij', 'Zelfverzekerd', 'Gemotiveerd', 'Inspiratie'],
-            Neutral: ['Rustig', 'Afwachtend', 'Strategisch'],
-            Negative: ['Gefrustreerd', 'Geduldig']
-        };
-
-        const counts = { Positive: 0, Neutral: 0, Negative: 0 };
-
-        const uniqueMoods = [...new Set((sections || []).map((s) => s.mood).filter(Boolean))];
-        uniqueMoods.forEach((mood) => {
-            if (moodCategories.Positive.includes(mood)) counts.Positive++;
-            else if (moodCategories.Neutral.includes(mood)) counts.Neutral++;
-            else if (moodCategories.Negative.includes(mood)) counts.Negative++;
-        });
+        // If no stats are provided, show all zeros.
+        const stats = moodStats || { positiveCount: 0, neutralCount: 0, negativeCount: 0 };
 
         moodContainer.innerHTML = `
-      <div class="stat-card" aria-label="Positive moods">
-        <span class="text-3xl">😊</span>
-        <p class="text-sm mt-1">Positive</p>
-        <p class="text-lg font-bold">${counts.Positive}</p>
-      </div>
-      <div class="stat-card" aria-label="Neutral moods">
-        <span class="text-3xl">😐</span>
-        <p class="text-sm mt-1">Neutral</p>
-        <p class="text-lg font-bold">${counts.Neutral}</p>
-      </div>
-      <div class="stat-card" aria-label="Negative moods">
-        <span class="text-3xl">😔</span>
-        <p class="text-sm mt-1">Negative</p>
-        <p class="text-lg font-bold">${counts.Negative}</p>
-      </div>
+        <div class="stat-card" aria-label="Positive moods">
+            <span class="text-3xl">😊</span>
+            <p class="text-sm mt-1">Positive</p>
+            <p class="text-lg font-bold">${stats.positiveCount}</p>
+        </div>
+        <div class="stat-card" aria-label="Neutral moods">
+            <span class="text-3xl">😐</span>
+            <p class="text-sm mt-1">Neutral</p>
+            <p class="text-lg font-bold">${stats.neutralCount}</p>
+        </div>
+        <div class="stat-card" aria-label="Negative moods">
+            <span class="text-3xl">😔</span>
+            <p class="text-sm mt-1">Negative</p>
+            <p class="text-lg font-bold">${stats.negativeCount}</p>
+        </div>
     `;
     }
 
@@ -573,6 +566,10 @@
 
         await loadLogForDate();
         await fetchAndRenderJournals(state.currentPage);
+
+        if (window.initializeAuditModule) {
+            window.initializeAuditModule(state.targetDate);
+        }
 
         highlightCurrentSection();
     });

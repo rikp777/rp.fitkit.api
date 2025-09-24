@@ -5,6 +5,8 @@ import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import reactor.core.publisher.Flux;
 import rp.fitkit.api.model.exercise.ExerciseSession;
 
+import java.util.UUID;
+
 public interface ExerciseSessionRepository extends R2dbcRepository<ExerciseSession, String> {
     @Query("""
         SELECT es.* FROM exercise_session es
@@ -13,6 +15,6 @@ public interface ExerciseSessionRepository extends R2dbcRepository<ExerciseSessi
         WHERE es.user_id = :userId AND et.name = :exerciseName
         ORDER BY es.session_date DESC
     """)
-    Flux<ExerciseSession> findByUserIdAndExerciseNameOrderByDateDesc(String userId, String exerciseName);
-    Flux<ExerciseSession> findByUserIdOrderByDateDesc(String userId);
+    Flux<ExerciseSession> findByUserIdAndExerciseNameOrderByDateDesc(UUID userId, String exerciseName);
+    Flux<ExerciseSession> findByUserIdOrderByDateDesc(UUID userId);
 }

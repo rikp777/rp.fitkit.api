@@ -12,6 +12,7 @@ import rp.fitkit.api.repository.SetLogRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,7 +22,7 @@ public class WorkoutHistoryService {
     private final ExerciseSessionRepository exerciseSessionRepository;
     private final SetLogRepository setLogRepository;
 
-    public Mono<Map<LocalDate, List<ExerciseSessionResponseDto>>> getFullHistoryGroupedByDate(String userId) {
+    public Mono<Map<LocalDate, List<ExerciseSessionResponseDto>>> getFullHistoryGroupedByDate(UUID userId) {
         return exerciseSessionRepository.findByUserIdOrderByDateDesc(userId)
                 .flatMap(this::hydrateSessionToDto)
                 .collectList()
@@ -30,7 +31,7 @@ public class WorkoutHistoryService {
                 );
     }
 
-    public Flux<ExerciseSessionResponseDto> getHistoryForExercise(String userId, String exerciseName) {
+    public Flux<ExerciseSessionResponseDto> getHistoryForExercise(UUID userId, String exerciseName) {
         return exerciseSessionRepository.findByUserIdAndExerciseNameOrderByDateDesc(userId, exerciseName)
                 .flatMap(this::hydrateSessionToDto);
     }

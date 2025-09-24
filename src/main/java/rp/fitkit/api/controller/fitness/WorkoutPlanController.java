@@ -14,6 +14,8 @@ import rp.fitkit.api.dto.WorkoutPlanDto;
 import rp.fitkit.api.model.user.User;
 import rp.fitkit.api.service.WorkoutPlanService;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/v1/plans")
 @SecurityRequirement(name = "bearerAuth")
@@ -31,7 +33,7 @@ public class WorkoutPlanController {
             @AuthenticationPrincipal UserDetails userDetails,
             @Valid @RequestBody WorkoutPlanDto planDto) {
 
-        String userId = ((User) userDetails).getId();
+        UUID userId = ((User) userDetails).getId();
         return planService.createWorkoutPlan(planDto, userId)
                 .map(savedPlan -> ResponseEntity.status(HttpStatus.CREATED).body(savedPlan));
     }
@@ -40,17 +42,17 @@ public class WorkoutPlanController {
     public Flux<WorkoutPlanDto> getPlansForCurrentUser(
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        String userId = ((User) userDetails).getId();
+        UUID userId = ((User) userDetails).getId();
         return planService.getPlansForUser(userId);
     }
 
     @GetMapping("/{planId}")
     public Mono<ResponseEntity<WorkoutPlanDto>> getPlanById(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable String planId
+            @PathVariable UUID planId
     ) {
 
-        String userId = ((User) userDetails).getId();
+        UUID userId = ((User) userDetails).getId();
         return planService.getPlanByIdAndUser(planId, userId)
                 .map(planDto -> ResponseEntity.ok(planDto))
                 .defaultIfEmpty(ResponseEntity.notFound().build());
@@ -60,9 +62,9 @@ public class WorkoutPlanController {
     @SecurityRequirement(name = "bearerAuth")
     public Mono<ResponseEntity<Void>> deletePlan(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable String planId) {
+            @PathVariable UUID planId) {
 
-        String userId = ((User) userDetails).getId();
+        UUID userId = ((User) userDetails).getId();
         return planService.deletePlan(planId, userId)
                 .thenReturn(ResponseEntity.noContent().build());
     }

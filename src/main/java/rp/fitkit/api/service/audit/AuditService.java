@@ -18,6 +18,9 @@ import rp.fitkit.api.model.audit.AuditLog;
 import rp.fitkit.api.model.user.User;
 import rp.fitkit.api.repository.audit.AuditLogRepository;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -56,6 +59,40 @@ public class AuditService {
                             .map(auditMapper::toDto) // Gebruik de mapper
                             .collectList()
                             .map(list -> (Page<AuditLogDto>) new PageImpl<>(list, pageable, displayTotal));
+                });
+    }
+
+    /**
+     * Fetches a paginated view of the audit history for a given user on a specific date.
+     * Access restrictions for non-premium users are applied.
+     *
+     * @param user     The user whose audit history is to be fetched.
+     * @param date     The specific date for which to fetch the audit history.
+     * @param pageable The pagination and sorting information.
+     * @return A {@link Mono} emitting a {@link Page} of {@link AuditLogDto} objects.
+     */
+    public Mono<Page<AuditLogDto>> getAuditHistoryForUserByDate(User user, LocalDate date, Pageable pageable) {
+        boolean isPremium = user.isPremium();
+        log.debug("User {} (premium: {}) requesting audit history for date {}", user.getId(), isPremium, date);
+
+        if (!isPremium && pageable.getOffset() >= 500) {
+            log.warn("Access forbidden for normal user {} requesting offset {}", user.getId(), pageable.getOffset());
+            return Mono.error(new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "Normal users can only access the first 500 audit records."));
+        }
+
+        var startOfDay = date.atStartOfDay();
+        var endOfDay = date.atTime(LocalTime.MAX);
+
+        return auditLogRepository.countBySubjectIdAndTimestampBetween(user.getId(), startOfDay, endOfDay)
+                .flatMap(total -> {
+                    log.debug("Found total of {} audit records for user {} on date {}", total, user.getId(), date);
+                    long displayTotal = isPremium ? total : Math.min(total, 500L);
+
+                    return auditLogRepository.findBySubjectIdAndTimestampBetween(user.getId(), startOfDay, endOfDay, pageable)
+                            .map(auditMapper::toDto)
+                            .collectList()
+                            .map(list -> new PageImpl<>(list, pageable, displayTotal));
                 });
     }
 

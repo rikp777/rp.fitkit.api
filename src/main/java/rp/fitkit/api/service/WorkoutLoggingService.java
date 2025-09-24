@@ -16,6 +16,7 @@ import rp.fitkit.api.repository.user.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -27,7 +28,7 @@ public class WorkoutLoggingService {
     private final Sinks.Many<ExerciseSessionResponseDto> workoutSessionSink;
 
     @Transactional
-    public Mono<ExerciseSession> logWorkoutSession(String userId, ExerciseLogDto logDto) {
+    public Mono<ExerciseSession> logWorkoutSession(UUID userId, ExerciseLogDto logDto) {
         return userRepository.findById(userId)
                 .switchIfEmpty(Mono.error(new ResourceNotFoundException("Gebruiker met ID '" + userId + "' niet gevonden.")))
                 .flatMap(user -> {

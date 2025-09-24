@@ -9,6 +9,7 @@ import rp.fitkit.api.model.logbook.LogEntityLink;
 import rp.fitkit.api.model.root.EntityType;
 
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -79,5 +80,5 @@ public interface LogEntityLinkRepository extends R2dbcRepository<LogEntityLink, 
             "JOIN log_sections s ON l.source_entity_id = s.section_id::text " +
             "JOIN daily_logs d ON s.log_id = d.log_id " +
             "WHERE d.user_id = :userId AND l.source_entity_type = 'LOG_SECTION'")
-    Flux<LogEntityLink> findAllByUserId(String userId);
+    Flux<LogEntityLink> findAllByUserId(UUID userId);
 }

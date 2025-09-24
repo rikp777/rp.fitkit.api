@@ -14,6 +14,7 @@ import rp.fitkit.api.repository.user.UserSettingsRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,7 +39,7 @@ public class WorkoutSuggestionService {
     private final UserSettingsRepository userSettingsRepository;
 
 
-    public Mono<WorkoutSuggestion> getSuggestionForPlannedExercise(String userId, String exerciseTemplateId) {
+    public Mono<WorkoutSuggestion> getSuggestionForPlannedExercise(UUID userId, UUID exerciseTemplateId) {
         final String logPrefix = String.format("[PLANNED_SUGGESTION] userId=%s, templateId=%s:", userId, exerciseTemplateId);
         log.info("{} START - Ophalen van geplande suggestie gestart.", logPrefix);
 
@@ -84,7 +85,7 @@ public class WorkoutSuggestionService {
                 .doOnError(e -> log.error("{} Fout: De suggestie-pipeline is mislukt.", logPrefix, e));
     }
 
-    public Mono<WorkoutSuggestion> getSuggestionForAdHocExercise(String userId, String exerciseName) {
+    public Mono<WorkoutSuggestion> getSuggestionForAdHocExercise(UUID userId, String exerciseName) {
         final String logPrefix = String.format("[ADHOC_SUGGESTION] userId=%s, exercise=%s:", userId, exerciseName);
         log.info("{} START - Ophalen van ad-hoc suggestie gestart.", logPrefix);
 
@@ -102,7 +103,7 @@ public class WorkoutSuggestionService {
     }
 
 
-    private Mono<ExerciseSession> getLastSessionWithSets(String userId, String exerciseName) {
+    private Mono<ExerciseSession> getLastSessionWithSets(UUID userId, String exerciseName) {
         final String logPrefix = String.format("[SESSION_HELPER] userId=%s, exercise=%s:", userId, exerciseName);
         log.debug("{} Ophalen van laatste sessie gestart.", logPrefix);
 
@@ -123,7 +124,7 @@ public class WorkoutSuggestionService {
                 }));
     }
 
-    private Mono<UserSettings> getUserSettings(String userId) {
+    private Mono<UserSettings> getUserSettings(UUID userId) {
         final String logPrefix = String.format("[SETTINGS_HELPER] userId=%s:", userId);
         log.debug("{} Ophalen van gebruikersinstellingen gestart.", logPrefix);
 

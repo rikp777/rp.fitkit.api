@@ -1,4 +1,4 @@
-const appConfig = {
+export const appConfig = {
     app: {
         version: '0.1.0-alpha',
         link: 'https://github.com/rikp777/rp.fitkit.api'

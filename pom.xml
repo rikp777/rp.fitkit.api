@@ -29,7 +29,21 @@
     <properties>
         <java.version>21</java.version>
         <springdoc.version>2.8.9</springdoc.version>
+        <djl.version>0.28.0</djl.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>ai.djl</groupId>
+                <artifactId>bom</artifactId>
+                <version>${djl.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <!-- Basis starters -->
         <dependency>
@@ -99,6 +113,49 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- DJL core -->
+        <dependency>
+            <groupId>ai.djl</groupId>
+            <artifactId>api</artifactId>
+        </dependency>
+
+        <!-- PyTorch engine -->
+        <dependency>
+            <groupId>ai.djl.pytorch</groupId>
+            <artifactId>pytorch-engine</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- JNI binding compatible with DJL 0.28.0 -->
+        <dependency>
+            <groupId>ai.djl.pytorch</groupId>
+            <artifactId>pytorch-jni</artifactId>
+            <version>2.2.2-0.28.0</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- (Optional) Pre-fetch CPU natives so nothing downloads at runtime; pick ONE classifier -->
+        <dependency>
+            <groupId>ai.djl.pytorch</groupId>
+            <artifactId>pytorch-native-cpu</artifactId>
+            <version>2.2.2</version>
+            <classifier>win-x86_64</classifier>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- other classifiers: linux-x86_64 | osx-x86_64 | osx-aarch64 -->
+
+        <!-- HuggingFace extension (provides text-classification translator) -->
+        <dependency>
+            <groupId>ai.djl.huggingface</groupId>
+            <artifactId>tokenizers</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <!-- Hulpmiddelen -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -159,7 +216,6 @@
         </dependency>
 
     </dependencies>
-
 
     <build>
         <plugins>

@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,7 +45,7 @@ public class MentalHealthService {
      * @param languageCode De gewenste taalcode voor de vertalingen.
      * @return Een Flux van DTO's die elke stap vertegenwoordigen.
      */
-    public Flux<MentalHealthStepDto> getMentalHealthStepsForUser(String userId, String languageCode) {
+    public Flux<MentalHealthStepDto> getMentalHealthStepsForUser(UUID userId, String languageCode) {
         log.info("Fetching all mental health steps for user: {} with language: {}", userId, languageCode);
         return getStepsAndProgress(userId)
                 .flatMapMany(tuple -> {
@@ -81,7 +82,7 @@ public class MentalHealthService {
      * @param languageCode The desired language code for translations.
      * @return A Mono containing the step DTO, or an error if not found or not accessible.
      */
-    public Mono<MentalHealthStepDto> getMentalHealthStepForUser(String userId, Long stepId, String languageCode) {
+    public Mono<MentalHealthStepDto> getMentalHealthStepForUser(UUID userId, Long stepId, String languageCode) {
         log.info("Fetching mental health stepId: {} for user: {} with language: {}", stepId, userId, languageCode);
 
         Mono<MentalHealthStep> stepMono = stepRepository.findById(stepId)
@@ -115,7 +116,7 @@ public class MentalHealthService {
      * @param languageCode The desired language code for translations.
      * @return A Mono containing the suggested step DTO, or empty if all steps are completed.
      */
-    public Mono<MentalHealthStepDto> getSuggestedStepForUser(String userId, String languageCode) {
+    public Mono<MentalHealthStepDto> getSuggestedStepForUser(UUID userId, String languageCode) {
         log.info("Fetching suggested mental health step for user: {} with language: {}", userId, languageCode);
 
         return getStepsAndProgress(userId)
@@ -153,7 +154,7 @@ public class MentalHealthService {
      * @return Een lege Mono als de operatie slaagt, anders een error.
      */
     @Transactional
-    public Mono<Void> performStepAction(String userId, Long stepId) {
+    public Mono<Void> performStepAction(UUID userId, Long stepId) {
         log.info("User {} is performing action for stepId: {}", userId, stepId);
 
         Mono<MentalHealthStep> stepMono = stepRepository.findById(stepId)
@@ -204,7 +205,7 @@ public class MentalHealthService {
      * @return A {@code Mono<Tuple2<List<MentalHealthStep>, Map<Long, UserStepProgress>>>} which, upon completion,
      *         emits a tuple containing the sorted list of all steps (T1) and a map of the user's progress for those steps (T2).
      */
-    private Mono<Tuple2<List<MentalHealthStep>, Map<Long, UserStepProgress>>> getStepsAndProgress(String userId) {
+    private Mono<Tuple2<List<MentalHealthStep>, Map<Long, UserStepProgress>>> getStepsAndProgress(UUID userId) {
         final String logPrefix = String.format("[HEALTH_HELPER] userId=%s:", userId);
         log.debug("{} Fetching all steps and progress.", logPrefix);
         Mono<List<MentalHealthStep>> stepsMono = stepRepository.findAll()
@@ -218,7 +219,7 @@ public class MentalHealthService {
                 .doOnSuccess(tuple -> log.debug("{} Fetched {} total steps and {} progress entries.", logPrefix, tuple.getT1().size(), tuple.getT2().size()));
     }
 
-    private Mono<Boolean> isStepUnlockedForUser(String userId, MentalHealthStep step) {
+    private Mono<Boolean> isStepUnlockedForUser(UUID userId, MentalHealthStep step) {
         if (step.getStepNumber() == 1) {
             return Mono.just(true);
         }

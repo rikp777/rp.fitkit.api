@@ -7,13 +7,15 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import rp.fitkit.api.model.ProgressionStrategy;
 
+import java.util.UUID;
+
 @Table(name = "user_settings")
 @Data
 @NoArgsConstructor
 public class UserSettings {
 
     @Id
-    private String userId;
+    private UUID userId;
 
     private ProgressionStrategy progressionStrategy; // enum
 

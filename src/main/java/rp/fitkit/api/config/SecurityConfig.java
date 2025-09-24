@@ -68,7 +68,7 @@ public class SecurityConfig {
                                 "/",
                                 "/auth/**",
                                 "/dashboard",
-                                "/js/**", "/css/**",
+                                "/src/**", "/css/**",
                                 "/mental-health/**"
                         ).permitAll()
                         .pathMatchers(

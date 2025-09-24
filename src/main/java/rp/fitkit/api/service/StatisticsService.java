@@ -11,6 +11,7 @@ import rp.fitkit.api.model.SetLog;
 
 import java.util.Comparator;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -31,7 +32,7 @@ public class StatisticsService {
      * @return Een Flux van datapunten, gesorteerd op datum.
      */
     @PreAuthorize("isAuthenticated()")
-    public Flux<ProgressDataPointDto> getEstimated1rmHistory(String userId, String exerciseName) {
+    public Flux<ProgressDataPointDto> getEstimated1rmHistory(UUID userId, String exerciseName) {
         log.info("Calculating e1RM history for user '{}' and exercise '{}'", userId, exerciseName);
         return workoutHistoryService.getHistoryForExercise(userId, exerciseName)
                 .flatMap(this::createDataPointFromSession);

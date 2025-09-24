@@ -9,6 +9,7 @@ import org.springframework.data.relational.core.mapping.Table;
 import rp.fitkit.api.model.user.User;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Table(name = "audit_log")
 @Data
@@ -19,14 +20,14 @@ public class AuditLog {
     private Long id;
 
     // Who performed the action
-    private String actorId;
+    private UUID actorId;
     private String actorUsername;
     private String actorRoles;
 
     private AuditAction action;
 
     // Whose data was affected
-    private String subjectId;
+    private UUID subjectId;
     private String subjectUsername;
 
     // What entity was affected

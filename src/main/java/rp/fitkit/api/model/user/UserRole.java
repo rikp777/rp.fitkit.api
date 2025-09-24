@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,7 +15,7 @@ import org.springframework.data.relational.core.mapping.Table;
 public class UserRole {
 
     @Column("user_id")
-    private String userId;
+    private UUID userId;
 
     @Column("role_name")
     private String roleName;

@@ -18,12 +18,12 @@ import java.util.UUID;
 @NoArgsConstructor
 @ToString(exclude = {"sets"})
 @Table("exercise_session")
-public class ExerciseSession implements Persistable<String> {
+public class ExerciseSession implements Persistable<UUID> {
 
     @Id
-    private String id = UUID.randomUUID().toString();
+    private UUID id = UUID.randomUUID();
     @Column("user_id")
-    private String userId;
+    private UUID userId;
     @Column("exercise_id")
     private String exerciseId;
     @Column("session_date")
@@ -38,14 +38,14 @@ public class ExerciseSession implements Persistable<String> {
     @Transient
     private boolean isNew;
 
-    public ExerciseSession(String userId) {
-        this.id = UUID.randomUUID().toString();
+    public ExerciseSession(UUID userId) {
+        this.id = UUID.randomUUID();
         this.date = LocalDate.now();
         this.isNew = true;
         this.userId = userId;
     }
 
-    public ExerciseSession(String userId, LocalDate date, List<SetLog> sets, String notes) {
+    public ExerciseSession(UUID userId, LocalDate date, List<SetLog> sets, String notes) {
         this.userId = userId;
         this.date = date;
         this.sets = (sets != null) ? new ArrayList<>(sets) : new ArrayList<>();
