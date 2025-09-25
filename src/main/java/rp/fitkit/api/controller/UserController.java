@@ -27,20 +27,12 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public Mono<ResponseEntity<UserResponseDto>> registerUser(
-            @Valid @RequestBody UserRegistrationDto registrationDto
+    public Mono<ResponseEntity<LoginResponseDto>> registerUser(
+            @Valid
+            @RequestBody UserRegistrationDto registrationDto
     ) {
         return userService.registerUser(registrationDto)
-                .map(savedUser -> {
-
-                    UserResponseDto responseDto = new UserResponseDto(
-                            savedUser.getId(),
-                            savedUser.getUsername(),
-                            savedUser.getEmail(),
-                            savedUser.getDateJoined()
-                    );
-                    return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
-                });
+                .map(loginResponse -> ResponseEntity.status(HttpStatus.CREATED).body(loginResponse));
     }
 
     @PostMapping(
@@ -73,5 +65,24 @@ public class UserController {
                 currentUser.getDateJoined()
         );
         return Mono.just(responseDto);
+    }
+
+    @PostMapping("/generate-recovery-codes")
+    @SecurityRequirement(name = "bearerAuth")
+    public Mono<ResponseEntity<GenerateRecoveryCodesResponseDto>> generateRecoveryCodes(
+            @AuthenticationPrincipal User user
+    ) {
+        return userService.generateAndStoreRecoveryCodes(user)
+                .map(codes -> ResponseEntity.ok(
+                        new GenerateRecoveryCodesResponseDto(codes, "Store these codes in a safe place. You will only see them once.")
+                ));
+    }
+
+    @PostMapping("/reset-password-with-code")
+    public Mono<ResponseEntity<Void>> resetPasswordWithCode(
+            @Valid @RequestBody ResetPasswordWithCodeRequestDto requestDto
+    ) {
+        return userService.resetPasswordWithRecoveryCode(requestDto)
+                .thenReturn(ResponseEntity.ok().build());
     }
 }

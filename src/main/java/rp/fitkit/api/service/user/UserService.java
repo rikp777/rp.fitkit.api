@@ -50,36 +50,51 @@ public class UserService {
         this.jwtUtil = jwtUtil;
     }
 
-    public Mono<User> registerUser(UserRegistrationDto registrationDto) {
+    public Mono<LoginResponseDto> registerUser(UserRegistrationDto registrationDto) {
         return userRepository.findByUsername(registrationDto.getUsername())
-                .map(Optional::ofNullable)
-                .defaultIfEmpty(Optional.empty())
-                .flatMap(existingUserByUsername -> {
-                    if (existingUserByUsername.isPresent()) {
-                        return Mono.error(new UserAlreadyExistsException(
-                                "Username '" + registrationDto.getUsername() + "' is al in gebruik."));
-                    }
-                    return userRepository.findByEmail(registrationDto.getEmail())
-                            .map(Optional::ofNullable)
-                            .defaultIfEmpty(Optional.empty());
-                })
-                .flatMap(existingUserByEmail -> {
-                    if (existingUserByEmail.isPresent()) {
-                        return Mono.error(new UserAlreadyExistsException(
-                                "Email '" + registrationDto.getEmail() + "' is al geregistreerd."));
-                    }
+                .flatMap(existingUser -> Mono.error(new UserAlreadyExistsException(
+                        "Username '" + registrationDto.getUsername() + "' is al in gebruik.")))
+                .then(userRepository.findByEmail(registrationDto.getEmail()))
+                .flatMap(existingUser -> Mono.error(new UserAlreadyExistsException(
+                        "Email '" + registrationDto.getEmail() + "' is al geregistreerd.")))
+                .then(Mono.defer(() -> {
                     String hashedPassword = passwordEncoder.encode(registrationDto.getPassword());
-
                     User newUser = new User(
                             registrationDto.getUsername(),
                             registrationDto.getEmail(),
                             hashedPassword
                     );
 
-                    return userRepository.save(newUser) .flatMap(savedUser -> userRoleRepository
-                            .save(new UserRole(savedUser.getId(), "ROLE_USER"))
-                            .thenReturn(savedUser)
+                    return userRepository.save(newUser)
+                            .flatMap(savedUser -> userRoleRepository
+                                    .save(new UserRole(savedUser.getId(), "ROLE_USER"))
+                                    .thenReturn(savedUser)
+                            )
+                            .flatMap(this::createLoginResponse);
+                }));
+    }
+
+    /**
+     * Helper method to create a LoginResponseDto for a given user.
+     * This avoids duplicating token generation logic between login and registration.
+     * @param user The user for whom to generate tokens.
+     * @return A Mono containing the complete LoginResponseDto.
+     */
+    private Mono<LoginResponseDto> createLoginResponse(User user) {
+        return userRoleRepository.findByUserId(user.getId())
+                .map(UserRole::getRoleName)
+                .collectList()
+                .map(roles -> {
+                    user.setAuthoritiesFromRoles(roles);
+                    String accessToken = jwtUtil.generateAccessToken(user);
+                    String refreshToken = jwtUtil.generateRefreshToken(user);
+                    UserResponseDto userDetails = new UserResponseDto(
+                            user.getId(),
+                            user.getUsername(),
+                            user.getEmail(),
+                            user.getDateJoined()
                     );
+                    return new LoginResponseDto(accessToken, refreshToken, "Bearer", userDetails);
                 });
     }
 
@@ -91,30 +106,14 @@ public class UserService {
     public Mono<LoginResponseDto> loginUserAndGenerateToken(UserLoginDto loginDto) {
         return userRepository.findByUsername(loginDto.getUsername())
                 .switchIfEmpty(userRepository.findByEmail(loginDto.getUsername()))
-                .flatMap(user -> userRoleRepository.findByUserId(user.getId())
-                        .map(UserRole::getRoleName)
-                        .map(SimpleGrantedAuthority::new)
-                        .collectList()
-                        .flatMap(authorities -> {
-                            user.setAuthorities(authorities);
-
-                            if (passwordEncoder.matches(loginDto.getPassword(), user.getPasswordHash())) {
-                                String accessToken = jwtUtil.generateAccessToken(user);
-                                String refreshToken = jwtUtil.generateRefreshToken(user);
-                                UserResponseDto userDetails = new UserResponseDto(
-                                        user.getId(),
-                                        user.getUsername(),
-                                        user.getEmail(),
-                                        user.getDateJoined()
-                                );
-                                return Mono.just(new LoginResponseDto(accessToken, refreshToken, "Bearer", userDetails));
-                            } else {
-                                return Mono.error(new BadCredentialsException("Ongeldige inloggegevens."));
-                            }
-                        }))
-                .switchIfEmpty(Mono.error(new BadCredentialsException("Gebruiker niet gevonden of ongeldige inloggegevens.")));
+                .flatMap(user -> {
+                    if (passwordEncoder.matches(loginDto.getPassword(), user.getPasswordHash())) {
+                        return createLoginResponse(user);
+                    }
+                    return Mono.error(new BadCredentialsException("Ongeldige inloggegevens."));
+                })
+                .switchIfEmpty(Mono.error(new BadCredentialsException("Gebruiker niet gevonden.")));
     }
-
 
     public Mono<String> refreshAccessToken(String refreshToken) {
         if (!jwtUtil.validateToken(refreshToken)) {

@@ -16,7 +16,14 @@ export const registerUser = (username, email, password) => {
         body: JSON.stringify(registrationData)
     });
 };
-
+export const resetPasswordWithCode = (requestBody) => {
+    return fetch('/api/v1/auth/reset-password-with-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody)
+    });
+};
+export const generateRecoveryCodes = () => fetchWithAuth('/api/v1/auth/generate-recovery-codes', { method: 'POST' });
 export const getUserDetails = () => fetchWithAuth('/api/v1/auth/me');
 
 // Dashboard APIs

@@ -124,6 +124,9 @@ public class SecurityConfig {
                 .andRoute(GET("/auth/register"), request ->
                         ok().bodyValue(new ClassPathResource("static/app/pages/auth/register.html")))
 
+                .andRoute(GET("/auth/reset"), request ->
+                        ok().bodyValue(new ClassPathResource("static/app/pages/auth/reset-password.html")))
+
                 .andRoute(GET("/dashboard"), request ->
                         ok().bodyValue(new ClassPathResource("static/app/pages/dashboard.html")))
 

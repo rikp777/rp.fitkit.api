@@ -58,7 +58,12 @@
                     </div>
 
                     <div>
-                        <label for="password" class="form-label">Password</label>
+                        <div class="flex items-center justify-between">
+                            <label for="password" class="form-label">Password</label>
+                            <div class="text-sm">
+                                <a href="/auth/reset" class="font-semibold text-indigo-400 hover:text-indigo-300">Forgot password?</a>
+                            </div>
+                        </div>
                         <div class="mt-2 relative">
                             <input id="password" name="password" type="password" required class="form-input pr-10">
                             <span class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" id="togglePassword">

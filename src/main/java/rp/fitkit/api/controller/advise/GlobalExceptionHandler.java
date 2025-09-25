@@ -58,7 +58,8 @@ public class GlobalExceptionHandler {
 
         List<Map<String, String>> structuredErrors = allErrors.stream()
                 .map(error -> {
-                    String message = messageSource.getMessage(error, locale);
+                    String message = error.getDefaultMessage();
+
                     if (error instanceof FieldError fieldError) {
                         return Map.of(
                                 "field", fieldError.getField(),
@@ -78,7 +79,7 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.joining("\n"));
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, detail);
-        problemDetail.setTitle(messageSource.getMessage("validation.error.title", null, locale));
+        problemDetail.setTitle(messageSource.getMessage("validation.error.title", null, "Validation Error", locale));
         problemDetail.setInstance(resolvePathFromServerWebExchange(exchange));
         problemDetail.setProperty("timestamp", Instant.now().toString());
         problemDetail.setProperty("errors", structuredErrors);
